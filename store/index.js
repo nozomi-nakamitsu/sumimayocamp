@@ -68,12 +68,12 @@ export const actions = {
         .auth()
         .setPersistence(firebase.auth.Auth.Persistence.SESSION)
         .then((result) => {
-          resolve()
+          resolve(result)
         })
     })
   },
   // ④ 公開可能なユーザー情報をFirestoreに登録
-  setPublicUserData({ dispatch }, userObject) {
+  setPublicUserData(userObject) {
     return new Promise((resolve) => {
       const publicUser = firestore.collection('users').doc(userObject.uid)
       // ** usersに登録するObjのみを登録する
@@ -84,13 +84,13 @@ export const actions = {
       publicObj.photoURL = userObject.photoURL
       publicObj.displayName = userObject.displayName
       publicObj.token = userObject.token
-      publicUser.set(publicObj, { merge: true }).then((result) => {
+      publicUser.set(publicObj, { merge: true }).then(() => {
         resolve(userObject)
       })
     })
   },
   // ⑤非公開のユーザー情報をFirestoreに登録
-  setPrivateUserData({ dispatch }, userObject) {
+  setPrivateUserData(userObject) {
     return new Promise((resolve) => {
       const privateUsers = firestore
         .collection('privateUsers')
@@ -103,14 +103,14 @@ export const actions = {
       privateObj.email = userObject.email
       privateObj.token = userObject.token
       privateObj.refreshToken = userObject.refreshToken
-      privateUsers.set(privateObj, { merge: true }).then((result) => {
+      privateUsers.set(privateObj, { merge: true }).then(() => {
         resolve(userObject)
       })
     })
   },
   // ⑥ ローカルストレージに保持するユーザー情報を設定
-  setLocalUserData({ dispatch, commit }, userObject) {
-    return new Promise(async (resolve) => {
+  setLocalUserData({ commit }, userObject) {
+    return new Promise((resolve) => {
       const user = firestore.collection('users').doc(userObject.uid)
       user
         .get()
@@ -132,18 +132,18 @@ export const actions = {
     })
   },
   // ③ 取得したアイコンのURLをFirestorageに保存して、そのURLをFirestoreに登録する準備
-  createPhotoURL({ dispatch }, userObject) {
+  createPhotoURL(userObject) {
     return new Promise((resolve) => {
       const url = userObject.photoURL
       const xhr = new XMLHttpRequest()
       xhr.responseType = 'blob'
-      xhr.onload = function (event) {
+      xhr.onload = function () {
         const blob = xhr.response
         const mountainsRef = storageRef.child(
           `user/${userObject.uid}/image.jpg`
         )
         const uploadTask = mountainsRef.put(blob)
-        uploadTask.then((snapshot) => {
+        uploadTask.then(() => {
           uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
             // firestorageに登録したURLを登録するオブジェクトに代入
             userObject.photoURL = downloadURL
@@ -177,7 +177,7 @@ export const actions = {
       // ** usersに登録するObjのみを登録する
       const publicObj = {}
       publicObj.nickName = nickName
-      publicUser.set(publicObj, { merge: true }).then((result) => {
+      publicUser.set(publicObj, { merge: true }).then(() => {
         commit('setCurrentUser', publicObj)
         location.href = '/'
       })
