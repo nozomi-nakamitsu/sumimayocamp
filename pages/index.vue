@@ -33,10 +33,8 @@ export default defineComponent({
     onMounted(async () => {
       await firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
-          console.log('user.displayName', user.displayName)
           store.commit('setIsLogined', true)
           store.commit('setCurrentUser', user)
-          console.log(store.getters)
           // ログイン中の場合の処理
         } else {
           console.log('ログインしてないよ')
