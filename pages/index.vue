@@ -1,18 +1,35 @@
 <template>
   <div>
-    <div v-if="store.getters.getIsLogined">
+    <div v-if="store.getters.getCurrentUser.displayName">
       <p>{{ store.getters.getCurrentUser.displayName }}さんようこそ</p>
       <img :src="store.getters.getCurrentUser.photoURL" alt="" />
     </div>
-    <button @click="login" v-else>ログイン</button>
+    <Loading :is-loading="isLoading" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, useStore, onMounted } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  useStore,
+  onMounted,
+  ref,
+} from '@nuxtjs/composition-api'
 import firebase from '../plugins/firebase'
+import Loading from '../components/common/Loading.vue'
 export default defineComponent({
+  components: {
+    Loading,
+  },
   setup() {
+    // vuex
+    const store = useStore()
+    // ref
+    const isLoading = ref<boolean>(true)
+    /**
+     * ログインしてるかチェックする
+     *TODO: 後でmiddlewareに書いて共通化する!
+     */
     onMounted(async () => {
       await firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
@@ -24,27 +41,15 @@ export default defineComponent({
         } else {
           console.log('ログインしてないよ')
         }
+        isLoading.value = false
       })
     })
-    const store = useStore()
-    const login = async () => {
-      console.log('login')
-      try {
-        await store.dispatch('setPersistence')
-        await store.dispatch('auth')
-      } catch (error) {
-        store.dispatch('onRejectted', error)
-      }
-    }
 
-    // todo追加
-    // const addTodo = async () => {
-    //   await store.dispatch('addTodo', form.value)
-    //   await console.log('aaa')
-    // }
     return {
-      login,
+      // vuex
       store,
+      // loarding
+      isLoading,
     }
   },
 })

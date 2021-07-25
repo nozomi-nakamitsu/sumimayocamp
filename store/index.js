@@ -186,6 +186,7 @@ export const actions = {
             commit('setCurrentUser', doc.data())
             console.log(`ログインに成功しました`)
             // location.reload()
+            location.href = '/'
             resolve(userObject)
           } else {
             console.log('ない')
