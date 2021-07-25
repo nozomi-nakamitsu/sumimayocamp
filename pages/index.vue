@@ -17,8 +17,8 @@ import {
   onMounted,
   ref,
 } from '@nuxtjs/composition-api'
-import firebase from '../plugins/firebase'
-import { firestore } from '../plugins/firebase'
+import firebase, { firestore } from '../plugins/firebase'
+
 import Loading from '../components/common/Loading.vue'
 export default defineComponent({
   components: {
