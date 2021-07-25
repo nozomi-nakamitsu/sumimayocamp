@@ -3,6 +3,7 @@
     <div v-if="store.getters.getCurrentUser.displayName">
       <p>{{ store.getters.getCurrentUser.displayName }}さんようこそ</p>
       <img :src="store.getters.getCurrentUser.photoURL" alt="" />
+      <button @click="logout">ログアウト</button>
     </div>
     <Loading :is-loading="isLoading" />
   </div>
@@ -42,12 +43,21 @@ export default defineComponent({
         isLoading.value = false
       })
     })
+    const logout = async () => {
+      try {
+        await store.dispatch('logout')
+      } catch (error) {
+        store.dispatch('onRejectted', error)
+      }
+    }
 
     return {
       // vuex
       store,
       // loarding
       isLoading,
+      // 認証
+      logout,
     }
   },
 })

@@ -152,6 +152,16 @@ export const actions = {
       xhr.send()
     })
   },
+  logout({ commit }) {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        commit('setCurrentUser', {})
+        commit('setIsLogined', false)
+        location.href = '/login'
+      })
+  },
 }
 
 export const getters = {
