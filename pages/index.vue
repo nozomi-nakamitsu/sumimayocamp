@@ -1,9 +1,10 @@
 <template>
   <div>
-    <div v-if="store.getters.getCurrentUser.displayName">
-      <p>{{ store.getters.getCurrentUser.displayName }}さんようこそ</p>
+    <div v-if="!isLoading">
+      <p>{{ store.getters.getCurrentUser.nickName }}さんようこそ</p>
       <img :src="store.getters.getCurrentUser.photoURL" alt="" />
       <button @click="logout">ログアウト</button>
+      <a href="/users/edit">ニックネームを変更する</a>
     </div>
     <Loading :is-loading="isLoading" />
   </div>
@@ -17,6 +18,7 @@ import {
   ref,
 } from '@nuxtjs/composition-api'
 import firebase from '../plugins/firebase'
+import { firestore } from '../plugins/firebase'
 import Loading from '../components/common/Loading.vue'
 export default defineComponent({
   components: {
@@ -25,8 +27,10 @@ export default defineComponent({
   setup() {
     // vuex
     const store = useStore()
+
     // ref
     const isLoading = ref<boolean>(true)
+    const currentUser = ref<any>({})
     /**
      * ログインしてるかチェックする
      *TODO: 後でmiddlewareに書いて共通化する!
@@ -34,8 +38,19 @@ export default defineComponent({
     onMounted(async () => {
       await firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
-          store.commit('setIsLogined', true)
-          store.commit('setCurrentUser', user)
+          firestore
+            .collection('users')
+            .doc(user.uid)
+            .get()
+            .then((doc) => {
+              console.log(doc.data())
+              store.commit('setIsLogined', true)
+              store.commit('setCurrentUser', doc.data())
+              console.log(
+                'store.getters.getCurrentUser',
+                store.getters.getCurrentUser
+              )
+            })
           // ログイン中の場合の処理
         } else {
           console.log('ログインしてないよ')
@@ -58,6 +73,7 @@ export default defineComponent({
       isLoading,
       // 認証
       logout,
+      currentUser,
     }
   },
 })

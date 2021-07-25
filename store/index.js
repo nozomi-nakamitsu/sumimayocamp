@@ -9,6 +9,7 @@ export const state = () => ({
     uid: '',
     photoURL: '',
     displayName: '',
+    nickName: '',
   },
 })
 
@@ -21,6 +22,7 @@ export const mutations = {
     state.currentUser.token = data.token
     state.currentUser.photoURL = data.photoURL
     state.currentUser.displayName = data.displayName
+    state.currentUser.nickName = data.nickName
   },
 }
 
@@ -161,6 +163,23 @@ export const actions = {
         commit('setIsLogined', false)
         location.href = '/login'
       })
+  },
+
+  editNickName({ commit, state }, nickName) {
+    try {
+      console.log(state.currentUser)
+      console.log('nickName', nickName)
+      let publicUser = firestore.collection('users').doc(state.currentUser.uid)
+      // ** usersに登録するObjのみを登録する
+      let publicObj = {}
+      publicObj.nickName = nickName
+      publicUser.set(publicObj, { merge: true }).then((result) => {
+        commit('setCurrentUser', publicObj)
+        location.href = '/'
+      })
+    } catch (error) {
+      console.error(error)
+    }
   },
 }
 

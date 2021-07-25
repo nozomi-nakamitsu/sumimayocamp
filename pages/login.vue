@@ -14,7 +14,6 @@ export default defineComponent({
         if (user) {
           store.commit('setIsLogined', true)
           store.commit('setCurrentUser', user)
-          // ログイン中の場合の処理
         } else {
           console.log('ログインしてないよ')
         }
