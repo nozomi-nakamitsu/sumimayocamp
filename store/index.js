@@ -2,8 +2,6 @@ import firebase from '~/plugins/firebase.js'
 import { firestore, storage } from '~/plugins/firebase.js'
 import 'firebase/storage'
 const storageRef = storage.ref()
-// const db = firebase.firestore()
-// const todoRef = db.collection('todos')
 export const state = () => ({
   isLogined: false,
   currentUser: {
