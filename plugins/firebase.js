@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import 'firebase/storage'
 if (!firebase.apps.length) {
   firebase.initializeApp({
     apiKey: process.env.API_KEY,
@@ -10,5 +11,6 @@ if (!firebase.apps.length) {
     measurementId: process.env.MEASUREMENT_ID,
   })
 }
-
 export default firebase
+export const firestore = firebase.firestore()
+export const storage = firebase.storage()
