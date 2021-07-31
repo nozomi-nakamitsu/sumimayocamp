@@ -1,6 +1,6 @@
 <template>
   <div class="user-edit-container">
-    <input type="text" v-model="form.name" class="input" />
+    <input v-model="form.name" type="text" class="input" />
     <button @click="submit">変更する</button>
   </div>
 </template>
@@ -12,8 +12,8 @@ import {
   onMounted,
   ref,
 } from '@nuxtjs/composition-api'
-import firebase from '../../plugins/firebase'
-import { firestore } from '../../plugins/firebase'
+import firebase, { firestore } from '../../plugins/firebase'
+
 export default defineComponent({
   setup() {
     // vuex
