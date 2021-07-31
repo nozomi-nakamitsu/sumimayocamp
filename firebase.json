@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/sumimayocamp",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
