@@ -28,4 +28,13 @@ export interface Post {
   learn: String
   created_at: Date
   updated_at: Date
+  users: {
+    displayName: String
+    isNewUser: Boolean
+    nickName: String
+    photoURL: String
+    providerId: String
+    token: String
+    uid: String
+  }
 }

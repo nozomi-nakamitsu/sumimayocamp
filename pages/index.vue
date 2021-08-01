@@ -1,12 +1,13 @@
 <template>
   <div>
-    <p>メイン</p>
-    <div v-for="post in posts" :key="post.id"><Card :post="post" /></div>
+    <div v-for="post in posts" :key="post.id" style="margin: 20px">
+      <Card :post="post" />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted,ref } from '@nuxtjs/composition-api'
+import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
 import Card from '../components/common/Card.vue'
 import { firestore } from '../plugins/firebase'
 export default defineComponent({
@@ -24,12 +25,31 @@ export default defineComponent({
           // success
           if (docs) {
             docs.forEach((doc) => {
-              posts.value=[...posts.value,doc.data()]
+              firestore
+                .collection('users')
+                .doc(doc.data().user_id)
+                .get()
+                .then((userdocs) => {
+                  console.log('userdocs', userdocs.data())
+                  const postsObj = {
+                    id: doc.data().id,
+                    user_id: doc.data().user_id,
+                    title: doc.data().title,
+                    content: doc.data().content,
+                    url: doc.data().url,
+                    movieUrl: doc.data().movieUrl,
+                    learn: doc.data().learn,
+                    created_at: doc.data().created_at,
+                    updated_at: doc.data().updated_at,
+                    user: userdocs.data(),
+                  }
+                  posts.value = [...posts.value, postsObj]
+                })
             })
           }
         })
-        .catch((error) => {
-          console.error(error)
+        .catch(function (error) {
+          console.log('Error : ', error)
         })
     })
     return {
