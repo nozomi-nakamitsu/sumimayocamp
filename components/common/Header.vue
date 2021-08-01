@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar dense class="header-container" v-if="currentUser">
+  <v-toolbar v-if="currentUser" dense class="header-container">
     <div class="image">
       <img :src="currentUser.photoURL" alt="" class="img" />
     </div>
@@ -27,7 +27,7 @@ export default defineComponent({
     const currentUser = store.getters.getCurrentUser
     const drawer = ref<boolean>(false)
 
-    //ログアウト
+    // ログアウト
     const logout = async () => {
       try {
         await store.dispatch('logout')
@@ -35,7 +35,7 @@ export default defineComponent({
         store.dispatch('onRejectted', error)
       }
     }
-    //ヘッダー開け閉め
+    // ヘッダー開け閉め
     const switchDrawer = () => {
       drawer.value = !drawer.value
     }
@@ -45,7 +45,7 @@ export default defineComponent({
       store,
       // ref系
       drawer,
-      //ヘッダー開け閉め
+      // ヘッダー開け閉め
       switchDrawer,
       // 認証
       logout,

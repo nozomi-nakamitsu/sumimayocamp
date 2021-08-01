@@ -4,7 +4,7 @@
       <Header v-if="showHeader" />
       <Nuxt />
     </v-main>
-    <Loading v-if="isLoading" :isLoading="isLoading" />
+    <Loading v-if="isLoading" :is-loading="isLoading" />
   </v-app>
 </template>
 <script lang="ts">
