@@ -60,13 +60,13 @@ export default defineComponent({
       created_at: new Date(),
       updated_at: new Date(),
     })
-    const fileUploadEvent = ref<any | null>(null)
+    const fileUploadEvent = ref<any>(null)
 
-    const selectFile = (event: any | null) => {
+    const selectFile = (event: any) => {
       fileUploadEvent.value = event
     }
 
-    const fileChanged = (e: any | null, id: string) => {
+    const fileChanged = (e: any, id: string) => {
       const target = e.target as HTMLInputElement
       const fileList = target.files as FileList
       const file = fileList[0]
@@ -90,11 +90,14 @@ export default defineComponent({
       try {
         const id = firestore.collection('posts').doc().id
         // @ts-ignore
-        const url = fileChanged(fileUploadEvent.value, id).then((path) => {
-          form.value.movieUrl = path
-        })
+        if (fileUploadEvent.value !== null) {
+          const url = fileChanged(fileUploadEvent.value, id).then((path) => {
+            form.value.movieUrl = path
+          })
+        }
         form.value.id = id
         firestore.collection('posts').doc(id).set(form.value)
+        console.log('oK')
       } catch (error) {
         console.error(error)
       }
