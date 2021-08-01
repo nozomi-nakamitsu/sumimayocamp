@@ -25,7 +25,7 @@
         type="file"
         class="input"
         accept="video/*"
-        @change="onAttachmentFileChange($event)"
+        @change="selectFile($event)"
       />
     </div>
     <div class="box">
@@ -42,6 +42,7 @@
 import { defineComponent, useStore, ref } from '@nuxtjs/composition-api'
 import { PostForm } from '../../types/props-types'
 import { firestore } from '../../plugins/firebase'
+import * as uuidv4 from 'uuid'
 export default defineComponent({
   setup() {
     // compositionAPI
@@ -59,14 +60,40 @@ export default defineComponent({
       created_at: new Date(),
       updated_at: new Date(),
     })
+    const fileUploadEvent = ref<any | null>(null)
 
+    const selectFile = (event: any | null) => {
+      fileUploadEvent.value = event
+    }
+
+    const fileChanged = (e: any | null, id: string) => {
+      const target = e.target as HTMLInputElement
+      const fileList = target.files as FileList
+      const file = fileList[0]
+      if (file) {
+        const fileName = uuidv4
+        try {
+          return store.dispatch('uploadFile', {
+            fileName,
+            file,
+            id,
+          })
+        } catch (error) {
+          console.error('file upload', error)
+        }
+      }
+    }
     /**
      * NOTE:fireStoreに投稿する
      */
-    const onSubmit = async () => {
-      console.log('送信する')
+    const onSubmit = () => {
       try {
         const id = firestore.collection('posts').doc().id
+        // @ts-ignore
+        const url = fileChanged(fileUploadEvent.value, id).then((path) => {
+          form.value.movieUrl = path
+          console.log('form.value.movieUrl', form.value.movieUrl)
+        })
         form.value.id = id
         firestore.collection('posts').doc(id).set(form.value)
       } catch (error) {
@@ -78,8 +105,11 @@ export default defineComponent({
       currentUser,
       // ref系
       form,
+      fileUploadEvent,
       // Post
       onSubmit,
+      // fileアップロード
+      selectFile,
     }
   },
 })

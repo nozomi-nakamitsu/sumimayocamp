@@ -15,7 +15,7 @@ export default defineComponent({
     Card,
   },
   setup() {
-    const posts = ref([])
+    const posts = ref<any>([])
     onMounted(() => {
       /* 全てのドキュメントを配列に代入 */
       firestore
@@ -30,8 +30,7 @@ export default defineComponent({
                 .doc(doc.data().user_id)
                 .get()
                 .then((userdocs) => {
-                  console.log('userdocs', userdocs.data())
-                  const postsObj = {
+                  const postsObj: any = {
                     id: doc.data().id,
                     user_id: doc.data().user_id,
                     title: doc.data().title,

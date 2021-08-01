@@ -169,8 +169,6 @@ export const actions = {
 
   editNickName({ commit, state }, nickName) {
     try {
-      console.log(state.currentUser)
-      console.log('nickName', nickName)
       const publicUser = firestore
         .collection('users')
         .doc(state.currentUser.uid)
@@ -184,6 +182,27 @@ export const actions = {
     } catch (error) {
       console.error(error)
     }
+  },
+  uploadFile(payload) {
+    return new Promise((resolve) => {
+      try {
+        const file = payload.file
+        const ref = `public/${payload.id}`
+        storage
+          .ref(ref)
+          .put(file)
+          .then((uploadTask) => {
+            storage
+              .ref(uploadTask.ref.fullPath)
+              .getDownloadURL()
+              .then(function (url) {
+                resolve(url)
+              })
+          })
+      } catch (error) {
+        console.error(error)
+      }
+    })
   },
 }
 

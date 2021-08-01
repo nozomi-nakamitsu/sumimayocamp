@@ -10,7 +10,15 @@
       url: {{ post.url }}
     </v-card-text>
     <v-card-text class="text-h5 font-weight-bold">
-      movieurl: {{ post.movieurl }}
+      movieurl: {{ post.movieUrl }}
+      <video
+        controls="controls"
+        width="200px"
+        height="133px"
+        v-if="post.movieUrl"
+      >
+        <source :src="post.movieUrl" />
+      </video>
     </v-card-text>
     <v-card-text class="text-h5 font-weight-bold">
       id: {{ post.id }}
