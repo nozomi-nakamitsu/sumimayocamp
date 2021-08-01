@@ -5,6 +5,8 @@
 @import 'generic/reset';
 // elements
 @import 'elements/main';
-// components
+//common
 @import 'components/common/loading-container';
+@import 'components/common/header-container';
+//pages
 @import 'components/pages/users/user-edit-container';
