@@ -92,7 +92,6 @@ export default defineComponent({
         // @ts-ignore
         const url = fileChanged(fileUploadEvent.value, id).then((path) => {
           form.value.movieUrl = path
-          console.log('form.value.movieUrl', form.value.movieUrl)
         })
         form.value.id = id
         firestore.collection('posts').doc(id).set(form.value)

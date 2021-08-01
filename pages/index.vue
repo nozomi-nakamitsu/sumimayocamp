@@ -48,7 +48,7 @@ export default defineComponent({
           }
         })
         .catch(function (error) {
-          console.log('Error : ', error)
+          console.error('Error : ', error)
         })
     })
     return {

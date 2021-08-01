@@ -47,7 +47,6 @@ export default defineComponent({
             .doc(user.uid)
             .get()
             .then((doc) => {
-              console.log(doc.data())
               store.commit('setIsLogined', true)
               store.commit('setCurrentUser', doc.data())
               isLoading.value = false
