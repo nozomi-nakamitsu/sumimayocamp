@@ -89,8 +89,9 @@ export default defineComponent({
     const onSubmit = () => {
       try {
         const id = firestore.collection('posts').doc().id
-        // @ts-ignore
+
         if (fileUploadEvent.value !== null) {
+          // @ts-ignore
           const url = fileChanged(fileUploadEvent.value, id).then((path) => {
             form.value.movieUrl = path
           })
