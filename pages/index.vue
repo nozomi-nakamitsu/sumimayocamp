@@ -1,12 +1,12 @@
 <template>
   <div>
     <p>メイン</p>
-    <div><Card /></div>
+    <div v-for="post in posts" :key="post.id"><Card :post="post" /></div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from '@nuxtjs/composition-api'
+import { defineComponent, onMounted,ref } from '@nuxtjs/composition-api'
 import Card from '../components/common/Card.vue'
 import { firestore } from '../plugins/firebase'
 export default defineComponent({
@@ -14,9 +14,9 @@ export default defineComponent({
     Card,
   },
   setup() {
+    const posts = ref([])
     onMounted(() => {
       /* 全てのドキュメントを配列に代入 */
-      const posts = []
       firestore
         .collection('posts')
         .get()
@@ -24,16 +24,18 @@ export default defineComponent({
           // success
           if (docs) {
             docs.forEach((doc) => {
-              posts.push(doc.data())
+              posts.value=[...posts.value,doc.data()]
             })
           }
-          console.log(posts)
         })
         .catch((error) => {
           console.error(error)
         })
     })
-    return {}
+    return {
+      //全投稿データ
+      posts,
+    }
   },
 })
 </script>
