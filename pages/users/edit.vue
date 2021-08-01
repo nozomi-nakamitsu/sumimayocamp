@@ -6,39 +6,17 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  useStore,
-  onMounted,
-  ref,
-} from '@nuxtjs/composition-api'
-import firebase, { firestore } from '../../plugins/firebase'
+import { defineComponent, useStore, ref } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   setup() {
     // vuex
     const store = useStore()
     // ref系
+    const currentUser = store.getters.getCurrentUser
     const form = ref({
-      name: '',
+      name: currentUser.nickName,
     })
-    onMounted(async () => {
-      await firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-          firestore.collection('users')
-            .doc(user.uid)
-            .get()
-            .then((doc) => {
-              store.commit('setIsLogined', true)
-              store.commit('setCurrentUser', doc.data())
-              form.value.name = store.getters.getCurrentUser.nickName
-            })
-        } else {
-          console.log('ログインしてないよ')
-        }
-      })
-    })
-
     const submit = async () => {
       try {
         await store.dispatch('editNickName', form.value.name)
@@ -50,6 +28,7 @@ export default defineComponent({
       submit,
       store,
       form,
+      currentUser,
     }
   },
 })
