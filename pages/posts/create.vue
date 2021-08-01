@@ -49,6 +49,7 @@ export default defineComponent({
     // ref系
     const currentUser = store.getters.getCurrentUser
     const form = ref<PostForm>({
+      id: '',
       user_id: currentUser.uid,
       title: '',
       content: '',
@@ -62,10 +63,12 @@ export default defineComponent({
     /**
      * NOTE:fireStoreに投稿する
      */
-    const onSubmit = () => {
+    const onSubmit = async () => {
       console.log('送信する')
       try {
-        firestore.collection('posts').add(form.value)
+        const id = firestore.collection('posts').doc().id
+        form.value.id = id
+        firestore.collection('posts').doc(id).set(form.value)
       } catch (error) {
         console.error(error)
       }
