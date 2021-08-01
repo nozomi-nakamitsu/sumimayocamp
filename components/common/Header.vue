@@ -14,6 +14,9 @@
     <v-toolbar-title>
       <a href="/">ホーム</a>
     </v-toolbar-title>
+    <v-toolbar-title>
+      <a href="/posts/create">新規作成</a>
+    </v-toolbar-title>
   </v-toolbar>
 </template>
 

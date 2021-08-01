@@ -1,11 +1,11 @@
 <template>
-  <v-app>
-    <v-main v-if="!isLoading">
+  <div>
+    <div v-if="!isLoading">
       <Header v-if="showHeader" />
       <Nuxt />
-    </v-main>
+    </div>
     <Loading v-if="isLoading" :is-loading="isLoading" />
-  </v-app>
+  </div>
 </template>
 <script lang="ts">
 import {
