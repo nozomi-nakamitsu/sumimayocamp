@@ -7,10 +7,10 @@
       <p class="title">タイトル</p>
       <input type="text" class="input" v-model="form.title" />
     </div>
-    <div class="box">
+    <!-- <div class="box">
       <p class="title">学習言語(後で実装)</p>
       <input type="text" class="input" />
-    </div>
+    </div> -->
     <div class="box">
       <p class="title">内容</p>
       <textarea type="text" class="input" v-model="form.content" />
@@ -21,12 +21,7 @@
     </div>
     <div class="box">
       <p class="title">添付動画URL</p>
-      <input
-        type="file"
-        class="input"
-        accept="video/*"
-        @change="selectFile($event)"
-      />
+      <input type="file" class="input" accept="" @change="selectFile($event)" />
     </div>
     <div class="box">
       <p class="title">学んだこと</p>
@@ -39,7 +34,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, useStore, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  useStore,
+  ref,
+  useRouter,
+} from '@nuxtjs/composition-api'
 import { PostForm } from '../../types/props-types'
 import { firestore } from '../../plugins/firebase'
 import * as uuidv4 from 'uuid'
@@ -47,6 +47,7 @@ export default defineComponent({
   setup() {
     // compositionAPI
     const store = useStore()
+    const Router = useRouter()
     // ref系
     const currentUser = store.getters.getCurrentUser
     const form = ref<PostForm>({
@@ -98,7 +99,7 @@ export default defineComponent({
         }
         form.value.id = id
         firestore.collection('posts').doc(id).set(form.value)
-        console.log('oK')
+        Router.push('/')
       } catch (error) {
         console.error(error)
       }

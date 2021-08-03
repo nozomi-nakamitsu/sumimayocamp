@@ -20,6 +20,7 @@ export default defineComponent({
       /* 全てのドキュメントを配列に代入 */
       firestore
         .collection('posts')
+        .orderBy("created_at", "desc")
         .get()
         .then((docs) => {
           // success
