@@ -1,36 +1,5 @@
 <template>
-  <div class="form-container">
-    <div>新規作成</div>
-    <!-- TODO: style実装時にフォームのコンポーネントに分ける -->
-
-    <div class="box">
-      <p class="title">タイトル</p>
-      <input type="text" class="input" v-model="form.title" />
-    </div>
-    <!-- <div class="box">
-      <p class="title">学習言語(後で実装)</p>
-      <input type="text" class="input" />
-    </div> -->
-    <div class="box">
-      <p class="title">内容</p>
-      <textarea type="text" class="input" v-model="form.content" />
-    </div>
-    <div class="box">
-      <p class="title">参考URL</p>
-      <input type="text" class="input" v-model="form.url" />
-    </div>
-    <div class="box">
-      <p class="title">添付動画URL</p>
-      <input type="file" class="input" accept="" @change="selectFile($event)" />
-    </div>
-    <div class="box">
-      <p class="title">学んだこと</p>
-      <textarea type="text" class="input" v-model="form.learn" />
-    </div>
-    <div class="box">
-      <v-btn elevation="2" raised @click="onSubmit">投稿する</v-btn>
-    </div>
-  </div>
+  <ThePostForm :propsform="form" :title="'新規作成'" @on-submit="onSubmit" />
 </template>
 
 <script lang="ts">
@@ -41,9 +10,14 @@ import {
   useRouter,
 } from '@nuxtjs/composition-api'
 import { PostForm } from '../../types/props-types'
+import ThePostForm from '../../components/common/ThePostForm.vue'
+
 import { firestore } from '../../plugins/firebase'
 import * as uuidv4 from 'uuid'
 export default defineComponent({
+  components: {
+    ThePostForm,
+  },
   setup() {
     // compositionAPI
     const store = useStore()
@@ -61,12 +35,6 @@ export default defineComponent({
       created_at: new Date(),
       updated_at: new Date(),
     })
-    const fileUploadEvent = ref<any>(null)
-
-    const selectFile = (event: any) => {
-      fileUploadEvent.value = event
-    }
-
     const fileChanged = (e: any, id: string) => {
       const target = e.target as HTMLInputElement
       const fileList = target.files as FileList
@@ -87,13 +55,22 @@ export default defineComponent({
     /**
      * NOTE:fireStoreに投稿する
      */
-    const onSubmit = () => {
+    const onSubmit = (data: {
+      formData: PostForm
+      file: string
+      types: string
+    }) => {
       try {
-        const id = firestore.collection('posts').doc().id
+        form.value = data.formData
+        var id = ''
+        if (data.types === '新規作成') {
+          id = firestore.collection('posts').doc().id
+        } else {
+          id = data.formData.id
+        }
 
-        if (fileUploadEvent.value !== null) {
-          // @ts-ignore
-          const url = fileChanged(fileUploadEvent.value, id).then((path) => {
+        if (data.file !== null) {
+          fileChanged(data.file, id).then((path) => {
             form.value.movieUrl = path
           })
         }
@@ -109,11 +86,8 @@ export default defineComponent({
       currentUser,
       // ref系
       form,
-      fileUploadEvent,
       // Post
       onSubmit,
-      // fileアップロード
-      selectFile,
     }
   },
 })
