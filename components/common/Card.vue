@@ -38,14 +38,12 @@
           <v-list-item-title style="cursor: pointer">編集</v-list-item-title>
         </v-list-item-content>
         <v-list-item-content v-if="isCurrentUser">
-          <v-list-item-title
-            style="cursor: pointer;"
-            @click="DeletePost()"
+          <v-list-item-title style="cursor: pointer" @click="DeletePost()"
             >削除</v-list-item-title
           >
         </v-list-item-content>
         <v-list-item-content>
-          <v-list-item-title style="cursor: pointer;">詳細</v-list-item-title>
+          <v-list-item-title style="cursor: pointer">詳細</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-card-actions>
@@ -78,8 +76,14 @@ export default defineComponent({
     // 投稿を削除する
     const DeletePost = () => {
       try {
-        firestore.collection('posts').doc(props.post.id).delete()
-        Router.push('/')
+        firestore
+          .collection('posts')
+          .doc(props.post.id)
+          .delete()
+          .then((res) => {
+            // TODO: リロード以外でいい方法あれば変更したい、Router.push("/")だと変更データが反映されなかった。
+            location.reload()
+          })
       } catch (error) {
         console.error(error)
       }
