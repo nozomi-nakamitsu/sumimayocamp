@@ -43,6 +43,7 @@ export const actions = {
         userObject.refreshToken = user.refreshToken
         userObject.uid = user.uid
         userObject.displayName = user.displayName
+        userObject.nickName = user.displayName
         userObject.photoURL = user.photoURL
         userObject.uid = user.uid
         userObject.email = user.email

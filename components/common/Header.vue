@@ -3,7 +3,11 @@
     <div class="image">
       <img :src="currentUser.photoURL" alt="" class="img" />
     </div>
-    <v-toolbar-title>{{ currentUser.nickName }}さんようこそ</v-toolbar-title>
+    <v-toolbar-title
+      >{{
+        currentUser.nickName ? currentUser.nickName : currentUser.displayName
+      }}さんようこそ</v-toolbar-title
+    >
     <v-spacer></v-spacer>
     <v-toolbar-title>
       <button @click="logout">ログアウト</button></v-toolbar-title
