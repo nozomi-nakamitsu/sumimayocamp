@@ -3,13 +3,13 @@
  * 学習内容の新規投稿用の型
  */
 export interface PostForm {
-  id: String
-  user_id: String
-  title: String
-  content: String
-  url: String
-  movieUrl: String
-  learn: String
+  id: string
+  user_id: string
+  title: string
+  content: string
+  url: string
+  movieUrl: string
+  learn: string
   created_at: Date
   updated_at: Date
 }
@@ -19,22 +19,22 @@ export interface PostForm {
  * 学習内容の表示用の型
  */
 export interface Post {
-  id: String
-  user_id: String
-  title: String
-  content: String
-  url: String
-  movieUrl: String
-  learn: String
+  id: string
+  user_id: string
+  title: string
+  content: string
+  url: string
+  movieUrl: string
+  learn: string
   created_at: Date
   updated_at: Date
   users: {
-    displayName: String
+    displayName: string
     isNewUser: Boolean
-    nickName: String
-    photoURL: String
-    providerId: String
-    token: String
-    uid: String
+    nickName: string
+    photoURL: string
+    providerId: string
+    token: string
+    uid: string
   }
 }

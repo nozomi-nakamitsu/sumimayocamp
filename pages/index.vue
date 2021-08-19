@@ -7,7 +7,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onMounted,
+  ref,
+  useAsync,
+} from '@nuxtjs/composition-api'
 import Card from '../components/common/Card.vue'
 import { firestore } from '../plugins/firebase'
 export default defineComponent({
@@ -16,11 +21,10 @@ export default defineComponent({
   },
   setup() {
     const posts = ref<any>([])
-    onMounted(() => {
-      /* 全てのドキュメントを配列に代入 */
+    useAsync(async () => {
       firestore
         .collection('posts')
-        .orderBy("created_at", "desc")
+        .orderBy('created_at', 'desc')
         .get()
         .then((docs) => {
           // success
