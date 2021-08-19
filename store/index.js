@@ -35,6 +35,7 @@ export const actions = {
       .signInWithPopup(provider)
       .then(function (result) {
         const user = result.user
+
         commit('setIsLogined', true)
         // 認証後のユーザー情報を取得してオブジェクト化
         const userObject = {}
@@ -73,7 +74,7 @@ export const actions = {
     })
   },
   // ④ 公開可能なユーザー情報をFirestoreに登録
-  setPublicUserData(userObject) {
+  setPublicUserData({ commit }, userObject) {
     return new Promise((resolve) => {
       const publicUser = firestore.collection('users').doc(userObject.uid)
       // ** usersに登録するObjのみを登録する
@@ -111,8 +112,9 @@ export const actions = {
   // ⑥ ローカルストレージに保持するユーザー情報を設定
   setLocalUserData({ commit }, userObject) {
     return new Promise((resolve) => {
-      const user = firestore.collection('users').doc(userObject.uid)
-      user
+      firestore
+        .collection('users')
+        .doc(userObject.uid)
         .get()
         .then((doc) => {
           if (doc.exists) {
@@ -132,7 +134,7 @@ export const actions = {
     })
   },
   // ③ 取得したアイコンのURLをFirestorageに保存して、そのURLをFirestoreに登録する準備
-  createPhotoURL(userObject) {
+  createPhotoURL({ commit }, userObject) {
     return new Promise((resolve) => {
       const url = userObject.photoURL
       const xhr = new XMLHttpRequest()
@@ -169,8 +171,6 @@ export const actions = {
 
   editNickName({ commit, state }, nickName) {
     try {
-      console.log(state.currentUser)
-      console.log('nickName', nickName)
       const publicUser = firestore
         .collection('users')
         .doc(state.currentUser.uid)
@@ -184,6 +184,27 @@ export const actions = {
     } catch (error) {
       console.error(error)
     }
+  },
+  uploadFile(payload) {
+    return new Promise((resolve) => {
+      try {
+        const file = payload.file
+        const ref = `public/${payload.id}`
+        storage
+          .ref(ref)
+          .put(file)
+          .then((uploadTask) => {
+            storage
+              .ref(uploadTask.ref.fullPath)
+              .getDownloadURL()
+              .then(function (url) {
+                resolve(url)
+              })
+          })
+      } catch (error) {
+        console.error(error)
+      }
+    })
   },
 }
 

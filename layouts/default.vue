@@ -1,11 +1,11 @@
 <template>
-  <v-app>
-    <v-main v-if="!isLoading">
+  <div>
+    <div v-if="!isLoading">
       <Header v-if="showHeader" />
       <Nuxt />
-    </v-main>
+    </div>
     <Loading v-if="isLoading" :is-loading="isLoading" />
-  </v-app>
+  </div>
 </template>
 <script lang="ts">
 import {
@@ -47,7 +47,6 @@ export default defineComponent({
             .doc(user.uid)
             .get()
             .then((doc) => {
-              console.log(doc.data())
               store.commit('setIsLogined', true)
               store.commit('setCurrentUser', doc.data())
               isLoading.value = false

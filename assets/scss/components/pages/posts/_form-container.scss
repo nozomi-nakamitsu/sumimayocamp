@@ -1,0 +1,10 @@
+.form-container {
+  padding: 20px;
+  > .box > .input {
+    border: 1px solid gray;
+  }
+  > .box > .title {
+    margin-bottom: 0;
+    font-size: 16px;
+  }
+}
