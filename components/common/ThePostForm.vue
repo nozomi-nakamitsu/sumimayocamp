@@ -21,7 +21,7 @@
     </div>
     <div class="box">
       <p class="title">添付動画URL</p>
-      <input type="file" class="input" accept="" @change="selectFile($event)" />
+      <input type="file" class="input" @change="selectFile($event)" />
     </div>
     <div class="box">
       <p class="title">学んだこと</p>

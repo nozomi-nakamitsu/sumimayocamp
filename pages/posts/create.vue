@@ -36,6 +36,7 @@ export default defineComponent({
       updated_at: new Date(),
     })
     const fileChanged = (e: any, id: string) => {
+      debugger
       const target = e.target as HTMLInputElement
       const fileList = target.files as FileList
       const file = fileList[0]
@@ -54,6 +55,7 @@ export default defineComponent({
     }
     /**
      * NOTE:fireStoreに投稿する
+     * 先にidのみPOSTし、そのIDを使ってfireStorageに画像を入れる。fireStorageのパスを含んだデータをfireStoreにPOSTしている
      */
     const onSubmit = (data: {
       formData: PostForm
@@ -62,14 +64,10 @@ export default defineComponent({
     }) => {
       try {
         form.value = data.formData
-        var id = ''
-        if (data.types === '新規作成') {
-          id = firestore.collection('posts').doc().id
-        } else {
-          id = data.formData.id
-        }
-
+        const id = firestore.collection('posts').doc().id
         if (data.file !== null) {
+          // @ts-ignore
+          //TODO: 解消方法がわからないのでts-ignoreで対応
           fileChanged(data.file, id).then((path) => {
             form.value.movieUrl = path
           })
@@ -81,6 +79,7 @@ export default defineComponent({
         console.error(error)
       }
     }
+
     return {
       // 認証系
       currentUser,

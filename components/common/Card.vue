@@ -21,7 +21,7 @@
       </video>
     </v-card-text>
     <v-card-text class="text-h5 font-weight-bold">
-      id: {{ post.id }}
+      updated_at: {{ formatDateToSlashWithTime(post.updated_at) }}
     </v-card-text>
 
     <v-card-actions>
@@ -59,6 +59,7 @@ import {
 } from '@nuxtjs/composition-api'
 import { Post } from '../../types/props-types'
 import { firestore } from '../../plugins/firebase'
+import { formatDateToSlashWithTime } from '../../compositions/useFormatData'
 export default defineComponent({
   props: {
     post: {
@@ -95,6 +96,8 @@ export default defineComponent({
     return {
       DeletePost,
       isCurrentUser,
+      // フォーマット
+      formatDateToSlashWithTime,
     }
   },
 })
