@@ -35,3 +35,14 @@ export interface Post {
     uid: string
   }
 }
+
+/**
+ * NOTE:storeのログインユーザーの型
+ */
+export interface CurrentUser {
+  token: string
+  uid: string
+  photoURL: string
+  displayName: string
+  nickName: string
+}
