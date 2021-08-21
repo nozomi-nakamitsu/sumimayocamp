@@ -6,6 +6,22 @@
     <v-card-text class="text-h5 font-weight-bold">
       内容: {{ post.content }}
     </v-card-text>
+    <template>
+      <div class="markdown-editor">
+        <no-ssr>
+          <mavon-editor
+            language="ja"
+            v-model="post.content"
+            :subfield="false"
+            :editable="false"
+            :toolbarsFlag="false"
+            :boxShadow="false"
+            defaultOpen="preview"
+            previewBackground="#fff"
+          />
+        </no-ssr>
+      </div>
+    </template>
     <v-card-text class="text-h5 font-weight-bold">
       url: {{ post.url }}
     </v-card-text>

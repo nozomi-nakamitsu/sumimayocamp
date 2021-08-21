@@ -20,6 +20,7 @@
     "fibers": "^5.0.0",
     "firebase": "^8.7.1",
     "firebase-tools": "^9.16.0",
+    "mavon-editor": "^2.9.1",
     "nuxt": "^2.15.7",
     "sass-loader": "10",
     "save": "^2.4.0",

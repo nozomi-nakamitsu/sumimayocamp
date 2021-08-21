@@ -7,9 +7,6 @@ export interface PostForm {
   user_id: string
   title: string
   content: string
-  url: string
-  movieUrl: string
-  learn: string
   created_at: Date
   updated_at: Date
 }

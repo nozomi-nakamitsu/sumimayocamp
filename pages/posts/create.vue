@@ -29,9 +29,6 @@ export default defineComponent({
       user_id: currentUser.uid,
       title: '',
       content: '',
-      url: '',
-      movieUrl: '',
-      learn: '',
       created_at: new Date(),
       updated_at: new Date(),
     })
@@ -64,13 +61,13 @@ export default defineComponent({
       try {
         form.value = data.formData
         const id = firestore.collection('posts').doc().id
-        if (data.file !== null) {
-          // @ts-ignore
-          //TODO: 解消方法がわからないのでts-ignoreで対応
-          fileChanged(data.file, id).then((path) => {
-            form.value.movieUrl = path
-          })
-        }
+        // if (data.file !== null) {
+        //   // @ts-ignore
+        //   //TODO: 解消方法がわからないのでts-ignoreで対応
+        //   fileChanged(data.file, id).then((path) => {
+        //     form.value.movieUrl = path
+        //   })
+        // }
         form.value.id = id
         firestore.collection('posts').doc(id).set(form.value)
         Router.push('/')
