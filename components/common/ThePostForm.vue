@@ -7,7 +7,6 @@
       <p class="title">タイトル</p>
       <input type="text" class="input" v-model="form.title" />
     </div>
-    {{form.title}}
     <!-- <div class="box">
       <p class="title">学習言語(後で実装)</p>
       <input type="text" class="input" />
