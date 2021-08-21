@@ -34,9 +34,6 @@ export default defineComponent({
       user_id: post.user_id,
       title: post.title,
       content: post.content,
-      url: post.url,
-      movieUrl: post.movieUrl,
-      learn: post.learn,
       created_at: post.created_at,
       updated_at: post.updated_at,
     })
@@ -54,9 +51,6 @@ export default defineComponent({
               user_id: post.user_id,
               title: post.title,
               content: post.content,
-              url: post.url,
-              movieUrl: post.movieUrl,
-              learn: post.learn,
               created_at: post.created_at,
               updated_at: post.updated_at,
             }
@@ -94,13 +88,13 @@ export default defineComponent({
     }) => {
       try {
         form.value = data.formData
-        if (data.file !== null) {
-          // @ts-ignore
-          //TODO: 解消方法がわからないのでts-ignoreで対応
-          await fileChanged(data.file, form.value.id).then((path) => {
-            form.value.movieUrl = path
-          })
-        }
+        // if (data.file !== null) {
+        //   // @ts-ignore
+        //   //TODO: 解消方法がわからないのでts-ignoreで対応
+        //   await fileChanged(data.file, form.value.id).then((path) => {
+        //     form.value.movieUrl = path
+        //   })
+        // }
         await firestore
           .collection('posts')
           .doc(form.value.id)
