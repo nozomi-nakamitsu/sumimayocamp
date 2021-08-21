@@ -1,12 +1,9 @@
 <template>
-  <v-card class="mx-auto" max-width="400">
+  <v-card class="mx-auto" width="500">
     <v-card-title>
       <span class="text-h6 font-weight-light"> タイトル: {{ post.title }}</span>
     </v-card-title>
-    <v-card-text class="text-h5 font-weight-bold">
-      内容: {{ post.content }}
-    </v-card-text>
-    <template>
+    <!-- <template>
       <div class="markdown-editor">
         <no-ssr>
           <mavon-editor
@@ -21,23 +18,9 @@
           />
         </no-ssr>
       </div>
-    </template>
+    </template> -->
     <v-card-text class="text-h5 font-weight-bold">
-      url: {{ post.url }}
-    </v-card-text>
-    <v-card-text class="text-h5 font-weight-bold">
-      movieurl: {{ post.movieUrl }}
-      <video
-        controls="controls"
-        width="200px"
-        height="133px"
-        v-if="post.movieUrl"
-      >
-        <source :src="post.movieUrl" />
-      </video>
-    </v-card-text>
-    <v-card-text class="text-h5 font-weight-bold">
-      updated_at: {{ formatDateToSlashWithTime(post.updated_at) }}
+  {{ formatDateToSlashWithTime(post.updated_at) }}
     </v-card-text>
 
     <v-card-actions>

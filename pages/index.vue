@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <div v-for="post in posts" :key="post.id" style="margin: 20px">
-      <Card :post="post" />
+  <div class="index-container">
+    <div class="container">
+      <div v-for="post in posts" :key="post.id" style="margin: 20px">
+        <Card :post="post" />
+      </div>
     </div>
   </div>
 </template>
@@ -9,7 +11,6 @@
 <script lang="ts">
 import {
   defineComponent,
-  onMounted,
   ref,
   useAsync,
 } from '@nuxtjs/composition-api'
