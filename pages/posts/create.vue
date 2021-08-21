@@ -36,7 +36,6 @@ export default defineComponent({
       updated_at: new Date(),
     })
     const fileChanged = (e: any, id: string) => {
-      debugger
       const target = e.target as HTMLInputElement
       const fileList = target.files as FileList
       const file = fileList[0]

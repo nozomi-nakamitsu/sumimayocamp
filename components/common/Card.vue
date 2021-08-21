@@ -35,7 +35,11 @@
           }}</v-list-item-title>
         </v-list-item-content>
         <v-list-item-content v-if="isCurrentUser">
-          <v-list-item-title style="cursor: pointer">編集</v-list-item-title>
+          <v-list-item-title
+            style="cursor: pointer"
+            @click="Router.push(`/posts/edit/${post.id}`)"
+            >編集</v-list-item-title
+          >
         </v-list-item-content>
         <v-list-item-content v-if="isCurrentUser">
           <v-list-item-title style="cursor: pointer" @click="DeletePost()"
@@ -98,6 +102,8 @@ export default defineComponent({
       isCurrentUser,
       // フォーマット
       formatDateToSlashWithTime,
+      // compositionAPI
+      Router,
     }
   },
 })

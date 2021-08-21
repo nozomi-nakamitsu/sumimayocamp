@@ -7,6 +7,7 @@
       <p class="title">タイトル</p>
       <input type="text" class="input" v-model="form.title" />
     </div>
+    {{form.title}}
     <!-- <div class="box">
       <p class="title">学習言語(後で実装)</p>
       <input type="text" class="input" />
@@ -38,8 +39,9 @@ import {
   useStore,
   ref,
   SetupContext,
+  computed,
 } from '@nuxtjs/composition-api'
-import { PostForm } from '../../types/props-types'
+// import { PostForm } from '../../types/props-types'
 export default defineComponent({
   props: {
     propsform: {
@@ -57,7 +59,7 @@ export default defineComponent({
     const store = useStore()
     // ref系
     const currentUser = store.getters.getCurrentUser
-    const form = ref<PostForm>({
+    const form = computed(() => ({
       id: props.propsform.id,
       user_id: currentUser.uid,
       title: props.propsform.title,
@@ -68,7 +70,7 @@ export default defineComponent({
       created_at:
         props.title === '新規作成' ? new Date() : props.propsform.created_at,
       updated_at: new Date(),
-    })
+    }))
     const fileUploadEvent = ref<any>(null)
 
     const selectFile = (event: any) => {
