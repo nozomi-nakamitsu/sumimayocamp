@@ -39,6 +39,7 @@
         </v-list-item-content>
       </v-list-item>
     </v-card-actions>
+    <Emojifrom />
   </v-card>
 </template>
 <script lang="ts">
@@ -47,14 +48,18 @@ import {
   PropType,
   useRouter,
   useStore,
+  ref,
 } from '@nuxtjs/composition-api'
-import { Post } from '../../types/props-types'
-import {DeletePost} from '../../compositions/pages/usePost'
+import { Post, EmojiType } from '../../types/props-types'
+import { DeletePost } from '../../compositions/pages/usePost'
 import { formatDateToSlashWithTime } from '../../compositions/useFormatData'
-
 import { isCurrentUser } from '../../compositions/useAuth'
+import Emojifrom from '../../components/common/form/EmojiForm.vue'
 
 export default defineComponent({
+  components: {
+    Emojifrom,
+  },
   props: {
     post: {
       type: Object as PropType<Post>,
@@ -68,14 +73,23 @@ export default defineComponent({
     const store = useStore()
     // ref系
     const currentUser = store.getters.getCurrentUser
+    const selectedItem = ref<EmojiType[]>([])
+    // 絵文字を選択する
+    const selectEmoji = (item: EmojiType) => {
+      console.log(item)
+    }
     return {
       DeletePost,
       isCurrentUser,
       currentUser,
+
       // フォーマット
       formatDateToSlashWithTime,
       // compositionAPI
       Router,
+      // 絵文字選択
+      selectEmoji,
+      selectedItem,
     }
   },
 })

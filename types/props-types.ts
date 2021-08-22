@@ -46,3 +46,11 @@ export interface CurrentUser {
   displayName: string
   nickName: string
 }
+export interface EmojiType {
+  colons: string
+  emoticons: Array<any>
+  id: string
+  name: string
+  native: string
+  skin: Number
+}
