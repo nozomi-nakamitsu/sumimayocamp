@@ -56,7 +56,7 @@ import { formatDateToSlashWithTime } from '../../compositions/useFormatData'
 import { isCurrentUser } from '../../compositions/useAuth'
 import { firestore } from '../../plugins/firebase.js'
 import { DeletePost } from '../../compositions/pages/usePost'
-import { CurrentUser } from '../../types/props-types'
+
 
 export default defineComponent({
   components: {
@@ -72,8 +72,8 @@ export default defineComponent({
     const currentUser = store.getters.getCurrentUser
     const post = ref(store.getters.getPost)
     // 投稿者情報を取得
-    var postUser = ref<object>({})
-    useAsync(async () => {
+    const postUser = ref<object>({})
+    useAsync( () => {
       const id = Route.value.params.id
       try {
         store
@@ -92,7 +92,6 @@ export default defineComponent({
                   postUser.value = doc.data()
                 }
               })
-            return
           })
       } catch (error) {
         console.error('投稿内容を取得できませんでした', error)

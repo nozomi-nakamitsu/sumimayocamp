@@ -9,11 +9,12 @@ import {
   ref,
   useRouter,
 } from '@nuxtjs/composition-api'
+// import * as uuidv4 from 'uuid'
 import { PostForm } from '../../types/props-types'
 import ThePostForm from '../../components/common/ThePostForm.vue'
 
 import { firestore } from '../../plugins/firebase'
-import * as uuidv4 from 'uuid'
+
 export default defineComponent({
   components: {
     ThePostForm,
@@ -32,23 +33,23 @@ export default defineComponent({
       created_at: new Date(),
       updated_at: new Date(),
     })
-    const fileChanged = (e: any, id: string) => {
-      const target = e.target as HTMLInputElement
-      const fileList = target.files as FileList
-      const file = fileList[0]
-      if (file) {
-        const fileName = uuidv4
-        try {
-          return store.dispatch('uploadFile', {
-            fileName,
-            file,
-            id,
-          })
-        } catch (error) {
-          console.error('file upload', error)
-        }
-      }
-    }
+    // const fileChanged = (e: any, id: string) => {
+    //   const target = e.target as HTMLInputElement
+    //   const fileList = target.files as FileList
+    //   const file = fileList[0]
+    //   if (file) {
+    //     const fileName = uuidv4
+    //     try {
+    //       return store.dispatch('uploadFile', {
+    //         fileName,
+    //         file,
+    //         id,
+    //       })
+    //     } catch (error) {
+    //       console.error('file upload', error)
+    //     }
+    //   }
+    // }
     /**
      * NOTE:fireStoreに投稿する
      * 先にidのみPOSTし、そのIDを使ってfireStorageに画像を入れる。fireStorageのパスを含んだデータをfireStoreにPOSTしている

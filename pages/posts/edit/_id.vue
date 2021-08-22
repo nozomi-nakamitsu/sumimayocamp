@@ -11,11 +11,11 @@ import {
   useAsync,
   useRoute,
 } from '@nuxtjs/composition-api'
+// import * as uuidv4 from 'uuid'
 import { PostForm } from '../../../types/props-types'
 import ThePostForm from '../../../components/common/ThePostForm.vue'
-
 import { firestore } from '../../../plugins/firebase'
-import * as uuidv4 from 'uuid'
+
 export default defineComponent({
   components: {
     ThePostForm,
@@ -38,14 +38,14 @@ export default defineComponent({
       updated_at: post.updated_at,
     })
 
-    useAsync(async () => {
+    useAsync(() => {
       const id = Route.value.params.id
       try {
         store
           .dispatch('getPostData', {
             id,
           })
-          .then((res) => {
+          .then(() => {
             form.value = {
               id: post.id,
               user_id: post.user_id,
@@ -54,29 +54,28 @@ export default defineComponent({
               created_at: post.created_at,
               updated_at: post.updated_at,
             }
-            return
           })
       } catch (error) {
         console.error('投稿内容を取得できませんでした', error)
       }
     })
-    const fileChanged = (e: any, id: string) => {
-      const target = e.target as HTMLInputElement
-      const fileList = target.files as FileList
-      const file = fileList[0]
-      if (file) {
-        const fileName = uuidv4
-        try {
-          return store.dispatch('uploadFile', {
-            fileName,
-            file,
-            id,
-          })
-        } catch (error) {
-          console.error('file upload', error)
-        }
-      }
-    }
+    // const fileChanged = (e: any, id: string) => {
+    //   const target = e.target as HTMLInputElement
+    //   const fileList = target.files as FileList
+    //   const file = fileList[0]
+    //   if (file) {
+    //     const fileName = uuidv4
+    //     try {
+    //       return store.dispatch('uploadFile', {
+    //         fileName,
+    //         file,
+    //         id,
+    //       })
+    //     } catch (error) {
+    //       console.error('file upload', error)
+    //     }
+    //   }
+    // }
     /**
      * NOTE:更新処理
      *

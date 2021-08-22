@@ -9,11 +9,7 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  useAsync,
-} from '@nuxtjs/composition-api'
+import { defineComponent, ref, useAsync } from '@nuxtjs/composition-api'
 import Card from '../components/common/Card.vue'
 import { firestore } from '../plugins/firebase'
 export default defineComponent({
@@ -22,7 +18,7 @@ export default defineComponent({
   },
   setup() {
     const posts = ref<any>([])
-    useAsync(async () => {
+    useAsync(() => {
       firestore
         .collection('posts')
         .orderBy('created_at', 'desc')
@@ -58,7 +54,7 @@ export default defineComponent({
         })
     })
     return {
-      //全投稿データ
+      // 全投稿データ
       posts,
     }
   },
