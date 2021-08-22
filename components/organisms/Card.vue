@@ -54,7 +54,7 @@ import { Post, EmojiType } from '../../types/props-types'
 import { DeletePost } from '../../compositions/pages/usePost'
 import { formatDateToSlashWithTime } from '../../compositions/useFormatData'
 import { isCurrentUser } from '../../compositions/useAuth'
-import Emojifrom from '../../components/common/form/EmojiForm.vue'
+import Emojifrom from '../common/form/EmojiForm.vue'
 
 export default defineComponent({
   components: {
