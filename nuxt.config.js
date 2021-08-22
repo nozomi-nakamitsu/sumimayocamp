@@ -51,7 +51,10 @@ export default {
     '@nuxtjs/composition-api/module',
   ],
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [],
+  modules: ['nuxt-fontawesome'],
+  fontawesome: {
+    component: 'fa',
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -72,10 +75,8 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-   build: {
-    transpile: [
-      'vee-validate'
-    ]
+  build: {
+    transpile: ['vee-validate'],
   },
   env: {
     API_KEY,

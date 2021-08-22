@@ -7,18 +7,28 @@
         </div>
       </div>
     </div>
-
+    <template>
+      <div>
+        <fa :icon="icon" />
+      </div>
+    </template>
     <div>
       <Picker @select="selectEmoji" />
     </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, useStore, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  useStore,
+  ref,
+  computed,
+} from '@nuxtjs/composition-api'
 import { EmojiType } from '../../../types/props-types'
 
 import { isCurrentUser } from '../../../compositions/useAuth'
 import { Emoji, Picker } from 'emoji-mart-vue'
+import { faSmile } from '@fortawesome/free-solid-svg-icons'
 export default defineComponent({
   components: {
     Picker,
@@ -44,6 +54,8 @@ export default defineComponent({
         selectedItem.value = [...selectedItem.value, item]
       }
     }
+    // アイコン
+    const icon = computed(() => faSmile)
 
     return {
       isCurrentUser,
@@ -51,6 +63,8 @@ export default defineComponent({
       // 絵文字選択
       selectEmoji,
       selectedItem,
+      // アイコン
+      icon,
     }
   },
 })
