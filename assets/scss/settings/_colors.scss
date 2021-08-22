@@ -1,0 +1,36 @@
+/*
+  【色の定義方法】
+  ・https://codepen.io/meodai/full/mEvZRx このサイトでカラー名を調べる
+  ・(カラーの系統)-(カラー名) に統一する
+  ex) #bf13cd
+  → $purple-awkward-purple: #bf13cd;
+*/
+
+// 黒系
+$black: #1b1a1b;
+
+// グレー系
+$gray-lightpowdered: #d0d7e9;
+$gray-veranda: #9ca4b9;
+// 白系
+$white: #ffffff;
+
+// 青系
+$blue-rain: #4369ca;
+$blue-Livid: #6987d5;
+
+// 緑系
+
+// 赤系p
+$red-orko: #da1205;
+$red-coy: #fff5f4;
+// オレンジ系
+
+// 黄色系
+
+// ピンク
+
+/* shadow color */
+$black-shadow: rgba(0, 0, 0, 0.1);
+
+$filter-white: rgba(255, 255, 255, 0.65);

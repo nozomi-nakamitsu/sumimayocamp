@@ -1,8 +1,23 @@
 <template>
-  <div class="user-edit-container">
-    <input v-model="form.nickName" type="text" class="input" />
-    <button @click="submit">変更する</button>
-  </div>
+  <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
+    <form @submit.prevent="handleSubmit(submit)">
+      <ValidationInput
+        label="ニックネーム"
+        input-name="nickName"
+        rules="required"
+        class="nameinput"
+        :set-value="form.nickName"
+        @input="change($event, 'nickName')"
+      ></ValidationInput>
+      <input
+        type="submit"
+        class="common-button"
+        title="変更する"
+        :disabled="invalid"
+        :class="invalid"
+      />
+    </form>
+  </ValidationObserver>
 </template>
 
 <script lang="ts">
@@ -12,8 +27,11 @@ import {
   ref,
   useRouter,
 } from '@nuxtjs/composition-api'
-
+import ValidationInput from '../../components/common/form/ValidationInput.vue'
 export default defineComponent({
+  components: {
+    ValidationInput,
+  },
   setup() {
     // vuex
     const store = useStore()
@@ -35,11 +53,17 @@ export default defineComponent({
         store.dispatch('onRejectted', error)
       }
     }
+
+    // NOTE: 入力した値を親コンポーネントに渡す
+    const change = (event: InputEvent) => {
+      form.value.nickName = event
+    }
     return {
       submit,
       store,
       form,
       currentUser,
+      change,
     }
   },
 })

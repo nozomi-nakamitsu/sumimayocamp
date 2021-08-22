@@ -2,25 +2,43 @@
   <div class="form-container">
     <div>{{ title }}</div>
     <!-- TODO: style実装時にフォームのコンポーネントに分ける -->
-
-    <div class="box">
-      <p class="title">タイトル</p>
-      <input type="text" class="input" v-model="form.title" />
-    </div>
-    <template>
-      <div class="markdown-editor">
-        <no-ssr>
-          <mavon-editor
-            :toolbars="markdownOption"
-            language="ja"
-            v-model="form.content"
-          />
-        </no-ssr>
-      </div>
-    </template>
-    <div class="box">
-      <v-btn elevation="2" raised @click="onSubmit">投稿する</v-btn>
-    </div>
+    <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
+      <form @submit.prevent="handleSubmit(onSubmit)">
+        <ValidationInput
+          label="タイトル"
+          input-name="title"
+          rules="required"
+          class="nameinput"
+          :set-value="form.title"
+          @input="change($event, 'nickName')"
+        ></ValidationInput>
+        <template>
+          <ValidationProvider
+            tag="div"
+            class="provider"
+            rules="required"
+            name="内容"
+          >
+            <div class="markdown-editor">
+              <no-ssr>
+                <mavon-editor
+                  :toolbars="markdownOption"
+                  language="ja"
+                  v-model="form.content"
+                />
+              </no-ssr>
+            </div>
+          </ValidationProvider>
+        </template>
+        <input
+          type="submit"
+          class="common-button"
+          title="投稿する"
+          :disabled="invalid"
+          :class="invalid"
+        />
+      </form>
+    </ValidationObserver>
   </div>
 </template>
 <script lang="ts">
@@ -32,8 +50,12 @@ import {
   computed,
 } from '@nuxtjs/composition-api'
 import { markdownOption } from '../../compositions/useMarkdown'
+import ValidationInput from '../../components/common/form/ValidationInput.vue'
 // import { PostForm } from '../../types/props-types'
 export default defineComponent({
+  components: {
+    ValidationInput,
+  },
   props: {
     propsform: {
       type: Object,
@@ -59,6 +81,7 @@ export default defineComponent({
         props.title === '新規作成' ? new Date() : props.propsform.created_at,
       updated_at: new Date(),
     }))
+
     const fileUploadEvent = ref<any>(null)
 
     const selectFile = (event: any) => {
@@ -68,13 +91,15 @@ export default defineComponent({
      * NOTE:fireStoreに投稿する
      */
     const onSubmit = () => {
-      console.log(form.value.content)
       context.emit('on-submit', {
         formData: form.value,
         types: props.title,
       })
     }
-
+    // NOTE: 入力した値を親コンポーネントに渡す
+    const change = (event: InputEvent) => {
+      form.value.title = event
+    }
     return {
       // 認証系
       currentUser,
@@ -87,6 +112,8 @@ export default defineComponent({
       selectFile,
       // マークダウン
       markdownOption,
+      // フォームの値取得
+      change,
     }
   },
 })

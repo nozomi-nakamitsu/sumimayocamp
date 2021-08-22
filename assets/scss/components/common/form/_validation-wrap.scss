@@ -1,0 +1,8 @@
+.validation-wrap {
+  > .label {
+    font-size: 1.2rem;
+  }
+  > .provider > .error {
+    color: $red-orko;
+  }
+}

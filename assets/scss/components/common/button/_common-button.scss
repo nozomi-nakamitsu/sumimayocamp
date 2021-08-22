@@ -1,0 +1,29 @@
+// 【共通部品】青色ボタン
+.common-button {
+  position: relative;
+  z-index: 1;
+  display: block;
+  height: auto;
+  padding: 10px;
+  font-weight: bold;
+  color: $white;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: $blue-rain;
+  border-radius: 3px;
+  transition: all 0.3s;
+
+  &:disabled {
+    background-color: $gray-lightpowdered;
+  }
+
+  &:hover {
+    color: $white;
+    background-color: $blue-Livid;
+  }
+
+  &:disabled:hover {
+    background-color: $gray-lightpowdered;
+  }
+}
