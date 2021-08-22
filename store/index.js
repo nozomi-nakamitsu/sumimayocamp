@@ -102,6 +102,7 @@ export const actions = {
       publicObj.photoURL = userObject.photoURL
       publicObj.displayName = userObject.displayName
       publicObj.token = userObject.token
+      publicObj.nickName = userObject.nickName
       publicUser.set(publicObj, { merge: true }).then(() => {
         resolve(userObject)
       })
@@ -121,6 +122,7 @@ export const actions = {
       privateObj.email = userObject.email
       privateObj.token = userObject.token
       privateObj.refreshToken = userObject.refreshToken
+      privateObj.nickName = userObject.nickName
       privateUsers.set(privateObj, { merge: true }).then(() => {
         resolve(userObject)
       })
@@ -185,22 +187,22 @@ export const actions = {
         location.href = '/login'
       })
   },
-
-  editNickName({ commit, state }, nickName) {
-    try {
-      const publicUser = firestore
-        .collection('users')
-        .doc(state.currentUser.uid)
-      // ** usersに登録するObjのみを登録する
-      const publicObj = {}
-      publicObj.nickName = nickName
-      publicUser.set(publicObj, { merge: true }).then(() => {
-        commit('setCurrentUser', publicObj)
-        location.href = '/'
-      })
-    } catch (error) {
-      console.error(error)
-    }
+  // ログインユーザーのニックネームを変更する
+  editNickName({ commit, state }, formData) {
+    return new Promise((resolve) => {
+      try {
+        firestore
+          .collection('users')
+          .doc(state.currentUser.uid)
+          .update(formData)
+          .then(() => {
+            commit('setCurrentUser', formData)
+            resolve(formData)
+          })
+      } catch (error) {
+        console.error(error)
+      }
+    })
   },
   uploadFile(payload) {
     return new Promise((resolve) => {

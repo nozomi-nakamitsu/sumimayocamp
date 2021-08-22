@@ -3,7 +3,7 @@
     <div class="image">
       <img :src="currentUser.photoURL" alt="" class="img" />
     </div>
-    <v-toolbar-title
+    <v-toolbar-title @click="Router.push('/')"
       >{{
         currentUser.nickName ? currentUser.nickName : currentUser.displayName
       }}さんようこそ</v-toolbar-title
@@ -13,23 +13,22 @@
       <button @click="logout">ログアウト</button></v-toolbar-title
     >
     <v-toolbar-title>
-      <a href="/users/edit">ニックネーム変更</a>
+      <p @click="Router.push('/users/edit')">ニックネーム変更</p>
     </v-toolbar-title>
     <v-toolbar-title>
-      <a href="/">ホーム</a>
-    </v-toolbar-title>
-    <v-toolbar-title>
-      <a href="/posts/create">新規作成</a>
+      <p @click="Router.push('/posts/create')">新規作成</p>
     </v-toolbar-title>
   </v-toolbar>
 </template>
 
 <script lang="ts">
-import { defineComponent, useStore, ref } from '@nuxtjs/composition-api'
+import { defineComponent, useStore, ref,useRouter } from '@nuxtjs/composition-api'
 export default defineComponent({
   setup() {
-    // vuex
+    // compositionAPI
     const store = useStore()
+    const  Router= useRouter()
+
     // ref
     const currentUser = store.getters.getCurrentUser
     const drawer = ref<boolean>(false)
@@ -48,8 +47,9 @@ export default defineComponent({
     }
 
     return {
-      // vuex
+      // compositionAPI
       store,
+      Router,
       // ref系
       drawer,
       // ヘッダー開け閉め
