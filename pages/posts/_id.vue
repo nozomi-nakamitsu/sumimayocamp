@@ -72,7 +72,7 @@ export default defineComponent({
     const currentUser = store.getters.getCurrentUser
     const post = ref(store.getters.getPost)
     // 投稿者情報を取得
-    const postUser = ref<object>({})
+    const postUser = ref<object|undefined>({})
     useAsync( () => {
       const id = Route.value.params.id
       try {
