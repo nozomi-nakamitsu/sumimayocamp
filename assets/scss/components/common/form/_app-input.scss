@@ -1,0 +1,11 @@
+.app-input {
+  border: 1px solid $gray-lightpowdered;
+  width: 90%;
+  padding: 8px;
+  height: 40px;
+  &.-error {
+    color: $red-orko;
+    background-color: $red-coy;
+    border: 1px solid $red-orko;
+  }
+}

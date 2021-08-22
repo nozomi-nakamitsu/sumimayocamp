@@ -8,6 +8,11 @@
 //common
 @import 'components/common/loading-container';
 @import 'components/common/header-container';
+@import 'components/common/form/app-input';
+@import 'components/common/form/validation-wrap';
+@import 'components/common/button/common-button';
+
+
 //pages
 @import 'components/pages/users/user-edit-container';
 @import 'components/pages/posts/form-container';
