@@ -1,8 +1,25 @@
 <template>
-  <div class="user-edit-container">
-    <input v-model="form.nickName" type="text" class="input" />
-    <button @click="submit">変更する</button>
-  </div>
+  <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
+    <form @submit.prevent="handleSubmit(submit)">
+      <ValidationProvider v-slot="{ errors }" rules="required">
+        <div class="user-edit-container">
+          <input
+            v-model="form.nickName"
+            type="text"
+            class="input"
+            name="nickName"
+          />
+          <div class="error">{{ errors[0] }}</div>
+          <input
+            type="submit"
+            class="button"
+            title="変更する"
+            :disabled="invalid"
+          />
+        </div>
+      </ValidationProvider>
+    </form>
+  </ValidationObserver>
 </template>
 
 <script lang="ts">
@@ -12,7 +29,6 @@ import {
   ref,
   useRouter,
 } from '@nuxtjs/composition-api'
-
 export default defineComponent({
   setup() {
     // vuex
