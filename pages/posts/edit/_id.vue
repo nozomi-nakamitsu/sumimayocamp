@@ -1,5 +1,5 @@
 <template>
-  <ThePostForm :propsform="form" :title="'新規作成'" @on-submit="onSubmit" />
+  <ThePostForm :propsform="form" :title="'編集'" @on-submit="onSubmit" />
 </template>
 
 <script lang="ts">
@@ -8,12 +8,13 @@ import {
   useStore,
   ref,
   useRouter,
+  useAsync,
+  useRoute,
 } from '@nuxtjs/composition-api'
 // import * as uuidv4 from 'uuid'
-import { PostForm } from '../../types/props-types'
-import ThePostForm from '../../components/common/ThePostForm.vue'
-
-import { firestore } from '../../plugins/firebase'
+import { PostForm } from '../../../types/props-types'
+import ThePostForm from '../../../components/common/ThePostForm.vue'
+import { firestore } from '../../../plugins/firebase'
 
 export default defineComponent({
   components: {
@@ -23,15 +24,40 @@ export default defineComponent({
     // compositionAPI
     const store = useStore()
     const Router = useRouter()
+    const Route = useRoute()
+
     // ref系
     const currentUser = store.getters.getCurrentUser
+    const post = store.getters.getPost
     const form = ref<PostForm>({
-      id: '',
-      user_id: currentUser.uid,
-      title: '',
-      content: '',
-      created_at: new Date(),
-      updated_at: new Date(),
+      id: post.id,
+      user_id: post.user_id,
+      title: post.title,
+      content: post.content,
+      created_at: post.created_at,
+      updated_at: post.updated_at,
+    })
+
+    useAsync(() => {
+      const id = Route.value.params.id
+      try {
+        store
+          .dispatch('getPostData', {
+            id,
+          })
+          .then(() => {
+            form.value = {
+              id: post.id,
+              user_id: post.user_id,
+              title: post.title,
+              content: post.content,
+              created_at: post.created_at,
+              updated_at: post.updated_at,
+            }
+          })
+      } catch (error) {
+        console.error('投稿内容を取得できませんでした', error)
+      }
     })
     // const fileChanged = (e: any, id: string) => {
     //   const target = e.target as HTMLInputElement
@@ -51,26 +77,27 @@ export default defineComponent({
     //   }
     // }
     /**
-     * NOTE:fireStoreに投稿する
-     * 先にidのみPOSTし、そのIDを使ってfireStorageに画像を入れる。fireStorageのパスを含んだデータをfireStoreにPOSTしている
+     * NOTE:更新処理
+     *
      */
-    const onSubmit = (data: {
+    const onSubmit = async (data: {
       formData: PostForm
       file: string
       types: string
     }) => {
       try {
         form.value = data.formData
-        const id = firestore.collection('posts').doc().id
         // if (data.file !== null) {
         //   // @ts-ignore
         //   //TODO: 解消方法がわからないのでts-ignoreで対応
-        //   fileChanged(data.file, id).then((path) => {
+        //   await fileChanged(data.file, form.value.id).then((path) => {
         //     form.value.movieUrl = path
         //   })
         // }
-        form.value.id = id
-        firestore.collection('posts').doc(id).set(form.value)
+        await firestore
+          .collection('posts')
+          .doc(form.value.id)
+          .update(form.value)
         Router.push('/')
       } catch (error) {
         console.error(error)

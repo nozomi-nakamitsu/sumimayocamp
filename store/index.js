@@ -11,6 +11,14 @@ export const state = () => ({
     displayName: '',
     nickName: '',
   },
+  post: {
+    id: '',
+    user_id: '',
+    title: '',
+    content: '',
+    created_at: '',
+    updated_at: '',
+  },
 })
 
 export const mutations = {
@@ -23,6 +31,14 @@ export const mutations = {
     state.currentUser.photoURL = data.photoURL
     state.currentUser.displayName = data.displayName
     state.currentUser.nickName = data.nickName
+  },
+  setPost(state, data) {
+    state.post.id = data.id
+    state.post.user_id = data.user_id
+    state.post.title = data.title
+    state.post.content = data.content
+    state.post.created_at = data.created_at
+    state.post.updated_at = data.updated_at
   },
 }
 
@@ -43,6 +59,7 @@ export const actions = {
         userObject.refreshToken = user.refreshToken
         userObject.uid = user.uid
         userObject.displayName = user.displayName
+        userObject.nickName = user.displayName
         userObject.photoURL = user.photoURL
         userObject.uid = user.uid
         userObject.email = user.email
@@ -85,6 +102,7 @@ export const actions = {
       publicObj.photoURL = userObject.photoURL
       publicObj.displayName = userObject.displayName
       publicObj.token = userObject.token
+      publicObj.nickName = userObject.nickName
       publicUser.set(publicObj, { merge: true }).then(() => {
         resolve(userObject)
       })
@@ -104,6 +122,7 @@ export const actions = {
       privateObj.email = userObject.email
       privateObj.token = userObject.token
       privateObj.refreshToken = userObject.refreshToken
+      privateObj.nickName = userObject.nickName
       privateUsers.set(privateObj, { merge: true }).then(() => {
         resolve(userObject)
       })
@@ -168,22 +187,22 @@ export const actions = {
         location.href = '/login'
       })
   },
-
-  editNickName({ commit, state }, nickName) {
-    try {
-      const publicUser = firestore
-        .collection('users')
-        .doc(state.currentUser.uid)
-      // ** usersに登録するObjのみを登録する
-      const publicObj = {}
-      publicObj.nickName = nickName
-      publicUser.set(publicObj, { merge: true }).then(() => {
-        commit('setCurrentUser', publicObj)
-        location.href = '/'
-      })
-    } catch (error) {
-      console.error(error)
-    }
+  // ログインユーザーのニックネームを変更する
+  editNickName({ commit, state }, formData) {
+    return new Promise((resolve) => {
+      try {
+        firestore
+          .collection('users')
+          .doc(state.currentUser.uid)
+          .update(formData)
+          .then(() => {
+            commit('setCurrentUser', formData)
+            resolve(formData)
+          })
+      } catch (error) {
+        console.error(error)
+      }
+    })
   },
   uploadFile(payload) {
     return new Promise((resolve) => {
@@ -206,6 +225,26 @@ export const actions = {
       }
     })
   },
+  // NOTE:指定したIDの投稿情報を取得
+  getPostData({ commit }, payload) {
+    return new Promise((resolve) => {
+      try {
+        firestore
+          .collection('posts')
+          .doc(payload.id)
+          .get()
+          .then((doc) => {
+            // success
+            if (doc) {
+              commit('setPost', doc.data())
+              resolve(doc.data())
+            }
+          })
+      } catch (error) {
+        console.error(error)
+      }
+    })
+  },
 }
 
 export const getters = {
@@ -214,5 +253,8 @@ export const getters = {
   },
   getCurrentUser(state) {
     return state.currentUser
+  },
+  getPost(state) {
+    return state.post
   },
 }
