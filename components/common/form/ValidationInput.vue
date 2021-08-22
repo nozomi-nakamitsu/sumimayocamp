@@ -1,8 +1,6 @@
 <template>
   <div class="validation-wrap">
-    <label v-if="!!label" :for="inputName" class="label"
-      >{{ label }}
-    </label>
+    <label v-if="!!label" :for="inputName" class="label">{{ label }} </label>
     <span v-if="required" class="required-asterisk">*</span>
     <ValidationProvider
       v-slot="{ failed, errors }"
@@ -12,7 +10,7 @@
     >
       <input
         :id="inputName"
-        :value="inputValue"
+        :value="form.inputValue"
         type="text"
         class="app-input"
         :disabled="disabled"
@@ -38,7 +36,7 @@
  * disabled 非活性にする場合にtrueを渡す
  * rules vee validateと同じ規則でバリデーションルールを指定
  */
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { defineComponent, computed } from '@nuxtjs/composition-api'
 // バリデーション周り
 import { ValidationProvider } from 'vee-validate'
 import { doneOrError } from '../../../compositions/validation-styles'
@@ -81,18 +79,20 @@ export default defineComponent({
     },
   },
   setup(props, ctx) {
-    const inputValue = ref<string | number>(props.setValue)
+    const form = computed(() => ({
+      inputValue: props.setValue,
+    }))
     const inputFunc = (e: Event) => {
       if (!(e.target instanceof HTMLInputElement)) {
         return
       }
-      inputValue.value = e.target.value
-      ctx.emit('input', inputValue.value)
+      form.value.inputValue = e.target.value
+      ctx.emit('input', form.value.inputValue)
     }
 
     return {
       doneOrError,
-      inputValue,
+      form,
       inputFunc,
     }
   },

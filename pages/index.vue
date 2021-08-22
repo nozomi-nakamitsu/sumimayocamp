@@ -21,7 +21,7 @@ export default defineComponent({
     useAsync(() => {
       firestore
         .collection('posts')
-        .orderBy('created_at', 'desc')
+        .orderBy('updated_at', 'desc')
         .get()
         .then((docs) => {
           // success
