@@ -59,14 +59,16 @@ import {
   PropType,
   useRouter,
   useStore,
-  ref,
 } from '@nuxtjs/composition-api'
-import { Post, EmojiType } from '../../types/props-types'
+import { Post } from '../../types/props-types'
 import { DeletePost } from '../../compositions/pages/usePost'
 import { formatDateToSlashWithTime } from '../../compositions/useFormatData'
+import { useEmoji } from '../../compositions/useEmoji'
+
 import { isCurrentUser } from '../../compositions/useAuth'
 import Emojifrom from '../molecules/EmojiItems.vue'
 import { Picker } from 'emoji-mart-vue'
+
 export default defineComponent({
   components: {
     Emojifrom,
@@ -85,34 +87,21 @@ export default defineComponent({
     const store = useStore()
     // ref系
     const currentUser = store.getters.getCurrentUser
+    // 絵文字関連の処理
+    const {
+      selectedItem,
+      isFormVisible,
+      onFocus,
+      onRemoveFocus,
+      selectEmoji,
+      switchVisible,
+    } = useEmoji()
 
-    const selectedItem = ref<EmojiType[]>([])
-    const isFormVisible = ref<Boolean>(false)
-    const onFocus = () => {
-      isFormVisible.value = true
-    }
-    const onRemoveFocus = () => {
-      isFormVisible.value = false
-    }
-    const switchVisible = () => {
-      isFormVisible.value = !isFormVisible.value
-    }
-    // 絵文字を選択する
-    const selectEmoji = (item: any) => {
-      if (!selectedItem.value) {
-        selectedItem.value = item.unified
-      } else if (selectedItem.value.includes(item)) {
-        selectedItem.value = selectedItem.value.filter((v) => v.id !== item.id)
-      } else {
-        selectedItem.value = [...selectedItem.value, item]
-      }
-      switchVisible()
-    }
     return {
       DeletePost,
       isCurrentUser,
       currentUser,
-
+      useEmoji,
       // フォーマット
       formatDateToSlashWithTime,
       // compositionAPI
