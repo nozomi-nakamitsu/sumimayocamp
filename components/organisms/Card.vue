@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="card-container">
     <v-card class="mx-auto" width="500">
       <v-card-title>
         <span class="text-h6 font-weight-light">
