@@ -76,7 +76,7 @@ export default defineComponent({
   },
   props: {
     post: {
-      type: Object as PropType<Post>,
+      type: Object  as PropType<Post>,
       required: true,
     },
   },
@@ -95,7 +95,7 @@ export default defineComponent({
       onRemoveFocus,
       selectEmoji,
       switchVisible,
-    } = useEmoji()
+    } = useEmoji(props,currentUser)
 
     return {
       DeletePost,

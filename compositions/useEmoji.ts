@@ -1,6 +1,7 @@
 import { ref } from '@nuxtjs/composition-api'
 import { EmojiType } from '../types/props-types'
-export const useEmoji = () => {
+import { firestore } from '../plugins/firebase'
+export const useEmoji = (props: any, currentUser: any) => {
   const selectedItem = ref<any[]>([])
   const isFormVisible = ref<Boolean>(false)
   const onFocus = () => {
@@ -14,18 +15,33 @@ export const useEmoji = () => {
   }
 
   // 絵文字を選択する
-  const selectEmoji = (item: any) => {
-    const displayselectedItemIsd = JSON.parse(
-      JSON.stringify(selectedItem.value)
-    ).map((v: EmojiType) => v.id)
-    if (!selectedItem.value) {
-      selectedItem.value = item.unified
-    } else if (displayselectedItemIsd.includes(item.id)) {
+  const selectEmoji = async (item: any, id: string) => {
+    try {
+      const displayselectedItemIsd = JSON.parse(
+        JSON.stringify(selectedItem.value)
+      ).map((v: EmojiType) => v.id)
+      if (!selectedItem.value) {
+        selectedItem.value = item.unified
+        return
+      } else if (displayselectedItemIsd.includes(item.id)) {
+        selectedItem.value = selectedItem.value.filter((v) => v.id !== item.id)
+        return
+      } else {
+        selectedItem.value = [...selectedItem.value, item]
+      }
+      await firestore
+        .collection('posts')
+        .doc(props.post.id)
+        .collection('emojiItmes')
+        .doc(item.id)
+        .set({ item: item, uid: currentUser.uid })
+    } catch (e) {
+      // エラー時は選択した絵文字を画面から削除する
       selectedItem.value = selectedItem.value.filter((v) => v.id !== item.id)
-    } else {
-      selectedItem.value = [...selectedItem.value, item]
+      console.error(e)
+    } finally {
+      switchVisible()
     }
-    switchVisible()
   }
   return {
     selectedItem,
