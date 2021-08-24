@@ -35,7 +35,7 @@ export default defineComponent({
   props: {
     selectedItem: {
       type: Array as () => PropType<EmojiType>,
-      required: true,
+      defaukt: [],
     },
   },
   emits: ['on-focus', 'on-clicked'],
