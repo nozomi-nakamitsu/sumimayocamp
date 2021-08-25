@@ -87,4 +87,5 @@ export default {
     APP_ID,
     MEASUREMENT_ID,
   },
+  ssr: false,
 }
