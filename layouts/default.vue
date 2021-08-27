@@ -18,8 +18,8 @@ import {
   computed,
 } from '@nuxtjs/composition-api'
 import firebase, { firestore } from '../plugins/firebase'
-import Loading from '../components/common/Loading.vue'
-import Header from '../components/common/Header.vue'
+import Loading from '../components/loadings/Loading.vue'
+import Header from '../components/organisms/Header.vue'
 export default defineComponent({
   components: {
     Loading,

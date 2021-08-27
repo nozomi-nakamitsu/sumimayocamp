@@ -1,0 +1,10 @@
+.card-container {
+  position: relative;
+  > .form {
+    width: 338px;
+    position: absolute;
+    top: 210px;
+    z-index: 2;
+    margin: 0;
+  }
+}

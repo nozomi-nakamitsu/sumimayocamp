@@ -11,7 +11,7 @@ import {
 } from '@nuxtjs/composition-api'
 // import * as uuidv4 from 'uuid'
 import { PostForm } from '../../types/props-types'
-import ThePostForm from '../../components/common/ThePostForm.vue'
+import ThePostForm from '../../components/organisms/ThePostForm.vue'
 
 import { firestore } from '../../plugins/firebase'
 
