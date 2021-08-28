@@ -91,3 +91,5 @@ sw.*
 # .env
 .env
 *.firebase
+# .vscode
+.vscode

@@ -21,20 +21,10 @@ export interface Post {
   user_id: string
   title: string
   content: string
-  url: string
-  movieUrl: string
-  learn: string
+
   created_at: Date
   updated_at: Date
-  users: {
-    displayName: string
-    isNewUser: Boolean
-    nickName: string
-    photoURL: string
-    providerId: string
-    token: string
-    uid: string
-  }
+  user: CurrentUser
 }
 
 /**
