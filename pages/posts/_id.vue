@@ -78,18 +78,8 @@ export default defineComponent({
           .dispatch('getPostData', {
             id,
           })
-          .then((res) => {
-            post.value = res
-            // 投稿者情報を取得
-            firestore
-              .collection('users')
-              .doc(post.value.user_id)
-              .get()
-              .then((doc) => {
-                if (doc) {
-                  postUser.value = doc.data()
-                }
-              })
+          .then((result) => {
+            post.value = { ...result }
           })
       } catch (error) {
         console.error('投稿内容を取得できませんでした', error)
