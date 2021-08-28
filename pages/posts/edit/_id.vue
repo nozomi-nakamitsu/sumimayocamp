@@ -28,14 +28,14 @@ export default defineComponent({
 
     // ref系
     const currentUser = store.getters.getCurrentUser
-    const post = store.getters.getPost
     const form = ref<PostForm>({
-      id: post.id,
-      user_id: post.user_id,
-      title: post.title,
-      content: post.content,
-      created_at: post.created_at,
-      updated_at: post.updated_at,
+      id: '',
+      user_id: currentUser.uid,
+      title: '',
+      content: '',
+      created_at: new Date(),
+      updated_at: new Date(),
+      user:{...currentUser}
     })
 
     useAsync(() => {
@@ -45,15 +45,8 @@ export default defineComponent({
           .dispatch('getPostData', {
             id,
           })
-          .then(() => {
-            form.value = {
-              id: post.id,
-              user_id: post.user_id,
-              title: post.title,
-              content: post.content,
-              created_at: post.created_at,
-              updated_at: post.updated_at,
-            }
+          .then((result) => {
+            form.value = {...result}
           })
       } catch (error) {
         console.error('投稿内容を取得できませんでした', error)

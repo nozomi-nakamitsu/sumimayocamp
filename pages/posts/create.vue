@@ -32,6 +32,7 @@ export default defineComponent({
       content: '',
       created_at: new Date(),
       updated_at: new Date(),
+      user:{...currentUser}
     })
     // const fileChanged = (e: any, id: string) => {
     //   const target = e.target as HTMLInputElement
@@ -74,7 +75,7 @@ export default defineComponent({
         Router.push('/')
       } catch (error) {
         console.error(error)
-      }
+    }
     }
 
     return {
