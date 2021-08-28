@@ -9,6 +9,7 @@ export interface PostForm {
   content: string
   created_at: Date
   updated_at: Date
+  user:CurrentUser
 }
 
 /**

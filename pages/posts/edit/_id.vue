@@ -36,6 +36,7 @@ export default defineComponent({
       content: post.content,
       created_at: post.created_at,
       updated_at: post.updated_at,
+      user:post.user
     })
 
     useAsync(() => {
@@ -53,6 +54,7 @@ export default defineComponent({
               content: post.content,
               created_at: post.created_at,
               updated_at: post.updated_at,
+              user:post.user
             }
           })
       } catch (error) {

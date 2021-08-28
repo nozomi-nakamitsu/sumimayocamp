@@ -78,8 +78,9 @@ export default defineComponent({
       user_id: currentUser.uid,
       content: props.propsform.content,
       created_at:
-        props.title === '新規作成' ? new Date() : props.propsform.created_at,
+      props.title === '新規作成' ? new Date() : props.propsform.created_at,
       updated_at: new Date(),
+      user: props.propsform.user
     }))
 
     const fileUploadEvent = ref<any>(null)
