@@ -19,8 +19,15 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, useStore, PropType } from '@nuxtjs/composition-api'
-import { EmojiType } from '@/types/props-types'
+import {
+  defineComponent,
+  useStore,
+  PropType,
+  watchEffect,
+  computed,
+  ref,
+} from '@nuxtjs/composition-api'
+import { EmojiType, Post } from '@/types/props-types'
 
 import { isCurrentUser } from '@/compositions/useAuth'
 import { Emoji } from 'emoji-mart-vue'
@@ -37,6 +44,10 @@ export default defineComponent({
       type: Array as () => PropType<EmojiType>,
       default: [],
     },
+    post: {
+      type: Object as PropType<any>,
+      required: true,
+    },
   },
   emits: ['on-focus', 'on-clicked'],
   setup(props) {
@@ -44,12 +55,22 @@ export default defineComponent({
     const store = useStore()
     // ref系
     const currentUser = store.getters.getCurrentUser
+ 
+    // const emojiItems = ref(
+    //   JSON.parse(JSON.stringify(props.post.emojiItems))
+    // )
+    watchEffect(() => {
+      // console.log('post', emojiItems.value)
+      // const aaa = emojiItems.value.map((v: any) => v)
+      // console.log('aaa', aaa)
+    })
     return {
       // 認証系
       isCurrentUser,
       currentUser,
       // アイコン
       faSmile,
+     
     }
   },
 })

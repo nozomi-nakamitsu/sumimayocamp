@@ -1,6 +1,6 @@
 import { ref } from '@nuxtjs/composition-api'
 import { EmojiType } from '@/types/props-types'
-import firebase, { firestore, } from '@/plugins/firebase'
+import firebase, { firestore } from '@/plugins/firebase'
 export const useEmoji = (props: any, currentUser: any) => {
   const selectedItem = ref<any[]>([])
   const isFormVisible = ref<Boolean>(false)
@@ -24,22 +24,38 @@ export const useEmoji = (props: any, currentUser: any) => {
         selectedItem.value = item.unified
         return
       } else if (displayselectedItemIsd.includes(item.id)) {
+        // NOTE:同じものを二回目に押した時は、絵文字を削除
         selectedItem.value = selectedItem.value.filter((v) => v.id !== item.id)
         await firestore
-        .collection('posts')
-        .doc(props.post.id).update({
-          "emojiItems.users": firebase.firestore.FieldValue.arrayRemove(currentUser.uid )
-        })
+          .collection('posts')
+          .doc(props.post.id)
+          .collection('emojiItems')
+          .doc(item.id)
+          .collection('users')
+          .doc(currentUser.uid)
+          .delete()
         return
       } else {
         selectedItem.value = [...selectedItem.value, item]
       }
-     await firestore
+      //NOTE: 絵文字データをサブコレクションとしてfirestoreに追加
+      await firestore
         .collection('posts')
-        .doc(props.post.id).update({
-          "emojiItems.item": item,
-          "emojiItems.users": firebase.firestore.FieldValue.arrayUnion(currentUser.uid )
+        .doc(props.post.id)
+        .collection('emojiItems')
+        .doc(item.id)
+        .set({
+          item: item,
         })
+      // NOTE: 絵文字のユーザーデータをサブサブコレクションとしてfirestoreに追加
+      await firestore
+        .collection('posts')
+        .doc(props.post.id)
+        .collection('emojiItems')
+        .doc(item.id)
+        .collection('users')
+        .doc(currentUser.uid)
+        .set({ ...currentUser })
     } catch (e) {
       // エラー時は選択した絵文字を画面から削除する
       selectedItem.value = selectedItem.value.filter((v) => v.id !== item.id)

@@ -44,6 +44,7 @@
       </v-card-actions>
       <Emojifrom
         :selectedItem="selectedItem"
+        :post="post"
         @on-focus="onFocus"
         @on-clicked="switchVisible"
       />
