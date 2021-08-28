@@ -60,12 +60,12 @@ import {
   useRouter,
   useStore,
 } from '@nuxtjs/composition-api'
-import { Post } from '../../types/props-types'
-import { DeletePost } from '../../compositions/pages/usePost'
-import { formatDateToSlashWithTime } from '../../compositions/useFormatData'
-import { useEmoji } from '../../compositions/useEmoji'
+import { Post } from '@/types/props-types'
+import { DeletePost } from '@/compositions/pages/usePost'
+import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
+import { useEmoji } from '@/compositions/useEmoji'
 
-import { isCurrentUser } from '../../compositions/useAuth'
+import { isCurrentUser } from '@/compositions/useAuth'
 import Emojifrom from '../molecules/EmojiItems.vue'
 import { Picker } from 'emoji-mart-vue'
 

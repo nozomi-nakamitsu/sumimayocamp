@@ -10,8 +10,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, useAsync } from '@nuxtjs/composition-api'
-import Card from '../components/organisms/Card.vue'
-import { firestore } from '../plugins/firebase'
+import Card from '@/components/organisms/Card.vue'
+import { firestore } from '@/plugins/firebase'
 export default defineComponent({
   components: {
     Card,

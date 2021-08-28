@@ -49,9 +49,8 @@ import {
   SetupContext,
   computed,
 } from '@nuxtjs/composition-api'
-import { markdownOption } from '../../compositions/useMarkdown'
+import { markdownOption } from '@/compositions/useMarkdown'
 import ValidationInput from '../molecules/form/ValidationInput.vue'
-// import { PostForm } from '../../types/props-types'
 export default defineComponent({
   components: {
     ValidationInput,

@@ -39,7 +39,7 @@
 import { defineComponent, computed } from '@nuxtjs/composition-api'
 // バリデーション周り
 import { ValidationProvider } from 'vee-validate'
-import { doneOrError } from '../../../compositions/validation-styles'
+import { doneOrError } from '@/compositions/validation-styles'
 export default defineComponent({
   components: {
     ValidationProvider,
