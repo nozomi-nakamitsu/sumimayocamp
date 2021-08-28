@@ -27,7 +27,7 @@ import {
   ref,
   useRouter,
 } from '@nuxtjs/composition-api'
-import ValidationInput from '../../components/molecules/form/ValidationInput.vue'
+import ValidationInput from '@/components/molecules/form/ValidationInput.vue'
 export default defineComponent({
   components: {
     ValidationInput,
