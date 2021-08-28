@@ -55,6 +55,7 @@ export default {
   fontawesome: {
     component: 'fa',
   },
+  defaultLocale: 'ja',
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

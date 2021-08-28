@@ -16,6 +16,7 @@
         :disabled="disabled"
         :placeholder="placeholder"
         :class="doneOrError(failed)"
+        :name="inputName"
         @input="inputFunc"
       />
       <p v-if="errors.length > 0" class="error">
