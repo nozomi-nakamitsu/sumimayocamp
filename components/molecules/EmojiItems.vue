@@ -1,9 +1,13 @@
 <template>
   <div class="emoji-container">
     <div class="items">
-      <div v-for="(item, index) in selectedItem" :key="index" class="wrapper">
+      <div
+        v-for="(emojiItem, index) in emojiItems"
+        :key="index"
+        class="wrapper"
+      >
         <div class="box">
-          <Emoji :emoji="item" :size="20" class="emoji-image" />
+          <Emoji :emoji="emojiItem.item.item" :size="20" class="emoji-image" />
         </div>
       </div>
       <div class="wrapper">
@@ -45,7 +49,7 @@ export default defineComponent({
       default: [],
     },
     post: {
-      type: Object as PropType<any>,
+      type: Object as PropType<Post>,
       required: true,
     },
   },
@@ -55,12 +59,12 @@ export default defineComponent({
     const store = useStore()
     // ref系
     const currentUser = store.getters.getCurrentUser
- 
-    // const emojiItems = ref(
-    //   JSON.parse(JSON.stringify(props.post.emojiItems))
-    // )
+
+    const emojiItems = computed(() =>
+      JSON.parse(JSON.stringify(props.post.emojiItems))
+    )
     watchEffect(() => {
-      // console.log('post', emojiItems.value)
+      console.log('emojiItems', emojiItems.value)
       // const aaa = emojiItems.value.map((v: any) => v)
       // console.log('aaa', aaa)
     })
@@ -70,7 +74,8 @@ export default defineComponent({
       currentUser,
       // アイコン
       faSmile,
-     
+      //絵文字
+      emojiItems,
     }
   },
 })

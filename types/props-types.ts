@@ -9,7 +9,7 @@ export interface PostForm {
   content: string
   created_at: Date
   updated_at: Date
-  user:CurrentUser
+  user: CurrentUser
 }
 
 /**
@@ -25,6 +25,10 @@ export interface Post {
   created_at: Date
   updated_at: Date
   user: CurrentUser
+  emojiItems: {
+    item: EmojiType | undefined
+    users: CurrentUser[]
+  }[]
 }
 
 /**

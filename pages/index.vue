@@ -14,15 +14,20 @@ import {
   onBeforeUnmount,
   onMounted,
   ref,
+  useStore,
 } from '@nuxtjs/composition-api'
-import { Post } from '@/types/props-types'
+import { CurrentUser, EmojiType, Post } from '@/types/props-types'
 import Card from '@/components/organisms/Card.vue'
 import { firestore } from '@/plugins/firebase'
+import EmojiItemsVue from '~/components/molecules/EmojiItems.vue'
 export default defineComponent({
   components: {
     Card,
   },
   setup() {
+    // compositionAPI
+    const store = useStore()
+    const currentUser = store.getters.getCurrentUser
     const posts = ref<Post[]>([])
     var unsubscribe = null as any
 
@@ -36,7 +41,29 @@ export default defineComponent({
             (change) => {
               // 変更後のデータが取得できる
               if (change.type === 'added') {
-                posts.value = [...posts.value, change.doc.data() as Post]
+                const postData = change.doc.data()
+                change.doc.ref
+                  .collection('emojiItems')
+
+                  .get()
+                  .then((res) => {
+                    // サブコレクションの絵文字データとサブサブコレクションの絵文字ユーザーデータを取得
+                    const getEmojiData = res.docs.map((v) => {
+                      const item = v.data() as EmojiType
+                      const emojiUser = <CurrentUser[]>[]
+                      v.ref
+                        .collection('users')
+                        .get()
+                        .then((users: any) => {
+                          users.docs.map((user: any) => {
+                            emojiUser.push(user.data())
+                          })
+                        })
+                      return { item, users: emojiUser as CurrentUser[] }
+                    })
+                    postData.emojiItems = getEmojiData
+                    posts.value = [...posts.value, postData as Post]
+                  })
               } else if (change.type === 'removed') {
                 posts.value = posts.value.filter(
                   (v: Post) => v.id !== change.doc.data().id
