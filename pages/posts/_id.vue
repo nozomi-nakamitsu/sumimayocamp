@@ -55,8 +55,6 @@ import MarkdownViewCard from '../../components/organisms/MarkdownViewCard.vue'
 import { formatDateToSlashWithTime } from '../../compositions/useFormatData'
 import { isCurrentUser } from '../../compositions/useAuth'
 import { firestore } from '../../plugins/firebase.js'
-import { DeletePost } from '../../compositions/pages/usePost'
-
 
 export default defineComponent({
   components: {
@@ -72,8 +70,8 @@ export default defineComponent({
     const currentUser = store.getters.getCurrentUser
     const post = ref(store.getters.getPost)
     // 投稿者情報を取得
-    const postUser = ref<object|undefined>({})
-    useAsync( () => {
+    const postUser = ref<object | undefined>({})
+    useAsync(() => {
       const id = Route.value.params.id
       try {
         store
@@ -105,6 +103,15 @@ export default defineComponent({
       }
       return formatDateToSlashWithTime(post.value.updated_at)
     })
+    // 削除メソッド
+    const DeletePost = async (id: string) => {
+      try {
+        await firestore.collection('posts').doc(id).delete()
+        Router.push('/')
+      } catch (error) {
+        console.error(error)
+      }
+    }
 
     return {
       // 認証系
