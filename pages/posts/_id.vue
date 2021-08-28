@@ -51,10 +51,10 @@ import {
   useRouter,
   computed,
 } from '@nuxtjs/composition-api'
-import MarkdownViewCard from '../../components/organisms/MarkdownViewCard.vue'
-import { formatDateToSlashWithTime } from '../../compositions/useFormatData'
-import { isCurrentUser } from '../../compositions/useAuth'
-import { firestore } from '../../plugins/firebase.js'
+import MarkdownViewCard from '@/components/organisms/MarkdownViewCard.vue'
+import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
+import { isCurrentUser } from '@/compositions/useAuth'
+import { firestore } from '@/plugins/firebase.js'
 
 export default defineComponent({
   components: {

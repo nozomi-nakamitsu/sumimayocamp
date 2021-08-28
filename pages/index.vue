@@ -11,16 +11,13 @@
 <script lang="ts">
 import {
   defineComponent,
-  onBeforeMount,
   onBeforeUnmount,
   onMounted,
   ref,
-  useAsync,
 } from '@nuxtjs/composition-api'
-import Card from '../components/organisms/Card.vue'
-import { firestore } from '../plugins/firebase'
 import { Post } from '@/types/props-types'
-
+import Card from '@/components/organisms/Card.vue'
+import { firestore } from '@/plugins/firebase'
 export default defineComponent({
   components: {
     Card,

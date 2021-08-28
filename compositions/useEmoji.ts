@@ -1,6 +1,6 @@
 import { ref } from '@nuxtjs/composition-api'
-import { EmojiType } from '../types/props-types'
-import firebase, { firestore, } from '../plugins/firebase'
+import { EmojiType } from '@/types/props-types'
+import firebase, { firestore, } from '@/plugins/firebase'
 export const useEmoji = (props: any, currentUser: any) => {
   const selectedItem = ref<any[]>([])
   const isFormVisible = ref<Boolean>(false)
