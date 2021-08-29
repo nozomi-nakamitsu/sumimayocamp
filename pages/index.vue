@@ -15,6 +15,7 @@ import {
   onMounted,
   ref,
   useStore,
+  onActivated,
 } from '@nuxtjs/composition-api'
 import { CurrentUser, EmojiType, Post } from '@/types/props-types'
 import Card from '@/components/organisms/Card.vue'
@@ -79,6 +80,10 @@ export default defineComponent({
     // ページ遷移後にsnapshotでの監視をstopする
     onBeforeUnmount(() => {
       unsubscribe()
+    })
+
+    onActivated(() => {
+      console.log(' アップデート')
     })
 
     return {

@@ -69,13 +69,14 @@ export default defineComponent({
 
     const emojiItems = computed(() => {
       const target = JSON.parse(JSON.stringify(props.post.emojiItems))
+      console.log('target', target)
       return target.filter((v: any) => v.users.length !== 0)
     })
-    watchEffect(() => {
-      console.log('emojiItems', emojiItems.value)
-      // const aaa = emojiItems.value.map((v: any) => v)
-      // console.log('aaa', aaa)
-    })
+    // watchEffect(() => {
+    //   console.log('emojiItems', emojiItems.value)
+    //   // const aaa = emojiItems.value.map((v: any) => v)
+    //   // console.log('aaa', aaa)
+    // })
     return {
       // 認証系
       isCurrentUser,
