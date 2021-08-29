@@ -51,18 +51,36 @@ export default defineComponent({
                     // サブコレクションの絵文字データとサブサブコレクションの絵文字ユーザーデータを取得
                     const getEmojiData = res.docs.map((v) => {
                       const item = v.data() as EmojiType
-                      const emojiUser = <CurrentUser[]>[]
-                      v.ref
-                        .collection('users')
-                        .get()
-                        .then((users: any) => {
-                          users.docs.map((user: any) => {
-                            emojiUser.push(user.data())
-                          })
+                      var emojiUser = <CurrentUser[]>[]
+                      v.ref.collection('users').onSnapshot((usersSnapshot) => {
+                        usersSnapshot.docChanges().forEach((changeUser) => {
+                          if (changeUser.type === 'added') {
+                            usersSnapshot.docs.map((user: any) => {
+                              const emojiUserids = emojiUser.map(
+                                (user) => user.uid
+                              )
+                              if (emojiUserids.includes(user.data().uid)) {
+                                console.log('追加')
+                                return
+                              } else {
+                                emojiUser.push(user.data())
+                              }
+                            })
+                          } else if (changeUser.type === 'removed') {
+                            usersSnapshot.docs.map((user: any) => {
+                              emojiUser = emojiUser.filter(
+                                (v: CurrentUser) => v.uid !== currentUser.uid
+                              )
+                            })
+                          }
                         })
+                      })
+
                       return { item, users: emojiUser as CurrentUser[] }
                     })
                     postData.emojiItems = getEmojiData
+
+                    console.log('AAAAAA__getEmojiData', getEmojiData)
                     posts.value = [...posts.value, postData as Post]
                   })
               } else if (change.type === 'removed') {
@@ -81,11 +99,6 @@ export default defineComponent({
     onBeforeUnmount(() => {
       unsubscribe()
     })
-
-    onActivated(() => {
-      console.log(' アップデート')
-    })
-
     return {
       // 全投稿データ
       posts,

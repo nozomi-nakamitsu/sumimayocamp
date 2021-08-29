@@ -3,50 +3,40 @@
     <v-card class="mx-auto" width="500">
       <v-card-title>
         <span class="text-h6 font-weight-light">
-          タイトル: {{ displayPost.title }}</span
+          タイトル: {{ post.title }}</span
         >
       </v-card-title>
       <v-card-text class="text-h5 font-weight-bold">
-        {{ formatDateToSlashWithTime(displayPost.updated_at) }}
+        {{ formatDateToSlashWithTime(post.updated_at) }}
       </v-card-text>
       <v-card-actions>
         <v-list-item class="grow">
           <v-list-item-avatar color="grey darken-3">
-            <v-img
-              class="elevation-6"
-              alt=""
-              :src="displayPost.user.photoURL"
-            ></v-img>
+            <v-img class="elevation-6" alt="" :src="post.user.photoURL"></v-img>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{
-              displayPost.user.nickName
-                ? displayPost.user.nickName
-                : displayPost.user.displayName
+              post.user.nickName ? post.user.nickName : post.user.displayName
             }}</v-list-item-title>
           </v-list-item-content>
-          <v-list-item-content
-            v-if="isCurrentUser(displayPost.user_id, currentUser)"
-          >
+          <v-list-item-content v-if="isCurrentUser(post.user_id, currentUser)">
             <v-list-item-title
               style="cursor: pointer"
-              @click="Router.push(`/posts/edit/${displayPost.id}`)"
+              @click="Router.push(`/posts/edit/${post.id}`)"
               >編集</v-list-item-title
             >
           </v-list-item-content>
-          <v-list-item-content
-            v-if="isCurrentUser(displayPost.user_id, currentUser)"
-          >
+          <v-list-item-content v-if="isCurrentUser(post.user_id, currentUser)">
             <v-list-item-title
               style="cursor: pointer"
-              @click="DeletePost(displayPost.id)"
+              @click="DeletePost(post.id)"
               >削除</v-list-item-title
             >
           </v-list-item-content>
           <v-list-item-content>
             <v-list-item-title
               style="cursor: pointer"
-              @click="Router.push(`/posts/${displayPost.id}`)"
+              @click="Router.push(`/posts/${post.id}`)"
               >詳細</v-list-item-title
             >
           </v-list-item-content>
@@ -54,7 +44,7 @@
       </v-card-actions>
       <Emojifrom
         :selectedItem="selectedItem"
-        :post="displayPost"
+        :post="post"
         @on-focus="onFocus"
         @on-clicked="switchVisible"
       />
@@ -101,7 +91,6 @@ export default defineComponent({
 
     // 絵文字関連の処理
     const {
-      displayPost,
       selectedItem,
       isFormVisible,
       onFocus,
@@ -119,7 +108,6 @@ export default defineComponent({
       }
     }
     return {
-      displayPost,
       DeletePost,
       isCurrentUser,
       currentUser,

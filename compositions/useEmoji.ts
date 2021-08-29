@@ -4,7 +4,6 @@ import firebase, { firestore } from '@/plugins/firebase'
 export const useEmoji = (props: any, currentUser: any) => {
   const router = useRouter()
   const selectedItem = ref<any[]>([])
-  const displayPost = ref<any>(props.post)
   const isFormVisible = ref<Boolean>(false)
   const onFocus = () => {
     isFormVisible.value = true
@@ -60,14 +59,11 @@ export const useEmoji = (props: any, currentUser: any) => {
           .collection('users')
           .doc(currentUser.uid)
           .delete()
-       router.go(0)
         return
       } else {
         if (displayPropsItems.indexOf(item.id) === -1) {
           selectedItem.value = [...selectedItem.value, item]
         } else {
-          router.go(0)
-
           // const target = displayPost.value.emojiItems.find(
           //   (v: any) => v.item.item.id === item.id
           // )
@@ -79,7 +75,6 @@ export const useEmoji = (props: any, currentUser: any) => {
           //     item: { ...target.item },
           //   },
           // }
-          console.log(' displayPost.value ', displayPost.value)
           // displayPost.value. = [
           //   ...displayPost.value.emojiItems.users,
           //   currentUser,
@@ -114,8 +109,6 @@ export const useEmoji = (props: any, currentUser: any) => {
   }
   return {
     selectedItem,
-    displayPost,
-
     isFormVisible,
     onFocus,
     onRemoveFocus,
