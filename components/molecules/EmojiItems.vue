@@ -8,6 +8,13 @@
       >
         <div class="box">
           <Emoji :emoji="emojiItem.item.item" :size="20" class="emoji-image" />
+           <p class="count">11</p>
+        </div>
+      </div>
+      <div v-for="item in selectedItem" :key="item.id" class="wrapper">
+        <div class="box">
+          <Emoji :emoji="item" :size="20" class="emoji-image" />
+          <p class="count">1</p>
         </div>
       </div>
       <div class="wrapper">

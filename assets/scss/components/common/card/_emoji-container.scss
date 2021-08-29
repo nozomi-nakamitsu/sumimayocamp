@@ -9,12 +9,20 @@
     margin-bottom: 40px;
   }
   > .items > .wrapper {
-    width: 20px;
+    width: 45px;
     height: 20px;
     margin: 5px;
+    background-color: $gray-pearl;
+    border-radius: 50px;
+    cursor: pointer;
   }
   > .items > .wrapper > .box {
-    width: 20px;
     height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  > .items > .wrapper > .box > .count {
+    font-size: 0.8rem;
   }
 }
