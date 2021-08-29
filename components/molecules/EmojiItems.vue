@@ -8,7 +8,7 @@
       >
         <div class="box">
           <Emoji :emoji="emojiItem.item.item" :size="20" class="emoji-image" />
-           <p class="count">11</p>
+          <p class="count">{{ emojiItem.users.length }}</p>
         </div>
       </div>
       <div v-for="item in selectedItem" :key="item.id" class="wrapper">
@@ -67,9 +67,10 @@ export default defineComponent({
     // ref系
     const currentUser = store.getters.getCurrentUser
 
-    const emojiItems = computed(() =>
-      JSON.parse(JSON.stringify(props.post.emojiItems))
-    )
+    const emojiItems = computed(() => {
+      const target = JSON.parse(JSON.stringify(props.post.emojiItems))
+      return target.filter((v: any) => v.users.length !== 0)
+    })
     watchEffect(() => {
       console.log('emojiItems', emojiItems.value)
       // const aaa = emojiItems.value.map((v: any) => v)
