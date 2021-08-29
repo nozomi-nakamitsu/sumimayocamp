@@ -60,7 +60,6 @@ export default defineComponent({
                                 (user) => user.uid
                               )
                               if (emojiUserids.includes(user.data().uid)) {
-                                console.log('追加')
                                 return
                               } else {
                                 emojiUser.push(user.data())
@@ -71,6 +70,30 @@ export default defineComponent({
                               emojiUser = emojiUser.filter(
                                 (v: CurrentUser) => v.uid !== currentUser.uid
                               )
+                              const target = posts.value.find((post: any) =>
+                                post.emojiItems.find(
+                                  (v: any) => v.item.id === item.id
+                                )
+                              ) as Post
+                              const targetEmoji = target.emojiItems.find(
+                                (v: any) => v.item.id === item.id
+                              )
+
+                              target.emojiItems.filter(
+                                (v: any) => v.item.id !== item.id
+                              )
+
+                              const index = target.emojiItems
+                                .map((v: any) => v.item.id)
+                                .indexOf(item.id)
+
+                              if (targetEmoji) {
+                                target.emojiItems[index] = {
+                                  item,
+                                  users: emojiUser as CurrentUser[],
+                                }
+                              }
+                              
                             })
                           }
                         })
