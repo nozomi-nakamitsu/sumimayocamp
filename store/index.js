@@ -4,6 +4,7 @@ import 'firebase/storage'
 const storageRef = storage.ref()
 export const state = () => ({
   isLogined: false,
+  isLoading: false,
   currentUser: {
     token: '',
     uid: '',
@@ -24,6 +25,9 @@ export const state = () => ({
 export const mutations = {
   setIsLogined(state, isLogined) {
     state.isLogined = isLogined
+  },
+  setIsLoading(state, isLoading) {
+    state.isLoading = isLoading
   },
   setCurrentUser(state, data) {
     state.currentUser.uid = data.uid
@@ -250,6 +254,9 @@ export const actions = {
 export const getters = {
   getIsLogined(state) {
     return state.isLogined
+  },
+  getIsLoading(state) {
+    return state.isLoading
   },
   getCurrentUser(state) {
     return state.currentUser
