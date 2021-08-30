@@ -43,12 +43,12 @@
         </v-list-item>
       </v-card-actions>
       <Emojifrom
-        :selectedItem="selectedItem"
+        :selected-item="selectedItem"
         @on-focus="onFocus"
         @on-clicked="switchVisible"
       />
     </v-card>
-    <div v-if="isFormVisible" @mouseleave="onRemoveFocus" class="form">
+    <div v-if="isFormVisible" class="form" @mouseleave="onRemoveFocus">
       <Picker @select="selectEmoji" />
     </div>
   </div>
@@ -60,6 +60,7 @@ import {
   useRouter,
   useStore,
 } from '@nuxtjs/composition-api'
+import { Picker } from 'emoji-mart-vue'
 import { Post } from '@/types/props-types'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 import { useEmoji } from '@/compositions/useEmoji'
@@ -67,7 +68,6 @@ import { useEmoji } from '@/compositions/useEmoji'
 import { firestore } from '@/plugins/firebase.js'
 import { isCurrentUser } from '@/compositions/useAuth'
 import Emojifrom from '../molecules/EmojiItems.vue'
-import { Picker } from 'emoji-mart-vue'
 
 export default defineComponent({
   components: {

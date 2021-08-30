@@ -37,6 +37,7 @@ export default {
   plugins: [
     { src: '@/plugins/vue-mavon-editor', ssr: false },
     '@/plugins/vee-validate',
+    '@/plugins/i18n.ts',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -51,10 +52,32 @@ export default {
     '@nuxtjs/composition-api/module',
   ],
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['nuxt-fontawesome'],
+  modules: [
+    [
+      'nuxt-i18n',
+      {
+        locales: [
+          {
+            code: 'ja',
+            iso: 'ja',
+            file: 'ja.json',
+          },
+          { code: 'en', iso: 'en-US' },
+        ],
+        defaultLocale: 'ja',
+        vueI18n: {
+          fallbackLocale: 'ja',
+        },
+        vueI18nLoader: true,
+      },
+    ],
+    ['nuxt-fontawesome'],
+  ],
+
   fontawesome: {
     component: 'fa',
   },
+  defaultLocale: 'ja',
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

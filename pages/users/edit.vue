@@ -2,7 +2,6 @@
   <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
     <form @submit.prevent="handleSubmit(submit)">
       <ValidationInput
-        label="ニックネーム"
         input-name="nickName"
         rules="required"
         class="nameinput"

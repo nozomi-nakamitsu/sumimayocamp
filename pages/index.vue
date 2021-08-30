@@ -9,12 +9,7 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-} from '@nuxtjs/composition-api'
+import { defineComponent, ref,onMounted,onBeforeUnmount } from '@nuxtjs/composition-api'
 import { Post } from '@/types/props-types'
 import Card from '@/components/organisms/Card.vue'
 import { firestore } from '@/plugins/firebase'

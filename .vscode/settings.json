@@ -1,0 +1,11 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "css.validate": false,
+  "stylelint.enable": true,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "scss.validate": false
+}

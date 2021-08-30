@@ -37,7 +37,7 @@
         </v-list-item>
       </v-card-actions>
     </v-card>
-    <p @click="Router.push('/')" style="cursor: pointer">ホームに戻る</p>
+    <p style="cursor: pointer" @click="Router.push('/')">ホームに戻る</p>
   </div>
 </template>
 
