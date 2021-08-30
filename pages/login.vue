@@ -6,7 +6,6 @@
 
 <script lang="ts">
 import { defineComponent, useStore, onMounted } from '@nuxtjs/composition-api'
-// import firebase from '../plugins/firebase'
 import firebase from '@/plugins/firebase'
 export default defineComponent({
   setup() {

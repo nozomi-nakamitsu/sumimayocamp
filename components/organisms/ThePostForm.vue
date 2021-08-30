@@ -49,9 +49,8 @@ import {
   SetupContext,
   computed,
 } from '@nuxtjs/composition-api'
-import { markdownOption } from '../../compositions/useMarkdown'
+import { markdownOption } from '@/compositions/useMarkdown'
 import ValidationInput from '../molecules/form/ValidationInput.vue'
-// import { PostForm } from '../../types/props-types'
 export default defineComponent({
   components: {
     ValidationInput,
@@ -78,8 +77,9 @@ export default defineComponent({
       user_id: currentUser.uid,
       content: props.propsform.content,
       created_at:
-        props.title === '新規作成' ? new Date() : props.propsform.created_at,
+      props.title === '新規作成' ? new Date() : props.propsform.created_at,
       updated_at: new Date(),
+      user: props.propsform.user
     }))
 
     const fileUploadEvent = ref<any>(null)

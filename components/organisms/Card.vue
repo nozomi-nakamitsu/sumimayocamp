@@ -61,12 +61,12 @@ import {
   useStore,
 } from '@nuxtjs/composition-api'
 import { Picker } from 'emoji-mart-vue'
-import { Post } from '../../types/props-types'
-import { DeletePost } from '../../compositions/pages/usePost'
-import { formatDateToSlashWithTime } from '../../compositions/useFormatData'
-import { useEmoji } from '../../compositions/useEmoji'
+import { Post } from '@/types/props-types'
+import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
+import { useEmoji } from '@/compositions/useEmoji'
 
-import { isCurrentUser } from '../../compositions/useAuth'
+import { firestore } from '@/plugins/firebase.js'
+import { isCurrentUser } from '@/compositions/useAuth'
 import Emojifrom from '../molecules/EmojiItems.vue'
 
 export default defineComponent({
@@ -76,7 +76,7 @@ export default defineComponent({
   },
   props: {
     post: {
-      type: Object  as PropType<Post>,
+      type: Object as PropType<Post>,
       required: true,
     },
   },
@@ -95,8 +95,16 @@ export default defineComponent({
       onRemoveFocus,
       selectEmoji,
       switchVisible,
-    } = useEmoji(props,currentUser)
+    } = useEmoji(props, currentUser)
 
+    const DeletePost = async (id: string) => {
+      try {
+        await firestore.collection('posts').doc(id).delete()
+        Router.push('/')
+      } catch (error) {
+        console.error(error)
+      }
+    }
     return {
       DeletePost,
       isCurrentUser,

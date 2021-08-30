@@ -10,10 +10,10 @@ import {
   useRouter,
 } from '@nuxtjs/composition-api'
 // import * as uuidv4 from 'uuid'
-import { PostForm } from '../../types/props-types'
-import ThePostForm from '../../components/organisms/ThePostForm.vue'
+import { PostForm } from '@/types/props-types'
+import ThePostForm from '@/components/organisms/ThePostForm.vue'
 
-import { firestore } from '../../plugins/firebase'
+import { firestore } from '@/plugins/firebase'
 
 export default defineComponent({
   components: {
@@ -32,6 +32,7 @@ export default defineComponent({
       content: '',
       created_at: new Date(),
       updated_at: new Date(),
+      user:{...currentUser}
     })
     // const fileChanged = (e: any, id: string) => {
     //   const target = e.target as HTMLInputElement
@@ -74,7 +75,7 @@ export default defineComponent({
         Router.push('/')
       } catch (error) {
         console.error(error)
-      }
+    }
     }
 
     return {
