@@ -69,7 +69,6 @@ export default defineComponent({
 
     const emojiItems = computed(() => {
       const target = JSON.parse(JSON.stringify(props.post.emojiItems))
-      console.log(target.filter((v: any) => v.users.length !== 0))
       return target.filter((v: any) => v.users.length !== 0)
     })
     return {

@@ -55,6 +55,7 @@ export const useEmoji = (props: any, currentUser: any) => {
         return
       } else if (displayPropsMyItems.includes(item.id)) {
         // NOTE:同じものを二回目に押した時は、絵文字を削除
+
         await firestore
           .collection('posts')
           .doc(props.post.id)
@@ -68,22 +69,6 @@ export const useEmoji = (props: any, currentUser: any) => {
         if (displayPropsItems.indexOf(item.id) === -1) {
           selectedItem.value = [...selectedItem.value, {item,users:[{...currentUser,item_id:item.id,post_id:props.post.id}]}]
         } else {
-          // const target = displayPost.value.emojiItems.find(
-          //   (v: any) => v.item.item.id === item.id
-          // )
-          // console.log('target', target)
-          // displayPost.value = {
-          //   ...displayPost.value,
-          //   emojiItems: {
-          //     users: [...target.users, currentUser],
-          //     item: { ...target.item },
-          //   },
-          // }
-          // displayPost.value. = [
-          //   ...displayPost.value.emojiItems.users,
-          //   currentUser,
-          // ]
-        }
         //NOTE: 絵文字データをサブコレクションとしてfirestoreに追加
         await firestore
           .collection('posts')
@@ -100,6 +85,8 @@ export const useEmoji = (props: any, currentUser: any) => {
           .collection('users')
           .doc(currentUser.uid)
           .set({ ...currentUser,item_id:item.id,post_id:props.post.id })
+        }
+   
       }
     } catch (e) {
       // エラー時は選択した絵文字を画面から削除する
