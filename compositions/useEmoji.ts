@@ -20,10 +20,15 @@ export const useEmoji = (props: any, currentUser: any) => {
     try {
       const displayselectedItemIsd = JSON.parse(
         JSON.stringify(selectedItem.value)
-      ).map((v: EmojiType) => v.id)
+      ).map((v: any) => v.item.id)
+
       const displayPropsItems = JSON.parse(
         JSON.stringify(props.post.emojiItems)
       ).map((v: any) => v.id)
+
+      const displayselectedItems = JSON.parse(
+        JSON.stringify(selectedItem.value)
+      ).map((v: any) => v)
 
       const displayPropsMyItems = JSON.parse(
         JSON.stringify(props.post.emojiItems)
@@ -33,13 +38,12 @@ export const useEmoji = (props: any, currentUser: any) => {
           return v.id
         }
       })
-
       if (!selectedItem.value) {
         selectedItem.value = item.unified
         return
       } else if (displayselectedItemIsd.includes(item.id)) {
         // NOTE:同じものを二回目に押した時は、絵文字を削除
-        selectedItem.value = selectedItem.value.filter((v) => v.id !== item.id)
+        selectedItem.value = selectedItem.value.filter((v) => v.item.id !== item.id)
         await firestore
           .collection('posts')
           .doc(props.post.id)
@@ -62,7 +66,7 @@ export const useEmoji = (props: any, currentUser: any) => {
         return
       } else {
         if (displayPropsItems.indexOf(item.id) === -1) {
-          selectedItem.value = [...selectedItem.value, item]
+          selectedItem.value = [...selectedItem.value, {item,users:[{...currentUser,item_id:item.id,post_id:props.post.id}]}]
         } else {
           // const target = displayPost.value.emojiItems.find(
           //   (v: any) => v.item.item.id === item.id

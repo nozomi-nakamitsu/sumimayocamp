@@ -13,8 +13,8 @@
       </div>
       <div v-for="item in selectedItem" :key="item.id" class="wrapper">
         <div class="box">
-          <Emoji :emoji="item" :size="20" class="emoji-image" />
-          <p class="count">{{ emojiItem.users.length }}</p>
+          <Emoji :emoji="item.item" :size="20" class="emoji-image" />
+          <p class="count">{{ item.users.length }}</p>
         </div>
       </div>
       <div class="wrapper">
@@ -69,6 +69,7 @@ export default defineComponent({
 
     const emojiItems = computed(() => {
       const target = JSON.parse(JSON.stringify(props.post.emojiItems))
+      console.log(target.filter((v: any) => v.users.length !== 0))
       return target.filter((v: any) => v.users.length !== 0)
     })
     return {
