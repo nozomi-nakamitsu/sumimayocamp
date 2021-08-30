@@ -1,10 +1,3 @@
-<i18n>
-  {
-    "en": {
-      "localMessage": "Blah"
-    }
-  }
-</i18n>
 <template>
   <div class="index-container">
     <div class="container">
@@ -12,7 +5,6 @@
         <Card :post="post" />
       </div>
     </div>
-    <p>{{ message }}</p>
   </div>
 </template>
 
