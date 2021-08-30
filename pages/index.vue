@@ -67,7 +67,22 @@ export default defineComponent({
                             })
                           } else if (changeUser.type === 'removed') {
                            if(usersSnapshot.docs.length===0){
-                            console.log("０です")
+                       
+                
+
+                            var targetEmoji= postData.emojiItems.find((emojiItem:any)=>emojiItem.id ===item.id)
+                            const targetEmojiIds=postData.emojiItems.map((item:any)=>item.id)
+                            if(targetEmojiIds&&targetEmoji){
+                            
+                            targetEmoji.users=  targetEmoji.users.filter((user:any)=>user.uid !==currentUser.uid)
+                              const emojiIndex=targetEmojiIds.indexOf(item.id)
+                
+                          
+                            postData.emojiItems.splice(emojiIndex, 1, targetEmoji)
+            
+                           return
+                            }
+
                            }
                             usersSnapshot.docs.forEach((user: any) => {
                            
