@@ -20,11 +20,11 @@
 </template>
 <script lang="ts">
 import { defineComponent, useStore, PropType } from '@nuxtjs/composition-api'
+import { Emoji } from 'emoji-mart-vue'
+import { faSmile } from '@fortawesome/free-solid-svg-icons'
 import { EmojiType } from '../../types/props-types'
 
 import { isCurrentUser } from '../../compositions/useAuth'
-import { Emoji } from 'emoji-mart-vue'
-import { faSmile } from '@fortawesome/free-solid-svg-icons'
 import Icon from './Icon.vue'
 
 export default defineComponent({

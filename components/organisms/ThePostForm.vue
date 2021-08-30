@@ -22,9 +22,9 @@
             <div class="markdown-editor">
               <no-ssr>
                 <mavon-editor
+                  v-model="form.content"
                   :toolbars="markdownOption"
                   language="ja"
-                  v-model="form.content"
                 />
               </no-ssr>
             </div>
