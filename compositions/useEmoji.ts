@@ -23,14 +23,14 @@ export const useEmoji = (props: any, currentUser: any) => {
       ).map((v: EmojiType) => v.id)
       const displayPropsItems = JSON.parse(
         JSON.stringify(props.post.emojiItems)
-      ).map((v: any) => v.item.item.id)
+      ).map((v: any) => v.id)
 
       const displayPropsMyItems = JSON.parse(
         JSON.stringify(props.post.emojiItems)
       ).map((v: any) => {
         const uids = v.users.map((user: CurrentUser) => user.uid)
         if (uids.includes(currentUser.uid)) {
-          return v.item.item.id
+          return v.id
         }
       })
 
@@ -86,9 +86,7 @@ export const useEmoji = (props: any, currentUser: any) => {
           .doc(props.post.id)
           .collection('emojiItems')
           .doc(item.id)
-          .set({
-            item: item,
-          })
+          .set({...item})
         // NOTE: 絵文字のユーザーデータをサブサブコレクションとしてfirestoreに追加
         await firestore
           .collection('posts')
@@ -97,7 +95,7 @@ export const useEmoji = (props: any, currentUser: any) => {
           .doc(item.id)
           .collection('users')
           .doc(currentUser.uid)
-          .set({ ...currentUser })
+          .set({ ...currentUser,item_id:item.id,post_id:props.post.id })
       }
     } catch (e) {
       // エラー時は選択した絵文字を画面から削除する

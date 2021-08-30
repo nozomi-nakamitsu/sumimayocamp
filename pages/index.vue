@@ -50,7 +50,7 @@ export default defineComponent({
                   .then((res) => {
                     // サブコレクションの絵文字データとサブサブコレクションの絵文字ユーザーデータを取得
                     const getEmojiData = res.docs.map((v) => {
-                      const item = v.data() as EmojiType
+                      const item = v.data() 
                       var emojiUser = <CurrentUser[]>[]
                       v.ref.collection('users').onSnapshot((usersSnapshot) => {
                         usersSnapshot.docChanges().forEach((changeUser) => {
@@ -66,44 +66,43 @@ export default defineComponent({
                               }
                             })
                           } else if (changeUser.type === 'removed') {
-                            usersSnapshot.docs.map((user: any) => {
-                              emojiUser = emojiUser.filter(
-                                (v: CurrentUser) => v.uid !== currentUser.uid
-                              )
-                              const target = posts.value.find((post: any) =>
-                                post.emojiItems.find(
-                                  (v: any) => v.item.id === item.id
-                                )
-                              ) as Post
-                              const targetEmoji = target.emojiItems.find(
-                                (v: any) => v.item.id === item.id
-                              )
+                           if(usersSnapshot.docs.length===0){
+                            console.log("０です")
+                           }
+                            usersSnapshot.docs.forEach((user: any) => {
+                           
+                            const targetPost=posts.value.find((post)=>post.id===user.data().post_id)
+                            var targetEmoji= targetPost?.emojiItems.find((item:any)=>item.id===user.data().item_id)
+                           
+                            const targetEmojiIds=targetPost?.emojiItems.map((item:any)=>item.id)
+                            const postIds=posts.value.map((post:Post)=>post.id)
 
-                              target.emojiItems.filter(
-                                (v: any) => v.item.id !== item.id
-                              )
+                            if(targetPost&&targetEmojiIds&&targetEmoji){
+                            
+                               targetEmoji.users=[{...user.data()}]
+                       
+                              const emojiIndex=targetEmojiIds.indexOf(user.data().item_id)
+                      
+                              const postiIndex=postIds.indexOf(user.data().post_id)
+                          
+                              posts.value[postiIndex].emojiItems.splice(emojiIndex, 1, targetEmoji)
+            
+                           
+                            }
+                             
+                          
 
-                              const index = target.emojiItems
-                                .map((v: any) => v.item.id)
-                                .indexOf(item.id)
 
-                              if (targetEmoji) {
-                                target.emojiItems[index] = {
-                                  item,
-                                  users: emojiUser as CurrentUser[],
-                                }
-                              }
-                              
                             })
                           }
                         })
                       })
 
-                      return { item, users: emojiUser as CurrentUser[] }
+                      return { ...item, users: emojiUser as CurrentUser[] }
                     })
                     postData.emojiItems = getEmojiData
 
-                    console.log('AAAAAA__getEmojiData', getEmojiData)
+              
                     posts.value = [...posts.value, postData as Post]
                   })
               } else if (change.type === 'removed') {

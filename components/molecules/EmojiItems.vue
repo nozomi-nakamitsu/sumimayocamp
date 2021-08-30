@@ -7,14 +7,14 @@
         class="wrapper"
       >
         <div class="box">
-          <Emoji :emoji="emojiItem.item.item" :size="20" class="emoji-image" />
+          <Emoji :emoji="emojiItem" :size="20" class="emoji-image" />
           <p class="count">{{ emojiItem.users.length }}</p>
         </div>
       </div>
       <div v-for="item in selectedItem" :key="item.id" class="wrapper">
         <div class="box">
           <Emoji :emoji="item" :size="20" class="emoji-image" />
-          <p class="count">1</p>
+          <p class="count">{{ emojiItem.users.length }}</p>
         </div>
       </div>
       <div class="wrapper">
@@ -69,14 +69,8 @@ export default defineComponent({
 
     const emojiItems = computed(() => {
       const target = JSON.parse(JSON.stringify(props.post.emojiItems))
-      console.log('target', target)
       return target.filter((v: any) => v.users.length !== 0)
     })
-    // watchEffect(() => {
-    //   console.log('emojiItems', emojiItems.value)
-    //   // const aaa = emojiItems.value.map((v: any) => v)
-    //   // console.log('aaa', aaa)
-    // })
     return {
       // 認証系
       isCurrentUser,
