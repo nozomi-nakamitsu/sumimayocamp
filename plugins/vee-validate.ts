@@ -3,13 +3,10 @@ import {
   ValidationProvider,
   ValidationObserver,
   extend,
-  localize,
   configure,
 } from 'vee-validate'
 import { required } from 'vee-validate/dist/rules'
-import validateJa from '@/lang/vee-validate/ja'
-import ja from '@/lang/ja'
-import  {i18n} from "@/config/i18n"
+import { i18n } from '@/config/i18n'
 
 // 必要なルールのみインポート
 extend('required', required)

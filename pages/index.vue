@@ -13,7 +13,6 @@ import {
   defineComponent,
   ref,
   useAsync,
-  getCurrentInstance,
 } from '@nuxtjs/composition-api'
 import Card from '../components/organisms/Card.vue'
 import { firestore } from '../plugins/firebase'
@@ -22,9 +21,6 @@ export default defineComponent({
     Card,
   },
   setup() {
-    let vm = getCurrentInstance()
-    // @ts-ignore
-    let message = ref(vm.$i18n.t('localMessage'))
     const posts = ref<any>([])
     useAsync(() => {
       firestore
@@ -64,7 +60,6 @@ export default defineComponent({
     return {
       // 全投稿データ
       posts,
-      message,
     }
   },
 })

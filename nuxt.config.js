@@ -53,23 +53,27 @@ export default {
   ],
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    'nuxt-i18n',
-    {
-      locales: [
-        {
-          code: 'ja',
-          iso: 'ja',
-          file: 'ja.json',
+    [
+      'nuxt-i18n',
+      {
+        locales: [
+          {
+            code: 'ja',
+            iso: 'ja',
+            file: 'ja.json',
+          },
+          { code: 'en', iso: 'en-US' },
+        ],
+        defaultLocale: 'ja',
+        vueI18n: {
+          fallbackLocale: 'ja',
         },
-        { code: 'en', iso: 'en-US' },
-      ],
-      defaultLocale: 'ja',
-      vueI18n: {
-        fallbackLocale: 'ja',
+        vueI18nLoader: true,
       },
-      vueI18nLoader: true,
-    },
-  ]['nuxt-fontawesome'],
+    ],
+    ['nuxt-fontawesome'],
+  ],
+
   fontawesome: {
     component: 'fa',
   },
