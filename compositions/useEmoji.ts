@@ -26,9 +26,9 @@ export const useEmoji = (props: any, currentUser: any) => {
         JSON.stringify(props.post.emojiItems)
       ).map((v: any) => v.id)
 
-      const displayselectedItems = JSON.parse(
-        JSON.stringify(selectedItem.value)
-      ).map((v: any) => v)
+      // const displayselectedItems = JSON.parse(
+      //   JSON.stringify(selectedItem.value)
+      // ).map((v: any) => v)
 
       const displayPropsMyItems = JSON.parse(
         JSON.stringify(props.post.emojiItems)

@@ -62,6 +62,7 @@ export default defineComponent({
                               if (emojiUserids.includes(user.data().uid)) {
                                 return
                               } else {
+
                                 emojiUser.push(user.data())
                               }
                             })
@@ -86,7 +87,7 @@ export default defineComponent({
                            }
                             usersSnapshot.docs.forEach((user: any) => {
                            
-                            const targetPost=posts.value.find((post)=>post.id===user.data().post_id)
+                            const targetPost=posts.value.find((post:Post)=>post.id===user.data().post_id)
                             var targetEmoji= targetPost?.emojiItems.find((item:any)=>item.id===user.data().item_id)
                            
                             const targetEmojiIds=targetPost?.emojiItems.map((item:any)=>item.id)
@@ -94,7 +95,7 @@ export default defineComponent({
 
                             if(targetPost&&targetEmojiIds&&targetEmoji){
                             
-                               targetEmoji.users=[{...user.data()}]
+                               targetEmoji.users=targetEmoji.users.filter((user:any)=> user.uid!==currentUser.uid)
                        
                               const emojiIndex=targetEmojiIds.indexOf(user.data().item_id)
                       
@@ -112,12 +113,11 @@ export default defineComponent({
                           }
                         })
                       })
-
                       return { ...item, users: emojiUser as CurrentUser[] }
                     })
                     postData.emojiItems = getEmojiData
 
-              
+
                     posts.value = [...posts.value, postData as Post]
                   })
               } else if (change.type === 'removed') {
