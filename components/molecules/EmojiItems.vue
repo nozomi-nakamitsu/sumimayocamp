@@ -7,9 +7,8 @@
         class="wrapper"
       >
         <div v-if="isHoverd === emojiItem.id">
-          <EmojiBalloonBox />
+          <EmojiBalloonBox :users="emojiItem.users" />
         </div>
-        
         <div
           class="box"
           :class="[

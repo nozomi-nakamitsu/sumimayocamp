@@ -1,19 +1,8 @@
-// .emoji-balloon-box {
-//   width: 200px;
-//   height: 200px;
-//   font-size: 12px;
-//   background: pink;
-//   position: absolute;
-//   top: 50px;
-//   border-radius: 4px;
-// }
 .emoji-balloon-box {
-  display: inline-block;
-  width: 150px;
-  // max-width: 100%;
+  display: block;
+  width: 180px;
   background: black;
-  opacity: 0.7;
-  // border: 2px solid #bdbdbd;
+  opacity: 0.8;
   border-radius: 4px;
   padding: 0.8em;
   text-align: left;
@@ -21,7 +10,9 @@
   position: absolute;
   bottom: 70px;
   color: $white;
+  margin: 0 auto;
 }
+
 .emoji-balloon-box > :last-child {
   margin-bottom: 0;
 }
@@ -33,15 +24,14 @@
   left: 50%;
 }
 .emoji-balloon-box::before {
-  margin-left: -62.82px;
+  margin-left: -82.82px;
   border: 12.82px solid transparent;
   border-top: 12.82px solid $black;
   z-index: 1;
 }
 .emoji-balloon-box::after {
-  margin-left: -63px;
+  margin-left: -80px;
   border: 10px solid transparent;
   border-top: 10px solid black;
-  opacity: 0.7;
   z-index: 2;
 }
