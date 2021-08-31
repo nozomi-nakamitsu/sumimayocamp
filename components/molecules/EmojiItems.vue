@@ -22,7 +22,10 @@
         </div>
       </div>
       <div v-for="item in selectedItem" :key="item.id" class="wrapper -active">
-        <div class="box">
+        <div v-if="isHoverd === item.item.id">
+          <EmojiBalloonBox :users="item.users" />
+        </div>
+        <div class="box" @mouseover="mouseOverAction(item.item.id)">
           <Emoji :emoji="item.item" :size="20" class="emoji-image" />
           <p class="count">{{ item.users.length }}</p>
         </div>
