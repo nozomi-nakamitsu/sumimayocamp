@@ -49,3 +49,13 @@ export interface EmojiType {
   native: string
   skin: Number
 }
+// 絵文字ユーザーの型
+export interface EmojiUser {
+  token: string
+  uid: string
+  photoURL: string
+  displayName: string
+  nickName: string
+  post_id:string
+  item_id:string
+}
