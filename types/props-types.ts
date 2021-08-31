@@ -1,4 +1,15 @@
 /**
+ * NOTE:storeのログインユーザーの型
+ */
+export interface CurrentUser {
+  token: string
+  uid: string
+  photoURL: string
+  displayName: string
+  nickName: string
+}
+
+/**
  * NOTE:
  * 学習内容の新規投稿用の型
  */
@@ -10,6 +21,14 @@ export interface PostForm {
   created_at: Date
   updated_at: Date
   user: CurrentUser
+}
+export interface EmojiType {
+  colons: string
+  emoticons: Array<any>
+  id: string
+  name: string
+  native: string
+  skin: Number
 }
 
 /**
@@ -31,24 +50,6 @@ export interface Post {
   }[]
 }
 
-/**
- * NOTE:storeのログインユーザーの型
- */
-export interface CurrentUser {
-  token: string
-  uid: string
-  photoURL: string
-  displayName: string
-  nickName: string
-}
-export interface EmojiType {
-  colons: string
-  emoticons: Array<any>
-  id: string
-  name: string
-  native: string
-  skin: Number
-}
 // 絵文字ユーザーの型
 export interface EmojiUser {
   token: string
@@ -56,6 +57,6 @@ export interface EmojiUser {
   photoURL: string
   displayName: string
   nickName: string
-  post_id:string
-  item_id:string
+  post_id: string
+  item_id: string
 }

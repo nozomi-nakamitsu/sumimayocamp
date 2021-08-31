@@ -57,17 +57,16 @@ import {
   defineComponent,
   useStore,
   PropType,
-  watchEffect,
   computed,
   ref,
 } from '@nuxtjs/composition-api'
-import { EmojiType, Post, EmojiUser } from '@/types/props-types'
 
-import { isCurrentUser } from '@/compositions/useAuth'
 import { Emoji } from 'emoji-mart-vue'
 import { faSmile } from '@fortawesome/free-solid-svg-icons'
 import Icon from './Icon.vue'
 import EmojiBalloonBox from './EmojiBalloonBox.vue'
+import { EmojiType, Post, EmojiUser } from '@/types/props-types'
+import { isCurrentUser } from '@/compositions/useAuth'
 import { firestore } from '@/plugins/firebase'
 
 export default defineComponent({
@@ -132,8 +131,6 @@ export default defineComponent({
           .collection('users')
           .doc(currentUser.uid)
           .delete()
-      } else {
-        return
       }
     }
     // selectedItemの絵文字をクリックすると、絵文字を削除する
@@ -154,7 +151,7 @@ export default defineComponent({
       currentUser,
       // アイコン
       faSmile,
-      //絵文字
+      // 絵文字
       emojiItems,
       isMyEmoji,
       // ref

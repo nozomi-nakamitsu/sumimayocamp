@@ -2,14 +2,14 @@
   <div class="markdown-editor">
     <no-ssr>
       <mavon-editor
-        language="ja"
         v-model="content"
+        language="ja"
         :subfield="false"
         :editable="false"
-        :toolbarsFlag="false"
-        :boxShadow="false"
-        defaultOpen="preview"
-        previewBackground="#fff"
+        :toolbars-flag="false"
+        :box-shadow="false"
+        default-open="preview"
+        preview-background="#fff"
       />
     </no-ssr>
   </div>

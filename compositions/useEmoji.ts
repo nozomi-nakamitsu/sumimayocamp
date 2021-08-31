@@ -1,8 +1,7 @@
-import { ref, useRouter } from '@nuxtjs/composition-api'
-import { CurrentUser, EmojiType, Post } from '@/types/props-types'
-import firebase, { firestore } from '@/plugins/firebase'
+import { ref } from '@nuxtjs/composition-api'
+import { CurrentUser } from '@/types/props-types'
+import { firestore } from '@/plugins/firebase'
 export const useEmoji = (props: any, currentUser: any) => {
-  const router = useRouter()
   const selectedItem = ref<any[]>([])
   const isFormVisible = ref<Boolean>(false)
   const onFocus = () => {
@@ -16,7 +15,7 @@ export const useEmoji = (props: any, currentUser: any) => {
   }
 
   // 絵文字を選択する
-  const selectEmoji = async (item: any, id: string) => {
+  const selectEmoji = async (item: any) => {
     try {
       const displayselectedItemIsd = JSON.parse(
         JSON.stringify(selectedItem.value)
@@ -73,7 +72,7 @@ export const useEmoji = (props: any, currentUser: any) => {
           .delete()
         return
       } else {
-        if (displayPropsItems.indexOf(item.id) === -1) {
+        if (!displayPropsItems.includes(item.id)) {
           selectedItem.value = [
             ...selectedItem.value,
             {
@@ -84,7 +83,7 @@ export const useEmoji = (props: any, currentUser: any) => {
             },
           ]
         }
-        //NOTE: 絵文字データをサブコレクションとしてfirestoreに追加
+        // NOTE: 絵文字データをサブコレクションとしてfirestoreに追加
         await firestore
           .collection('posts')
           .doc(props.post.id)

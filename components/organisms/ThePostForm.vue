@@ -22,9 +22,9 @@
             <div class="markdown-editor">
               <no-ssr>
                 <mavon-editor
+                  v-model="form.content"
                   :toolbars="markdownOption"
                   language="ja"
-                  v-model="form.content"
                 />
               </no-ssr>
             </div>
@@ -49,8 +49,9 @@ import {
   SetupContext,
   computed,
 } from '@nuxtjs/composition-api'
-import { markdownOption } from '@/compositions/useMarkdown'
 import ValidationInput from '../molecules/form/ValidationInput.vue'
+import { markdownOption } from '@/compositions/useMarkdown'
+
 export default defineComponent({
   components: {
     ValidationInput,

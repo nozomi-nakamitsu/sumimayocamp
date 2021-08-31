@@ -21,7 +21,7 @@ export default defineComponent({
     },
   },
 
-  setup(props) {
+  setup() {
     // compositionAPI
     const store = useStore()
     // ref系
