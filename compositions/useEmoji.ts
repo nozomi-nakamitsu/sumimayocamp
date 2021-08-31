@@ -31,6 +31,7 @@ export const useEmoji = (props: any, currentUser: any) => {
         if (uids.includes(currentUser.uid)) {
           return v.id
         }
+        
       })
       if (!selectedItem.value) {
         selectedItem.value = item.unified
