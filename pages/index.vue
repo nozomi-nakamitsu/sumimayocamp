@@ -19,7 +19,6 @@ import {
 import { CurrentUser, Post } from '@/types/props-types'
 import Card from '@/components/organisms/Card.vue'
 import { firestore } from '@/plugins/firebase'
-import EmojiItemsVue from '~/components/molecules/EmojiItems.vue'
 export default defineComponent({
   components: {
     Card,
@@ -29,7 +28,7 @@ export default defineComponent({
     const store = useStore()
     const currentUser = store.getters.getCurrentUser
     const posts = ref<Post[]>([])
-    var unsubscribe = null as any
+    let unsubscribe = null as any
 
     // 投稿一覧データを取得する
     onMounted(() => {
@@ -50,7 +49,7 @@ export default defineComponent({
                     // サブコレクションの絵文字データとサブサブコレクションの絵文字ユーザーデータを取得
                     const getEmojiData = res.docs.map((v) => {
                       const item = v.data()
-                      var emojiUser = <CurrentUser[]>[]
+                      const emojiUser = [] as CurrentUser[]
                       v.ref.collection('users').onSnapshot((usersSnapshot) => {
                         usersSnapshot.docChanges().forEach((changeUser) => {
                           if (changeUser.type === 'added') {
@@ -59,20 +58,18 @@ export default defineComponent({
                                 (user) => user.uid
                               )
                               if (emojiUserids.includes(user.data().uid)) {
-                                addEmojiMember(
+                                return addEmojiMember(
                                   item,
                                   emojiUser,
                                   postData as Post
                                 )
-
-                                return
                               } else {
-                                emojiUser.push(user.data())
+                                return emojiUser.push(user.data())
                               }
                             })
                           } else if (changeUser.type === 'removed') {
                             if (usersSnapshot.docs.length === 0) {
-                              var targetEmoji = postData.emojiItems.find(
+                              const targetEmoji = postData.emojiItems.find(
                                 (emojiItem: any) => emojiItem.id === item.id
                               )
                               const targetEmojiIds = postData.emojiItems.map(
@@ -97,7 +94,7 @@ export default defineComponent({
                               const targetPost = posts.value.find(
                                 (post: Post) => post.id === user.data().post_id
                               )
-                              var targetEmoji = targetPost?.emojiItems.find(
+                              const targetEmoji = targetPost?.emojiItems.find(
                                 (item: any) => item.id === user.data().item_id
                               )
 

@@ -37,7 +37,10 @@
         </v-list-item>
       </v-card-actions>
     </v-card>
-    <p style="cursor: pointer" @click="Router.push('/')">ホームに戻る</p>
+    <BaseComment :post-id="id" />
+    <p style="cursor: pointer; font-size: 12px" @click="Router.push('/')">
+      ホームに戻る
+    </p>
   </div>
 </template>
 
@@ -55,10 +58,12 @@ import MarkdownViewCard from '@/components/organisms/MarkdownViewCard.vue'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 import { isCurrentUser } from '@/compositions/useAuth'
 import { firestore } from '@/plugins/firebase.js'
+import BaseComment from '~/components/molecules/comment/BaseComment.vue'
 
 export default defineComponent({
   components: {
     MarkdownViewCard,
+    BaseComment,
   },
   setup() {
     // compositionAPI
@@ -71,10 +76,10 @@ export default defineComponent({
     const post = ref(store.getters.getPost)
     // 投稿者情報を取得
     const postUser = ref<object | undefined>({})
-    useAsync(() => {
-      const id = Route.value.params.id
+    const id = Route.value.params.id
+    useAsync(async () => {
       try {
-        store
+        await store
           .dispatch('getPostData', {
             id,
           })
@@ -111,6 +116,7 @@ export default defineComponent({
       post,
       updated_at,
       postUser,
+      id,
       // フォーマット
       formatDateToSlashWithTime,
       // compositionAPI
