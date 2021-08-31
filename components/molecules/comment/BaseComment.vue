@@ -5,24 +5,21 @@
       <main>
         <div
           v-for="(msg, index) in messages"
-          v-bind:key="'index-' + index"
+          :key="'index-' + index"
           class="message"
           :class="[
-            {'-sent':
-            sentOrReceived(msg.uid) === 'sent'},
-            {'-received':
-            sentOrReceived(msg.uid) === 'received'}
+            { '-sent': sentOrReceived(msg.uid) === 'sent' },
+            { '-received': sentOrReceived(msg.uid) === 'received' },
           ]"
         >
           <img :src="msg.photoURL" :alt="msg.nickName" />
           <p>{{ msg.text }}</p>
-          {{ sentOrReceived(msg.uid) }}
         </div>
 
         <div ref="scrollable"></div>
       </main>
 
-      <form v-on:submit.prevent="sendMessage">
+      <form @submit.prevent="sendMessage">
         <input
           v-model="message"
           type="text"
@@ -39,20 +36,13 @@ import {
   useStore,
   ref,
   onMounted,
-  PropType,
   onBeforeUnmount,
   computed,
-  useAsync,
 } from '@nuxtjs/composition-api'
 import { firestore } from '@/plugins/firebase.js'
-import { Post } from '@/types/props-types'
 
 export default defineComponent({
   props: {
-    // post: {
-    //   type: Object as PropType<Post>,
-    //   required: true,
-    // },
     postId: {
       type: String,
       required: true,
@@ -66,7 +56,7 @@ export default defineComponent({
 
     // ref系
     const currentUser = store.getters.getCurrentUser
-    var unsubscribe = null as any
+    let unsubscribe = null as any
 
     onMounted(() => {
       unsubscribe = firestore

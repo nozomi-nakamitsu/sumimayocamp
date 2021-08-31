@@ -37,7 +37,7 @@
         </v-list-item>
       </v-card-actions>
     </v-card>
-    <BaseComment :postId="id" />
+    <BaseComment :post-id="id" />
     <p style="cursor: pointer; font-size: 12px" @click="Router.push('/')">
       ホームに戻る
     </p>
