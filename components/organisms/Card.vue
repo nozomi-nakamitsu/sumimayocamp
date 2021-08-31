@@ -44,6 +44,7 @@
       </v-card-actions>
       <Emojifrom
         :selected-item="selectedItem"
+        :post="post"
         @on-focus="onFocus"
         @on-clicked="switchVisible"
       />
@@ -61,13 +62,13 @@ import {
   useStore,
 } from '@nuxtjs/composition-api'
 import { Picker } from 'emoji-mart-vue'
+import Emojifrom from '../molecules/EmojiItems.vue'
 import { Post } from '@/types/props-types'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 import { useEmoji } from '@/compositions/useEmoji'
 
 import { firestore } from '@/plugins/firebase.js'
 import { isCurrentUser } from '@/compositions/useAuth'
-import Emojifrom from '../molecules/EmojiItems.vue'
 
 export default defineComponent({
   components: {
@@ -87,6 +88,7 @@ export default defineComponent({
     const store = useStore()
     // ref系
     const currentUser = store.getters.getCurrentUser
+
     // 絵文字関連の処理
     const {
       selectedItem,
