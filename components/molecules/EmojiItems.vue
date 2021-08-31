@@ -16,6 +16,12 @@
             { '-pr': isHoverd === emojiItem.id },
           ]"
           @mouseover="mouseOverAction(emojiItem.id)"
+          @click="
+            DeleteEmojiItem(
+              emojiItem,
+              emojiItem.users.map((user) => user.uid)
+            )
+          "
         >
           <Emoji :emoji="emojiItem" :size="20" class="emoji-image" />
           <p class="count">{{ emojiItem.users.length }}</p>
@@ -25,7 +31,11 @@
         <div v-if="isHoverd === item.item.id">
           <EmojiBalloonBox :users="item.users" />
         </div>
-        <div class="box" @mouseover="mouseOverAction(item.item.id)">
+        <div
+          class="box"
+          @mouseover="mouseOverAction(item.item.id)"
+          @click="DeleteSelectEmojiItem(item.item)"
+        >
           <Emoji :emoji="item.item" :size="20" class="emoji-image" />
           <p class="count">{{ item.users.length }}</p>
         </div>
@@ -58,6 +68,7 @@ import { Emoji } from 'emoji-mart-vue'
 import { faSmile } from '@fortawesome/free-solid-svg-icons'
 import Icon from './Icon.vue'
 import EmojiBalloonBox from './EmojiBalloonBox.vue'
+import { firestore } from '@/plugins/firebase'
 
 export default defineComponent({
   components: {
@@ -81,12 +92,12 @@ export default defineComponent({
     const store = useStore()
     // ref系
     const currentUser = store.getters.getCurrentUser
-
+    const isHoverd = ref<string>('')
     const emojiItems = computed(() => {
       const target = JSON.parse(JSON.stringify(props.post.emojiItems))
       return target.filter((v: any) => v.users.length !== 0)
     })
-    const isHoverd = ref<string>('')
+
     // 自分の絵文字かどうかを判定する
     const isMyEmoji = computed(() => (users: EmojiUser[]): boolean => {
       if (users.length === 0) {
@@ -95,11 +106,46 @@ export default defineComponent({
       const usersIds = users.map((user: EmojiUser) => user.uid)
       return usersIds.includes(currentUser.uid)
     })
+    // 絵文字ホバー時に絵文字を押したユーザーを表示する吹き出しを表示する
     const mouseOverAction = (itemId: string) => {
       isHoverd.value = itemId
       setTimeout(() => {
         isHoverd.value = ''
       }, 1000)
+    }
+    // 自分が押した絵文字(selectedItem以外の絵文字)をクリックすると、絵文字を削除する
+    const DeleteEmojiItem = async (emojiItem: any, userIds: string[]) => {
+      if (userIds.includes(currentUser.uid)) {
+        if (userIds.length === 1) {
+          await firestore
+            .collection('posts')
+            .doc(props.post.id)
+            .collection('emojiItems')
+            .doc(emojiItem.id)
+            .delete()
+        }
+        await firestore
+          .collection('posts')
+          .doc(props.post.id)
+          .collection('emojiItems')
+          .doc(emojiItem.id)
+          .collection('users')
+          .doc(currentUser.uid)
+          .delete()
+      } else {
+        return
+      }
+    }
+    // selectedItemの絵文字をクリックすると、絵文字を削除する
+    const DeleteSelectEmojiItem = async (emojiItem: any) => {
+      await firestore
+        .collection('posts')
+        .doc(props.post.id)
+        .collection('emojiItems')
+        .doc(emojiItem.id)
+        .collection('users')
+        .doc(currentUser.uid)
+        .delete()
     }
 
     return {
@@ -115,6 +161,9 @@ export default defineComponent({
       isHoverd,
       // だしわけ系メソッド
       mouseOverAction,
+      // 絵文字削除
+      DeleteEmojiItem,
+      DeleteSelectEmojiItem,
     }
   },
 })
