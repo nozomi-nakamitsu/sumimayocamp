@@ -15,9 +15,8 @@ import {
   onMounted,
   ref,
   useStore,
-  onActivated,
 } from '@nuxtjs/composition-api'
-import { CurrentUser, EmojiType, Post } from '@/types/props-types'
+import { CurrentUser, Post } from '@/types/props-types'
 import Card from '@/components/organisms/Card.vue'
 import { firestore } from '@/plugins/firebase'
 import EmojiItemsVue from '~/components/molecules/EmojiItems.vue'
