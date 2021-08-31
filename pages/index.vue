@@ -86,13 +86,11 @@ export default defineComponent({
                                 const emojiIndex = targetEmojiIds.indexOf(
                                   item.id
                                 )
-
                                 postData.emojiItems.splice(
                                   emojiIndex,
                                   1,
                                   targetEmoji
                                 )
-
                                 return
                               }
                             }
@@ -134,7 +132,6 @@ export default defineComponent({
                           }
                         })
                       })
-                      console.log('aaaa')
                       return { ...item, users: emojiUser as CurrentUser[] }
                     })
                     postData.emojiItems = getEmojiData
