@@ -27,12 +27,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
     &.-active {
       background-color: $blue-Niagara;
       border: 1px solid $blue-Weather;
       color: $blue-Weather;
       border-radius: 50px;
       cursor: pointer;
+    }
+    &.-pr {
+      position: relative;
     }
   }
   > .items > .wrapper > .box > .count {

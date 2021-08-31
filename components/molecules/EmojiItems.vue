@@ -6,7 +6,18 @@
         :key="index"
         class="wrapper"
       >
-        <div class="box" :class="{ '-active': isMyEmoji(emojiItem.users) }">
+        <div v-if="isHoverd === emojiItem.id">
+          <EmojiBalloonBox />
+        </div>
+        
+        <div
+          class="box"
+          :class="[
+            { '-active': isMyEmoji(emojiItem.users) },
+            { '-pr': isHoverd === emojiItem.id },
+          ]"
+          @mouseover="mouseOverAction(emojiItem.id)"
+        >
           <Emoji :emoji="emojiItem" :size="20" class="emoji-image" />
           <p class="count">{{ emojiItem.users.length }}</p>
         </div>
@@ -44,11 +55,13 @@ import { isCurrentUser } from '@/compositions/useAuth'
 import { Emoji } from 'emoji-mart-vue'
 import { faSmile } from '@fortawesome/free-solid-svg-icons'
 import Icon from './Icon.vue'
+import EmojiBalloonBox from './EmojiBalloonBox.vue'
 
 export default defineComponent({
   components: {
     Emoji,
     Icon,
+    EmojiBalloonBox,
   },
   props: {
     selectedItem: {
@@ -71,6 +84,7 @@ export default defineComponent({
       const target = JSON.parse(JSON.stringify(props.post.emojiItems))
       return target.filter((v: any) => v.users.length !== 0)
     })
+    const isHoverd = ref<string>('')
     // 自分の絵文字かどうかを判定する
     const isMyEmoji = computed(() => (users: EmojiUser[]): boolean => {
       if (users.length === 0) {
@@ -79,6 +93,13 @@ export default defineComponent({
       const usersIds = users.map((user: EmojiUser) => user.uid)
       return usersIds.includes(currentUser.uid)
     })
+    const mouseOverAction = (itemId: string) => {
+      isHoverd.value = itemId
+      setTimeout(() => {
+        isHoverd.value = ''
+      }, 1000)
+    }
+
     return {
       // 認証系
       isCurrentUser,
@@ -88,6 +109,10 @@ export default defineComponent({
       //絵文字
       emojiItems,
       isMyEmoji,
+      // ref
+      isHoverd,
+      // だしわけ系メソッド
+      mouseOverAction,
     }
   },
 })
