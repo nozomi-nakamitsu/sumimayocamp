@@ -3,7 +3,6 @@ import firebase from '@/plugins/firebase'
 export default function ({ route, store, redirect }: Context) {
   return new Promise<void>((resolve) => {
     firebase.auth().onAuthStateChanged((user: any) => {
-      console.log('user', user)
       if (user) {
         // ログイン中の場合の処理
         store.commit('setIsLogined', true)
@@ -24,4 +23,3 @@ export default function ({ route, store, redirect }: Context) {
     })
   })
 }
-
