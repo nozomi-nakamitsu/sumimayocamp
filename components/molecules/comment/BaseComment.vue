@@ -109,6 +109,7 @@ export default defineComponent({
         (uid: string): string =>
           uid === currentUser.uid ? 'sent' : 'received'
     )
+    // コメント削除処理
     const onDelete = async (msg: any) => {
       if (msg.uid !== currentUser.uid) {
         return
