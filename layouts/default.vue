@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!isLoading">
+    <div>
       <Header v-if="showHeader" />
       <Nuxt />
     </div>
@@ -11,7 +11,6 @@
 import {
   defineComponent,
   useStore,
-  onMounted,
   ref,
   useRoute,
   useRouter,
@@ -20,6 +19,7 @@ import {
 import firebase, { firestore } from '../plugins/firebase'
 import Loading from '../components/loadings/Loading.vue'
 import Header from '../components/organisms/Header.vue'
+import { faLessThan } from '@fortawesome/free-solid-svg-icons'
 export default defineComponent({
   components: {
     Loading,
@@ -32,34 +32,34 @@ export default defineComponent({
     const Router = useRouter()
 
     // ref
-    const isLoading = ref<boolean>(true)
+    const isLoading = ref(false)
     const currentUser = ref<any>({})
     /**
      * ログインしてるかチェックする
      *TODO: 後でmiddlewareに書いて共通化する!
      */
-    onMounted(async () => {
-      isLoading.value = true
-      await firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-          firestore
-            .collection('users')
-            .doc(user.uid)
-            .get()
-            .then((doc) => {
-              store.commit('setIsLogined', true)
-              store.commit('setCurrentUser', doc.data())
-              isLoading.value = false
-            })
-          // ログイン中の場合の処理
-        } else {
-          if (Route.value.path !== '/login') {
-            Router.push('/login')
-          }
-          isLoading.value = false
-        }
-      })
-    })
+    // onMounted(async () => {
+    //   isLoading.value = true
+    //   await firebase.auth().onAuthStateChanged(function (user) {
+    //     if (user) {
+    //       store.commit('setIsLogined', true)
+    //       firestore
+    //         .collection('users')
+    //         .doc(user.uid)
+    //         .get()
+    //         .then((doc) => {
+    //           store.commit('setCurrentUser', doc.data())
+    //           isLoading.value = false
+    //         })
+    //       // ログイン中の場合の処理
+    //     } else {
+    //       if (Route.value.path !== '/login') {
+    //         Router.push('/login')
+    //       }
+    //       isLoading.value = false
+    //     }
+    //   })
+    // })
     /**
      *headerを表示するか判断
      */
