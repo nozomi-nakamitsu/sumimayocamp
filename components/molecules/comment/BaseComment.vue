@@ -13,7 +13,12 @@
           ]"
         >
           <img :src="msg.photoURL" :alt="msg.nickName" />
-          <p>{{ msg.text }}</p>
+          <p>
+            {{ msg.text }}
+          </p>
+          <div @click="onDelete(msg)">
+            <Icon :icon="faEllipsisH" />
+          </div>
         </div>
 
         <div ref="scrollable"></div>
@@ -40,8 +45,13 @@ import {
   computed,
 } from '@nuxtjs/composition-api'
 import { firestore } from '@/plugins/firebase.js'
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
+import Icon from '@/components/molecules/Icon.vue'
 
 export default defineComponent({
+  components: {
+    Icon,
+  },
   props: {
     postId: {
       type: String,
@@ -58,6 +68,7 @@ export default defineComponent({
     const currentUser = store.getters.getCurrentUser
     let unsubscribe = null as any
 
+    // ページ遷移後にsnapshotでの監視をstartする
     onMounted(() => {
       unsubscribe = firestore
         .collection('posts')
@@ -70,6 +81,7 @@ export default defineComponent({
     })
     // メッセージを送信する
     const sendMessage = async () => {
+      const id = await firestore.collection('posts').doc().id
       const messageInfo = {
         uid: currentUser.uid,
         nickName: currentUser.nickName,
@@ -77,12 +89,14 @@ export default defineComponent({
         text: message.value,
         postId: props.postId,
         createdAt: Date.now(),
+        id: id,
       }
       await firestore
         .collection('posts')
         .doc(props.postId)
         .collection('messages')
-        .add(messageInfo)
+        .doc(id)
+        .set(messageInfo)
       message.value = ''
     }
     // ページ遷移後にsnapshotでの監視をstopする
@@ -95,6 +109,21 @@ export default defineComponent({
         (uid: string): string =>
           uid === currentUser.uid ? 'sent' : 'received'
     )
+    const onDelete = async (msg: any) => {
+      if (msg.uid !== currentUser.uid) {
+        return
+      }
+      try {
+        await firestore
+          .collection('posts')
+          .doc(props.postId)
+          .collection('messages')
+          .doc(msg.id)
+          .delete()
+      } catch (e) {
+        console.error(e)
+      }
+    }
 
     return {
       // 認証系
@@ -105,6 +134,9 @@ export default defineComponent({
       // メソッド
       sendMessage,
       sentOrReceived,
+      onDelete,
+      // アイコン
+      faEllipsisH,
     }
   },
 })
