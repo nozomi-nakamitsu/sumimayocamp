@@ -1,4 +1,4 @@
-import firebase, { firestore, storage } from '~/plugins/firebase.js'
+import firebase, { firestore, storage, messaging } from '~/plugins/firebase.js'
 
 import 'firebase/storage'
 const storageRef = storage.ref()
@@ -10,6 +10,7 @@ export const state = () => ({
     photoURL: '',
     displayName: '',
     nickName: '',
+    fcmToken: '',
   },
   post: {
     id: '',
@@ -31,6 +32,7 @@ export const mutations = {
     state.currentUser.photoURL = data.photoURL
     state.currentUser.displayName = data.displayName
     state.currentUser.nickName = data.nickName
+    state.currentUser.fcmToken = data.fcmToken
   },
   setPost(state, data) {
     state.post.id = data.id
@@ -49,9 +51,16 @@ export const actions = {
     firebase
       .auth()
       .signInWithPopup(provider)
-      .then(function (result) {
+      .then(async function (result) {
         const user = result.user
-
+        await messaging.requestPermission()
+        var currentToken = await messaging.getToken()
+        console.log('aaaaaaaaa')
+        messaging.onTokenRefresh(async () => {
+          // トークンがリフレッシュされた場合
+          await messaging.requestPermission()
+          var currentToken = await messaging.getToken()
+        })
         commit('setIsLogined', true)
         // 認証後のユーザー情報を取得してオブジェクト化
         const userObject = {}
@@ -65,6 +74,8 @@ export const actions = {
         userObject.email = user.email
         userObject.isNewUser = result.additionalUserInfo.isNewUser
         userObject.providerId = result.additionalUserInfo.providerId
+        userObject.fcmToken = currentToken
+
         dispatch('createPhotoURL', userObject)
         dispatch('setPublicUserData', userObject)
         dispatch('setLocalUserData', userObject)
@@ -103,6 +114,8 @@ export const actions = {
       publicObj.displayName = userObject.displayName
       publicObj.token = userObject.token
       publicObj.nickName = userObject.nickName
+      publicObj.fcmToken = userObject.fcmToken
+
       publicUser.set(publicObj, { merge: true }).then(() => {
         resolve(userObject)
       })
@@ -123,6 +136,7 @@ export const actions = {
       privateObj.token = userObject.token
       privateObj.refreshToken = userObject.refreshToken
       privateObj.nickName = userObject.nickName
+      privateObj.fcmToken = userObject.fcmToken
       privateUsers.set(privateObj, { merge: true }).then(() => {
         resolve(userObject)
       })
