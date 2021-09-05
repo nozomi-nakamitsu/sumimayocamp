@@ -33,20 +33,6 @@ export default defineComponent({
     const store = useStore()
     const Router = useRouter()
     const Route = useRoute()
-
-    // ref系
-    // const currentUser = store.getters.getCurrentUser
-    // const form = ref<PostForm>({
-    //   id: '',
-    //   user_id: currentUser.uid,
-    //   title: '',
-    //   content: '',
-    //   created_at: new Date(),
-    //   updated_at: new Date(),
-    //   user: { ...currentUser },
-      
-    // })
-
     useAsync(() => {
       const id = Route.value.params.id
       try {
@@ -62,29 +48,6 @@ export default defineComponent({
         console.error('投稿内容を取得できませんでした', error)
       }
     })
-
-    // ファイル選択時の処理
-    // const fileChanged = async (file: any) => {
-    //   isLoading.value = true
-    //   const id = uuidv4()
-    //   try {
-    //     const url = await store.dispatch('uploadFile', {
-    //       file,
-    //       id,
-    //     })
-    //     var reg = new RegExp('\\([\.\\d]+?\\)', 'g')
-    //     form.value.content = file.content.replace(reg, `(${url}})`)
-    //     document
-    //       .querySelector('.auto-textarea-input')
-    //       ?.classList.remove('-hidden')
-    //     document.querySelector('.v-note-show')?.classList.remove('-hidden')
-    //     files.value = [...files.value, { id: id, url: url }]
-    //   } catch (error) {
-    //     console.error('file upload', error)
-    //   } finally {
-    //     isLoading.value = false
-    //   }
-    // }
 
     const {
       fileChanged,
