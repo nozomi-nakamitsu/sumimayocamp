@@ -9,18 +9,12 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  useStore,
-  ref,
-  useRouter,
-  onBeforeUnmount,
-} from '@nuxtjs/composition-api'
-import { v4 as uuidv4 } from 'uuid'
+import { defineComponent, useStore, useRouter } from '@nuxtjs/composition-api'
 import { PostForm, FileArray } from '@/types/props-types'
 import ThePostForm from '@/components/organisms/ThePostForm.vue'
 
 import { firestore } from '@/plugins/firebase'
+import { useUploadFile } from '@/compositions/useUploadFile'
 
 export default defineComponent({
   components: {
@@ -30,42 +24,14 @@ export default defineComponent({
     // compositionAPI
     const store = useStore()
     const Router = useRouter()
-    // ref系
-    const currentUser = store.getters.getCurrentUser
-    const form = ref<PostForm>({
-      id: '',
-      user_id: currentUser.uid,
-      title: '',
-      content: '',
-      created_at: new Date(),
-      updated_at: new Date(),
-      user: { ...currentUser },
-      files: [],
-    })
-    const isLoading = ref<boolean>(false)
-    const files = ref<FileArray[]>([])
-    // ファイル選択時の処理
-    const fileChanged = async (file: any) => {
-      isLoading.value = true
-      const id = uuidv4()
-      try {
-        const url = await store.dispatch('uploadFile', {
-          file,
-          id,
-        })
-        var reg = new RegExp('\\([\.\\d]+?\\)', 'g')
-        form.value.content = file.content.replace(reg, `(${url}})`)
-        document
-          .querySelector('.auto-textarea-input')
-          ?.classList.remove('-hidden')
-        document.querySelector('.v-note-show')?.classList.remove('-hidden')
-        files.value = [...files.value, { id: id, url: url }]
-      } catch (error) {
-        console.error('file upload', error)
-      } finally {
-        isLoading.value = false
-      }
-    }
+    const {
+      fileChanged,
+      deleteUnNecessaryFiles,
+      isLoading,
+      files,
+      form,
+      currentUser,
+    } = useUploadFile()
     /**
      * NOTE:fireStoreに投稿する
      *
@@ -82,7 +48,7 @@ export default defineComponent({
         )
         //NOTE:一度アップロードしたが、削除てしまったファイルがあればstorageから削除
         if (deleteFiles.length) {
-          await deleteFiles.map((file) => {
+          await deleteFiles.map((file: FileArray) => {
             const id = file.id
             store.dispatch('deleteFile', {
               id,
@@ -99,18 +65,6 @@ export default defineComponent({
       } catch (error) {
         console.error(error)
       }
-    }
-
-    /**
-     * 投稿してないファイルがあればstorageから削除
-     */
-    const deleteUnNecessaryFiles = () => {
-      files.value.map((file) => {
-        const id = file.id
-        store.dispatch('deleteFile', {
-          id,
-        })
-      })
     }
 
     /**
@@ -132,6 +86,7 @@ export default defineComponent({
       onSubmit,
       // ファイル処理系
       fileChanged,
+      useUploadFile,
     }
   },
 })
