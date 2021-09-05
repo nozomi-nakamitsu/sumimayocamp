@@ -17,6 +17,7 @@ export const state = () => ({
     user_id: '',
     title: '',
     content: '',
+    files: [],
     created_at: '',
     updated_at: '',
   },
@@ -41,6 +42,7 @@ export const mutations = {
     state.post.user_id = data.user_id
     state.post.title = data.title
     state.post.content = data.content
+    state.post.files = data.files
     state.post.created_at = data.created_at
     state.post.updated_at = data.updated_at
   },

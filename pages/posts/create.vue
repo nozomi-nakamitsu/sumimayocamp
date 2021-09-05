@@ -40,6 +40,7 @@ export default defineComponent({
       created_at: new Date(),
       updated_at: new Date(),
       user: { ...currentUser },
+      files: [],
     })
     const isLoading = ref<boolean>(false)
     const files = ref<FileArray[]>([])
@@ -88,6 +89,9 @@ export default defineComponent({
             })
           })
         }
+        form.value.files = files.value.filter((file: FileArray) =>
+          form.value.content.includes(file.url)
+        )
         const id = firestore.collection('posts').doc().id
         form.value.id = id
         firestore.collection('posts').doc(id).set(form.value)
@@ -108,14 +112,6 @@ export default defineComponent({
         })
       })
     }
-    /**
-     * ページ遷移時に投稿してないファイルがあればstorageから削除
-     */
-    onBeforeUnmount(() => {
-      if (files.value.length) {
-        deleteUnNecessaryFiles()
-      }
-    })
 
     /**
      * リロード時に投稿しれないファイルがあれば削除
