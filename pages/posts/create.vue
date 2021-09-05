@@ -43,8 +43,8 @@ export default defineComponent({
     }) => {
       try {
         form.value = data.formData
-        const deleteFiles = files.value.filter(
-          (file: FileArray) => form.value.content.indexOf(file.url) === -1
+        const deleteFiles = JSON.parse(JSON.stringify(files.value)).filter(
+          (v: FileArray) => form.value.content.indexOf(v.url) === -1
         )
         //NOTE:一度アップロードしたが、削除てしまったファイルがあればstorageから削除
         if (deleteFiles.length) {

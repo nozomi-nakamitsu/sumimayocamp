@@ -16,6 +16,8 @@ import {
   useRouter,
   useAsync,
   useRoute,
+  watchEffect,
+  onBeforeMount,
 } from '@nuxtjs/composition-api'
 // import { v4 as uuidv4 } from 'uuid'
 
@@ -33,7 +35,7 @@ export default defineComponent({
     const store = useStore()
     const Router = useRouter()
     const Route = useRoute()
-    useAsync(() => {
+    onBeforeMount(() => {
       const id = Route.value.params.id
       try {
         store
@@ -56,6 +58,10 @@ export default defineComponent({
       form,
       currentUser,
     } = useUploadFile()
+
+    watchEffect(() => {
+      console.log('files', JSON.parse(JSON.stringify(files.value)))
+    })
     /**
      * NOTE:更新処理
      *
@@ -67,8 +73,11 @@ export default defineComponent({
     }) => {
       try {
         form.value = data.formData
-        const deleteFiles = files.value.filter(
-          (file: FileArray) => form.value.content.indexOf(file.url) === -1
+        const deleteFiles = JSON.parse(JSON.stringify(files.value)).filter(
+          (v: FileArray) => form.value.content.indexOf(v.url) === -1
+        )
+        form.value.files = files.value.filter((file: FileArray) =>
+          form.value.content.includes(file.url)
         )
         //NOTE:一度アップロードしたが、削除てしまったファイルがあればstorageから削除
         if (deleteFiles.length) {
@@ -104,6 +113,7 @@ export default defineComponent({
       // ref系
       form,
       isLoading,
+      files,
       // Post
       onSubmit,
       // ファイルアップロード

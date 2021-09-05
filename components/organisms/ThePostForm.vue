@@ -19,15 +19,17 @@
             rules="required"
             name="内容"
           >
-            <div class="markdown-editor">
-              <no-ssr>
-                <mavon-editor
-                  v-model="form.content"
-                  :toolbars="markdownOption"
-                  language="ja"
-                  @imgAdd="imgAdd"
-                />
-              </no-ssr>
+            <div class="drop_area" @dragover.prevent>
+              <div class="markdown-editor">
+                <no-ssr>
+                  <mavon-editor
+                    v-model="form.content"
+                    :toolbars="markdownOption"
+                    language="ja"
+                    @imgAdd="imgAdd"
+                  />
+                </no-ssr>
+              </div>
             </div>
           </ValidationProvider>
         </template>
@@ -140,6 +142,7 @@ export default defineComponent({
         content: form.value.content,
       })
     }
+
     return {
       // 認証系
       currentUser,
