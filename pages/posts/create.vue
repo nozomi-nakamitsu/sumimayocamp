@@ -1,5 +1,13 @@
 <template>
-  <ThePostForm :propsform="form" :title="'新規作成'" @on-submit="onSubmit" />
+  <div>
+    <ThePostForm
+      :propsform="form"
+      :title="'新規作成'"
+      @on-submit="onSubmit"
+      @img-add="fileChanged"
+    />
+    <p></p>
+  </div>
 </template>
 
 <script lang="ts">
@@ -9,7 +17,7 @@ import {
   ref,
   useRouter,
 } from '@nuxtjs/composition-api'
-// import * as uuidv4 from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 import { PostForm } from '@/types/props-types'
 import ThePostForm from '@/components/organisms/ThePostForm.vue'
 
@@ -32,25 +40,28 @@ export default defineComponent({
       content: '',
       created_at: new Date(),
       updated_at: new Date(),
-      user:{...currentUser}
+      user: { ...currentUser },
     })
-    // const fileChanged = (e: any, id: string) => {
-    //   const target = e.target as HTMLInputElement
-    //   const fileList = target.files as FileList
-    //   const file = fileList[0]
-    //   if (file) {
-    //     const fileName = uuidv4
-    //     try {
-    //       return store.dispatch('uploadFile', {
-    //         fileName,
-    //         file,
-    //         id,
-    //       })
-    //     } catch (error) {
-    //       console.error('file upload', error)
-    //     }
-    //   }
-    // }
+    const targetUrl = ref<string>('')
+    const fileChanged = async (file: any) => {
+      if (file) {
+        const id = uuidv4()
+        try {
+          const url = await store.dispatch('uploadFile', {
+            file,
+            id,
+          })
+          targetUrl.value = url
+          const deleteText = file.content.substr(0, file.content.indexOf('!'))
+          form.value.content = deleteText.concat(
+            `![${file.fileName}](${targetUrl.value})`
+          )
+          console.log(' form.value.content', form.value.content)
+        } catch (error) {
+          console.error('file upload', error)
+        }
+      }
+    }
     /**
      * NOTE:fireStoreに投稿する
      * 先にidのみPOSTし、そのIDを使ってfireStorageに画像を入れる。fireStorageのパスを含んだデータをfireStoreにPOSTしている
@@ -75,7 +86,7 @@ export default defineComponent({
         Router.push('/')
       } catch (error) {
         console.error(error)
-    }
+      }
     }
 
     return {
@@ -85,6 +96,9 @@ export default defineComponent({
       form,
       // Post
       onSubmit,
+      // ファイル処理系
+      fileChanged,
+      targetUrl,
     }
   },
 })

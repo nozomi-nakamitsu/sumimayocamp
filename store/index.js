@@ -208,14 +208,15 @@ export const actions = {
       }
     })
   },
-  uploadFile(payload) {
+  uploadFile({ commit }, payload) {
     return new Promise((resolve) => {
       try {
         const file = payload.file
         const ref = `public/${payload.id}`
+
         storage
           .ref(ref)
-          .put(file)
+          .put(file.file)
           .then((uploadTask) => {
             storage
               .ref(uploadTask.ref.fullPath)

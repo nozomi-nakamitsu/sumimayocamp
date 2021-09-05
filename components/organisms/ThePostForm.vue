@@ -25,6 +25,8 @@
                   v-model="form.content"
                   :toolbars="markdownOption"
                   language="ja"
+                  @imgAdd="imgAdd"
+                  @change="func"
                 />
               </no-ssr>
             </div>
@@ -38,6 +40,7 @@
           :class="invalid"
         />
       </form>
+      {{ form.content }}
     </ValidationObserver>
   </div>
 </template>
@@ -66,7 +69,7 @@ export default defineComponent({
       default: '',
     },
   },
-  emits: ['on-submit'],
+  emits: ['on-submit', 'img-add'],
   setup(props, context: SetupContext) {
     // compositionAPI
     const store = useStore()
@@ -78,9 +81,9 @@ export default defineComponent({
       user_id: currentUser.uid,
       content: props.propsform.content,
       created_at:
-      props.title === '新規作成' ? new Date() : props.propsform.created_at,
+        props.title === '新規作成' ? new Date() : props.propsform.created_at,
       updated_at: new Date(),
-      user: props.propsform.user
+      user: props.propsform.user,
     }))
 
     const fileUploadEvent = ref<any>(null)
@@ -101,6 +104,19 @@ export default defineComponent({
     const change = (event: InputEvent) => {
       form.value.title = event
     }
+
+    const imgAdd = (filename: string, imgfile: File) => {
+      context.emit('img-add', {
+        file: imgfile,
+        fileName: imgfile.name,
+        content: form.value.content,
+      })
+    }
+    const func = (value: string, render: string) => {
+      // console.log('value', value)
+      // console.log('render', render)
+      // console.log('form', form.value.content)
+    }
     return {
       // 認証系
       currentUser,
@@ -115,6 +131,9 @@ export default defineComponent({
       markdownOption,
       // フォームの値取得
       change,
+      // ファイルアップロード処理
+      imgAdd,
+      func,
     }
   },
 })
