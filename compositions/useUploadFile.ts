@@ -1,10 +1,10 @@
-import { ref, useStore } from '@nuxtjs/composition-api'
+import { ref, useStore, watch } from '@nuxtjs/composition-api'
 import { FileArray, PostForm } from '@/types/props-types'
 import { v4 as uuidv4 } from 'uuid'
 export const useUploadFile = () => {
   const store = useStore()
   const isLoading = ref<boolean>(false)
-  const files = ref<FileArray[]>([])
+
   const currentUser = store.getters.getCurrentUser
   const form = ref<PostForm>({
     id: '',
@@ -16,6 +16,14 @@ export const useUploadFile = () => {
     user: { ...currentUser },
     files: [],
   })
+
+  const files = ref<FileArray[]>(form.value.files)
+  watch(
+    () => form.value.files,
+    () => {
+      files.value = [...form.value.files]
+    }
+  )
   const fileChanged = async (file: any) => {
     isLoading.value = true
     const id = uuidv4()
