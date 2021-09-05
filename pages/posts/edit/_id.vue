@@ -1,5 +1,11 @@
 <template>
-  <ThePostForm :propsform="form" :title="'編集'" @on-submit="onSubmit" />
+  <ThePostForm
+    :propsform="form"
+    :title="'編集'"
+    @on-submit="onSubmit"
+    @img-add="fileChanged"
+    :propLoading="isLoading"
+  />
 </template>
 
 <script lang="ts">
@@ -11,10 +17,12 @@ import {
   useAsync,
   useRoute,
 } from '@nuxtjs/composition-api'
-// import * as uuidv4 from 'uuid'
-import { PostForm } from '@/types/props-types'
+// import { v4 as uuidv4 } from 'uuid'
+
+import { PostForm, FileArray } from '@/types/props-types'
 import ThePostForm from '@/components/organisms/ThePostForm.vue'
 import { firestore } from '@/plugins/firebase'
+import { useUploadFile } from '@/compositions/useUploadFile'
 
 export default defineComponent({
   components: {
@@ -25,19 +33,6 @@ export default defineComponent({
     const store = useStore()
     const Router = useRouter()
     const Route = useRoute()
-
-    // ref系
-    const currentUser = store.getters.getCurrentUser
-    const form = ref<PostForm>({
-      id: '',
-      user_id: currentUser.uid,
-      title: '',
-      content: '',
-      created_at: new Date(),
-      updated_at: new Date(),
-      user:{...currentUser}
-    })
-
     useAsync(() => {
       const id = Route.value.params.id
       try {
@@ -46,29 +41,21 @@ export default defineComponent({
             id,
           })
           .then((result) => {
-            form.value = {...result}
+            form.value = { ...result }
           })
       } catch (error) {
         console.error('投稿内容を取得できませんでした', error)
       }
     })
-    // const fileChanged = (e: any, id: string) => {
-    //   const target = e.target as HTMLInputElement
-    //   const fileList = target.files as FileList
-    //   const file = fileList[0]
-    //   if (file) {
-    //     const fileName = uuidv4
-    //     try {
-    //       return store.dispatch('uploadFile', {
-    //         fileName,
-    //         file,
-    //         id,
-    //       })
-    //     } catch (error) {
-    //       console.error('file upload', error)
-    //     }
-    //   }
-    // }
+
+    const {
+      fileChanged,
+      deleteUnNecessaryFiles,
+      isLoading,
+      files,
+      form,
+      currentUser,
+    } = useUploadFile()
     /**
      * NOTE:更新処理
      *
@@ -80,13 +67,18 @@ export default defineComponent({
     }) => {
       try {
         form.value = data.formData
-        // if (data.file !== null) {
-        //   // @ts-ignore
-        //   //TODO: 解消方法がわからないのでts-ignoreで対応
-        //   await fileChanged(data.file, form.value.id).then((path) => {
-        //     form.value.movieUrl = path
-        //   })
-        // }
+        const deleteFiles = files.value.filter(
+          (file: FileArray) => form.value.content.indexOf(file.url) === -1
+        )
+        //NOTE:一度アップロードしたが、削除てしまったファイルがあればstorageから削除
+        if (deleteFiles.length) {
+          await deleteFiles.map((file: FileArray) => {
+            const id = file.id
+            store.dispatch('deleteFile', {
+              id,
+            })
+          })
+        }
         await firestore
           .collection('posts')
           .doc(form.value.id)
@@ -97,13 +89,26 @@ export default defineComponent({
       }
     }
 
+    /**
+     * リロード時に投稿しれないファイルがあれば削除
+     */
+    window.onbeforeunload = () => {
+      if (files.value.length) {
+        deleteUnNecessaryFiles()
+      }
+    }
+
     return {
       // 認証系
       currentUser,
       // ref系
       form,
+      isLoading,
       // Post
       onSubmit,
+      // ファイルアップロード
+      fileChanged,
+      useUploadFile,
     }
   },
 })
