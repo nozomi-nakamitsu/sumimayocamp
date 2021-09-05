@@ -4,6 +4,7 @@
     :title="'新規作成'"
     @on-submit="onSubmit"
     @img-add="fileChanged"
+    :propLoading="isLoading"
   />
 </template>
 
@@ -39,24 +40,31 @@ export default defineComponent({
       updated_at: new Date(),
       user: { ...currentUser },
     })
+    const isLoading = ref<boolean>(false)
+    // ファイル選択時の処理
     const fileChanged = async (file: any) => {
-      if (file) {
-        const id = uuidv4()
-        try {
-          const url = await store.dispatch('uploadFile', {
-            file,
-            id,
-          })
-          var reg = new RegExp('\\([\.\\d]+?\\)', 'g')
-          form.value.content = file.content.replace(reg, `(${url}})`)
-        } catch (error) {
-          console.error('file upload', error)
-        }
+      isLoading.value = true
+      const id = uuidv4()
+      try {
+        const url = await store.dispatch('uploadFile', {
+          file,
+          id,
+        })
+        var reg = new RegExp('\\([\.\\d]+?\\)', 'g')
+        form.value.content = file.content.replace(reg, `(${url}})`)
+        document
+          .querySelector('.auto-textarea-input')
+          ?.classList.remove('-hidden')
+        document.querySelector('.v-note-show')?.classList.remove('-hidden')
+      } catch (error) {
+        console.error('file upload', error)
+      } finally {
+        isLoading.value = false
       }
     }
     /**
      * NOTE:fireStoreに投稿する
-     * 先にidのみPOSTし、そのIDを使ってfireStorageに画像を入れる。fireStorageのパスを含んだデータをfireStoreにPOSTしている
+     *
      */
     const onSubmit = (data: {
       formData: PostForm
@@ -66,13 +74,6 @@ export default defineComponent({
       try {
         form.value = data.formData
         const id = firestore.collection('posts').doc().id
-        // if (data.file !== null) {
-        //   // @ts-ignore
-        //   //TODO: 解消方法がわからないのでts-ignoreで対応
-        //   fileChanged(data.file, id).then((path) => {
-        //     form.value.movieUrl = path
-        //   })
-        // }
         form.value.id = id
         firestore.collection('posts').doc(id).set(form.value)
         Router.push('/')
@@ -86,6 +87,7 @@ export default defineComponent({
       currentUser,
       // ref系
       form,
+      isLoading,
       // Post
       onSubmit,
       // ファイル処理系
