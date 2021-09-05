@@ -1,13 +1,10 @@
 <template>
-  <div>
-    <ThePostForm
-      :propsform="form"
-      :title="'新規作成'"
-      @on-submit="onSubmit"
-      @img-add="fileChanged"
-    />
-    <p></p>
-  </div>
+  <ThePostForm
+    :propsform="form"
+    :title="'新規作成'"
+    @on-submit="onSubmit"
+    @img-add="fileChanged"
+  />
 </template>
 
 <script lang="ts">
@@ -42,7 +39,6 @@ export default defineComponent({
       updated_at: new Date(),
       user: { ...currentUser },
     })
-    const targetUrl = ref<string>('')
     const fileChanged = async (file: any) => {
       if (file) {
         const id = uuidv4()
@@ -51,12 +47,8 @@ export default defineComponent({
             file,
             id,
           })
-          targetUrl.value = url
-          const deleteText = file.content.substr(0, file.content.indexOf('!'))
-          form.value.content = deleteText.concat(
-            `![${file.fileName}](${targetUrl.value})`
-          )
-          console.log(' form.value.content', form.value.content)
+          var reg = new RegExp('\\([\.\\d]+?\\)', 'g')
+          form.value.content = file.content.replace(reg, `(${url}})`)
         } catch (error) {
           console.error('file upload', error)
         }
@@ -98,7 +90,6 @@ export default defineComponent({
       onSubmit,
       // ファイル処理系
       fileChanged,
-      targetUrl,
     }
   },
 })

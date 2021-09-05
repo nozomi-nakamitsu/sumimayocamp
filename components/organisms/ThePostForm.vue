@@ -40,7 +40,6 @@
           :class="invalid"
         />
       </form>
-      {{ form.content }}
     </ValidationObserver>
   </div>
 </template>
