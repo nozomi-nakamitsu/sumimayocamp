@@ -41,7 +41,6 @@ export default defineComponent({
             id,
           })
           .then((result) => {
-            console.log(result)
             form.value = { ...result }
           })
       } catch (error) {
