@@ -60,3 +60,8 @@ export interface EmojiUser {
   post_id: string
   item_id: string
 }
+// マークダウンエディター用にファイル情報保有用の配列の型
+export interface FileArray {
+  id: string
+  url: string
+}

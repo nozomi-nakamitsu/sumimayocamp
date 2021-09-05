@@ -14,9 +14,10 @@ import {
   useStore,
   ref,
   useRouter,
+  onBeforeUnmount,
 } from '@nuxtjs/composition-api'
 import { v4 as uuidv4 } from 'uuid'
-import { PostForm } from '@/types/props-types'
+import { PostForm, FileArray } from '@/types/props-types'
 import ThePostForm from '@/components/organisms/ThePostForm.vue'
 
 import { firestore } from '@/plugins/firebase'
@@ -41,6 +42,7 @@ export default defineComponent({
       user: { ...currentUser },
     })
     const isLoading = ref<boolean>(false)
+    const files = ref<FileArray[]>([])
     // ファイル選択時の処理
     const fileChanged = async (file: any) => {
       isLoading.value = true
@@ -56,6 +58,7 @@ export default defineComponent({
           .querySelector('.auto-textarea-input')
           ?.classList.remove('-hidden')
         document.querySelector('.v-note-show')?.classList.remove('-hidden')
+        files.value = [...files.value, { id: id, url: url }]
       } catch (error) {
         console.error('file upload', error)
       } finally {
@@ -66,19 +69,60 @@ export default defineComponent({
      * NOTE:fireStoreに投稿する
      *
      */
-    const onSubmit = (data: {
+    const onSubmit = async (data: {
       formData: PostForm
       file: string
       types: string
     }) => {
       try {
         form.value = data.formData
+        const deleteFiles = files.value.filter(
+          (file: FileArray) => form.value.content.indexOf(file.url) === -1
+        )
+        //NOTE:一度アップロードしたが、削除てしまったファイルがあればstorageから削除
+        if (deleteFiles.length) {
+          await deleteFiles.map((file) => {
+            const id = file.id
+            store.dispatch('deleteFile', {
+              id,
+            })
+          })
+        }
         const id = firestore.collection('posts').doc().id
         form.value.id = id
         firestore.collection('posts').doc(id).set(form.value)
         Router.push('/')
       } catch (error) {
         console.error(error)
+      }
+    }
+
+    /**
+     * 投稿してないファイルがあればstorageから削除
+     */
+    const deleteUnNecessaryFiles = () => {
+      files.value.map((file) => {
+        const id = file.id
+        store.dispatch('deleteFile', {
+          id,
+        })
+      })
+    }
+    /**
+     * ページ遷移時に投稿してないファイルがあればstorageから削除
+     */
+    onBeforeUnmount(() => {
+      if (files.value.length) {
+        deleteUnNecessaryFiles()
+      }
+    })
+
+    /**
+     * リロード時に投稿しれないファイルがあれば削除
+     */
+    window.onbeforeunload = () => {
+      if (files.value.length) {
+        deleteUnNecessaryFiles()
       }
     }
 

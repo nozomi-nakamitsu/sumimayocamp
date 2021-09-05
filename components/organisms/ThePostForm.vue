@@ -26,7 +26,6 @@
                   :toolbars="markdownOption"
                   language="ja"
                   @imgAdd="imgAdd"
-                  @change="func"
                 />
               </no-ssr>
             </div>
@@ -141,6 +140,10 @@ export default defineComponent({
         content: form.value.content,
       })
     }
+    // 画像削除時の処理
+    const imgDel = (filename: string) => {
+      console.log('filename', filename)
+    }
     return {
       // 認証系
       currentUser,
@@ -158,6 +161,7 @@ export default defineComponent({
       // ファイルアップロード処理
       imgAdd,
       isLoading,
+      imgDel,
     }
   },
 })

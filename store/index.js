@@ -230,6 +230,17 @@ export const actions = {
       }
     })
   },
+  deleteFile({ commit }, payload) {
+    return new Promise((resolve) => {
+      try {
+        const ref = `public/${payload.id}`
+        storage.ref(ref).delete()
+        resolve()
+      } catch (error) {
+        console.error(error)
+      }
+    })
+  },
   // NOTE:指定したIDの投稿情報を取得
   getPostData({ commit }, payload) {
     return new Promise((resolve) => {
