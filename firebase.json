@@ -1,17 +1,14 @@
 {
   "hosting": {
     "public": "dist",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
   },
   "functions": {
-    "predeploy": [
-      "npm --prefix \"$RESOURCE_DIR\" run lint"
-    ],
+    "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run lint"],
     "source": "functions"
+  },
+  "firestore": {
+    "rules": "firestore.rules"
   },
   "emulators": {
     "auth": {

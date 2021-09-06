@@ -23,15 +23,12 @@ export default defineComponent({
   setup() {
     // compositionAPI
     const store = useStore()
+
+    const currentUser = store.getters.getCurrentUser
     const Router = useRouter()
-    const {
-      fileChanged,
-      deleteUnNecessaryFiles,
-      isLoading,
-      files,
-      form,
-      currentUser,
-    } = useUploadFile()
+    const { fileChanged, deleteUnNecessaryFiles, isLoading, files, form } =
+      useUploadFile(currentUser)
+
     /**
      * NOTE:fireStoreに投稿する
      *
