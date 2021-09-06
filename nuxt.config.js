@@ -111,7 +111,7 @@ export default {
     MEASUREMENT_ID,
   },
   ssr: false,
-  // router: {
-  //   middleware: ['auth'],
-  // },
+  router: {
+    middleware: ['auth'],
+  },
 }
