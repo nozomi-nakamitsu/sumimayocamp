@@ -28,3 +28,8 @@ export const messaging = firebaseMessaging
 export default firebase
 export const firestore = firebase.firestore()
 export const storage = firebase.storage()
+
+messaging.onMessage((payload) => {
+  console.log('event: onMessage')
+  console.log('    ', payload)
+})
