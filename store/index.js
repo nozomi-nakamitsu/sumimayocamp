@@ -4,6 +4,7 @@ import 'firebase/storage'
 const storageRef = storage.ref()
 export const state = () => ({
   isLogined: false,
+  isLoading: false,
   currentUser: {
     token: '',
     uid: '',
@@ -17,6 +18,7 @@ export const state = () => ({
     user_id: '',
     title: '',
     content: '',
+    files: [],
     created_at: '',
     updated_at: '',
   },
@@ -25,6 +27,9 @@ export const state = () => ({
 export const mutations = {
   setIsLogined(state, isLogined) {
     state.isLogined = isLogined
+  },
+  setIsLoading(state, isLoading) {
+    state.isLoading = isLoading
   },
   setCurrentUser(state, data) {
     state.currentUser.uid = data.uid
@@ -39,6 +44,7 @@ export const mutations = {
     state.post.user_id = data.user_id
     state.post.title = data.title
     state.post.content = data.content
+    state.post.files = data.files
     state.post.created_at = data.created_at
     state.post.updated_at = data.updated_at
   },
@@ -218,14 +224,15 @@ export const actions = {
       }
     })
   },
-  uploadFile(payload) {
+  uploadFile({ commit }, payload) {
     return new Promise((resolve) => {
       try {
         const file = payload.file
         const ref = `public/${payload.id}`
+
         storage
           .ref(ref)
-          .put(file)
+          .put(file.file)
           .then((uploadTask) => {
             storage
               .ref(uploadTask.ref.fullPath)
@@ -234,6 +241,17 @@ export const actions = {
                 resolve(url)
               })
           })
+      } catch (error) {
+        console.error(error)
+      }
+    })
+  },
+  deleteFile({ commit }, payload) {
+    return new Promise((resolve) => {
+      try {
+        const ref = `public/${payload.id}`
+        storage.ref(ref).delete()
+        resolve()
       } catch (error) {
         console.error(error)
       }
@@ -264,6 +282,9 @@ export const actions = {
 export const getters = {
   getIsLogined(state) {
     return state.isLogined
+  },
+  getIsLoading(state) {
+    return state.isLoading
   },
   getCurrentUser(state) {
     return state.currentUser

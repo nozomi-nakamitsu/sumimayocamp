@@ -71,6 +71,7 @@ More information about the usage of this directory in [the documentation](https:
 ```
 $ yarn generate
 $ yarn build
+$export PATH=$PATH:`npm bin -g`
 $ firebase deploy
 
 ```

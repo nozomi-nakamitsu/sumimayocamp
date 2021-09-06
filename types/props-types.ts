@@ -8,7 +8,11 @@ export interface CurrentUser {
   displayName: string
   nickName: string
 }
-
+// マークダウンエディター用にファイル情報保有用の配列の型
+export interface FileArray {
+  id: string
+  url: string
+}
 /**
  * NOTE:
  * 学習内容の新規投稿用の型
@@ -21,6 +25,7 @@ export interface PostForm {
   created_at: Date
   updated_at: Date
   user: CurrentUser
+  files: FileArray[]
 }
 export interface EmojiType {
   colons: string
