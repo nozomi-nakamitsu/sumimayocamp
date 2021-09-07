@@ -18,21 +18,24 @@ exports.helloWorld = functions.https.onRequest((req, res) => {
 exports.myFunction = functions.firestore
   .document('posts/{content}')
   .onWrite((change, context) => {
-    console.log('aaaaa')
+    console.log('myFunction')
+    functions.logger.log('myFunction')
   })
 
 exports.sendPushMessage = functions.firestore
   .document('posts/{id}/messages/{text}')
   .onWrite(async (change, context) => {
     const data = change.after.data()
+    functions.logger.log('data', data)
     const previousData = change.before.data()
     console.log('data', data)
     // // uidから通知先のユーザー情報を取得
     const userRef = await admin.firestore().collection('users').doc(data.uid)
     const userDoc = await userRef.get()
-
+    functions.logger.log('userDoc', userDoc)
     if (userDoc.exists) {
       const user = userDoc.data()
+      functions.logger.log('user', user)
       // 通知のタイトルと本文を設定
       const payload = {
         notification: {
@@ -45,16 +48,19 @@ exports.sendPushMessage = functions.firestore
       if (user.fcmToken) {
         try {
           admin.messaging().sendToDevice(user.fcmToken, payload)
-
+          functions.logger.log('ok')
           console.log('ok')
         } catch (error) {
           console.error(error)
+          functions.logger.log(error)
         }
       } else {
         console.error('No Firebase Cloud Messaging Token.')
+        functions.logger.log('No Firebase Cloud Messaging Token.')
       }
     } else {
       console.error('No User.')
+      functions.logger.log('No User.')
     }
 
     return true

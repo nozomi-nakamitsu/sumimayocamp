@@ -18,12 +18,12 @@ firebaseMessaging.usePublicVapidKey(
 )
 
 // Emulatorの有効化
-const isEmulating = window.location.hostname === 'localhost'
-if (isEmulating) {
-  // firebase.auth().useEmulator('http://localhost:9099')
-  firebase.functions().useEmulator('localhost', 5001)
-  firebase.firestore().useEmulator('localhost', 8080)
-}
+// const isEmulating = window.location.hostname === 'localhost'
+// if (isEmulating) {
+//   // firebase.auth().useEmulator('http://localhost:9099')
+//   firebase.functions().useEmulator('localhost', 5001)
+//   firebase.firestore().useEmulator('localhost', 8080)
+// }
 export const messaging = firebaseMessaging
 export default firebase
 export const firestore = firebase.firestore()
