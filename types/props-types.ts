@@ -88,3 +88,19 @@ export interface EmojiUser {
   post_id: string
   item_id: string
 }
+
+/**
+ * NOTE:
+ * ミッションの表示用の型
+ */
+export interface Mission {
+  id: string
+  title: string
+  content: string
+  created_at: Date
+  updated_at: Date
+  sendUser: CurrentUser
+  receiveUser: CurrentUser[] | null
+  files: FileArray[]
+  status: MissionStatus | null
+}
