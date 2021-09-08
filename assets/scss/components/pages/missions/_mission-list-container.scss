@@ -1,0 +1,9 @@
+.mission-list-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  > .title {
+    padding-bottom: 35px;
+  }
+}

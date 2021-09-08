@@ -13,8 +13,12 @@
       <button @click="logout">ログアウト</button></v-toolbar-title
     >
     <v-toolbar-title>
+      <p @click="Router.push('/missions')">ミッション一覧</p>
+    </v-toolbar-title>
+    <v-toolbar-title>
       <p @click="Router.push('/users/edit')">ニックネーム変更</p>
     </v-toolbar-title>
+
     <v-toolbar-title>
       <p @click="Router.push('/posts/create')">新規作成</p>
     </v-toolbar-title>
@@ -22,12 +26,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, useStore, ref,useRouter } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  useStore,
+  ref,
+  useRouter,
+} from '@nuxtjs/composition-api'
 export default defineComponent({
   setup() {
     // compositionAPI
     const store = useStore()
-    const  Router= useRouter()
+    const Router = useRouter()
 
     // ref
     const currentUser = store.getters.getCurrentUser
