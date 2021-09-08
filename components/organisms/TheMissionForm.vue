@@ -1,6 +1,5 @@
 <template>
   <div class="form-container">
-    <div>{{ title }}</div>
     <!-- TODO: style実装時にフォームのコンポーネントに分ける -->
     <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
       <form @submit.prevent="handleSubmit(onSubmit)" class="form-area">

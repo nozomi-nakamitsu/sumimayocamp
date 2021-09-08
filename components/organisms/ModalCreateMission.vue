@@ -1,7 +1,7 @@
 <template>
   <BaseModal
     :control-flag="controlFlag"
-    title="メンバー登録"
+    :title="title"
     @click="$emit('click')"
   >
     <TheMissionForm
