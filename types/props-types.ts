@@ -15,7 +15,30 @@ export interface FileArray {
 }
 /**
  * NOTE:
- * 学習内容の新規投稿用の型
+ * 学習内容のステータス用の型
+ */
+export interface MissionStatus {
+  userId: string
+  status: string
+}
+/**
+ * NOTE:
+ * 挑戦状の新規投稿用の型
+ */
+export interface MissionPost {
+  id: string
+  title: string
+  content: string
+  created_at: Date
+  updated_at: Date
+  sendUser: CurrentUser
+  receiveUser: CurrentUser[] | null
+  files: FileArray[]
+  status: MissionStatus | null
+}
+/**
+ * NOTE:
+ * 学習の内容の新規投稿用の型
  */
 export interface PostForm {
   id: string

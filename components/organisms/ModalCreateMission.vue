@@ -4,8 +4,8 @@
     title="メンバー登録"
     @click="$emit('click')"
   >
-    <ThePostForm
-      :propsform="form"
+    <TheMissionForm
+      :propsform="missionForm"
       :title="'ミッションを作成'"
       @on-submit="onSubmit"
       @img-add="fileChanged"
@@ -15,16 +15,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, useStore, useRouter } from '@nuxtjs/composition-api'
-import ThePostForm from '@/components/organisms/ThePostForm.vue'
-
+import {
+  defineComponent,
+  useStore,
+  useRouter,
+  watchEffect,
+} from '@nuxtjs/composition-api'
+import TheMissionForm from '@/components/organisms/TheMissionForm.vue'
+import { FileArray, MissionPost } from '@/types/props-types'
+import { firestore } from '@/plugins/firebase'
 import BaseModal from '@/components/atoms/BaseModal.vue'
-import { useUploadFile } from '~/compositions/useUploadFile'
+import { useMissions } from '~/compositions/useMissions'
 
 export default defineComponent({
   components: {
     BaseModal,
-    ThePostForm,
+    TheMissionForm,
   },
   props: {
     controlFlag: {
@@ -38,24 +44,64 @@ export default defineComponent({
   },
   emits: ['click', 'created'],
 
-  setup() {
+  setup(_, ctx) {
+    // compositionAPI
+    const store = useStore()
+    const Router = useRouter()
     const {
       fileChanged,
       deleteUnNecessaryFiles,
       isLoading,
       files,
-      form,
+      missionForm,
       currentUser,
-    } = useUploadFile()
-    const onSubmit = () => {
-      console.log('aaa')
+    } = useMissions()
+
+    watchEffect(() => {
+      console.log(missionForm.value)
+    })
+    /**
+     * NOTE:fireStoreに投稿する
+     *
+     */
+    const onSubmit = async (data: {
+      formData: MissionPost
+      file: string
+      types: string
+    }) => {
+      try {
+        missionForm.value = data.formData
+        console.log('form.value1', missionForm.value)
+        const deleteFiles = JSON.parse(JSON.stringify(files.value)).filter(
+          (v: FileArray) => missionForm.value.content.indexOf(v.url) === -1
+        )
+        //NOTE:一度アップロードしたが、削除てしまったファイルがあればstorageから削除
+        if (deleteFiles.length) {
+          await deleteFiles.map((file: FileArray) => {
+            const id = file.id
+            store.dispatch('deleteFile', {
+              id,
+            })
+          })
+        }
+        missionForm.value.files = files.value.filter((file: FileArray) =>
+          missionForm.value.content.includes(file.url)
+        )
+        const id = firestore.collection('missions').doc().id
+        missionForm.value.id = id
+
+        firestore.collection('missions').doc(id).set(missionForm.value)
+        ctx.emit('click')
+      } catch (error) {
+        console.error(error)
+      }
     }
     return {
       fileChanged,
       deleteUnNecessaryFiles,
       isLoading,
       files,
-      form,
+      missionForm,
       currentUser,
       onSubmit,
     }
