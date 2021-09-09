@@ -111,6 +111,9 @@ export default {
     MEASUREMENT_ID,
   },
   ssr: false,
+  manifest: {
+    gcm_sender_id: '103953800507',
+  },
   router: {
     middleware: ['auth'],
   },

@@ -150,6 +150,7 @@ export default defineComponent({
     onBeforeUnmount(() => {
       unsubscribe()
     })
+    
 
     // 絵文字押されたときに、user情報EmojiItemに追加する
     const addEmojiMember = (item: any, emojiUser: any, postData: Post) => {
