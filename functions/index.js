@@ -4,7 +4,7 @@ const functions = require('firebase-functions')
 var admin = require('firebase-admin')
 
 // var serviceAccount = require('/Users/nakamitsunozomi/Downloads/sumimayocamp-firebase-adminsdk-o4heo-cc62777183.json')
-var serviceAccount = require(process.env.PATH)
+var serviceAccount = require("./sumimayocamp-firebase-adminsdk-o4heo-f558fd8955.json")
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
