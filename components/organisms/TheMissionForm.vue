@@ -2,7 +2,7 @@
   <div class="form-container">
     <!-- TODO: style実装時にフォームのコンポーネントに分ける -->
     <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
-      <form @submit.prevent="handleSubmit(onSubmit)" class="form-area">
+      <form class="form-area" @submit.prevent="handleSubmit(onSubmit)">
         <ValidationInput
           label="タイトル"
           input-name="title"
@@ -114,7 +114,6 @@ export default defineComponent({
      * NOTE:fireStoreに投稿する
      */
     const onSubmit = () => {
-      console.log("aaaaaaaaaaaa")
       context.emit('on-submit', {
         formData: form.value,
         types: props.title,

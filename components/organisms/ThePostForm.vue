@@ -3,7 +3,7 @@
     <div>{{ title }}</div>
     <!-- TODO: style実装時にフォームのコンポーネントに分ける -->
     <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
-      <form @submit.prevent="handleSubmit(onSubmit)" class="form-area">
+      <form class="form-area" @submit.prevent="handleSubmit(onSubmit)">
         <ValidationInput
           label="タイトル"
           input-name="title"

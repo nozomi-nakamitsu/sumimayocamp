@@ -1,6 +1,6 @@
 import { ref, useStore, watch } from '@nuxtjs/composition-api'
-import { FileArray, MissionPost } from '@/types/props-types'
 import { v4 as uuidv4 } from 'uuid'
+import { FileArray, MissionPost } from '@/types/props-types'
 export const useMissions = (props: any) => {
   const store = useStore()
   const isLoading = ref<boolean>(false)
@@ -54,13 +54,13 @@ export const useMissions = (props: any) => {
         file,
         id,
       })
-      var reg = new RegExp('\\([.\\d]+?\\)', 'g')
+      const reg = new RegExp('\\([.\\d]+?\\)', 'g')
       missionForm.value.content = file.content.replace(reg, `(${url}})`)
       document
         .querySelector('.auto-textarea-input')
         ?.classList.remove('-hidden')
       document.querySelector('.v-note-show')?.classList.remove('-hidden')
-      files.value = [...files.value, { id: id, url: url }]
+      files.value = [...files.value, { id, url }]
     } catch (error) {
       console.error('file upload', error)
     } finally {
@@ -73,7 +73,7 @@ export const useMissions = (props: any) => {
   const deleteUnNecessaryFiles = () => {
     files.value.map((file) => {
       const id = file.id
-      store.dispatch('deleteFile', {
+    return  store.dispatch('deleteFile', {
         id,
       })
     })

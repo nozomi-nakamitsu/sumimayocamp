@@ -4,7 +4,7 @@
       <div v-if="controlFlag" class="inner">
         <div class="header">
           <p class="text">{{ title }}</p>
-          <div @click="$emit('click')" class="icon">
+          <div class="icon" @click="$emit('click')">
             <Icon :icon="faTimes" />
           </div>
         </div>

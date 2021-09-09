@@ -2,9 +2,9 @@
   <ThePostForm
     :propsform="form"
     :title="'編集'"
+    :prop-loading="isLoading"
     @on-submit="onSubmit"
     @img-add="fileChanged"
-    :propLoading="isLoading"
   />
 </template>
 
@@ -12,11 +12,10 @@
 import {
   defineComponent,
   useStore,
-  ref,
+
   useRouter,
-  useAsync,
+
   useRoute,
-  watchEffect,
   onBeforeMount,
 } from '@nuxtjs/composition-api'
 // import { v4 as uuidv4 } from 'uuid'
@@ -70,12 +69,12 @@ export default defineComponent({
       try {
         form.value = data.formData
         const deleteFiles = JSON.parse(JSON.stringify(files.value)).filter(
-          (v: FileArray) => form.value.content.indexOf(v.url) === -1
+          (v: FileArray) => !form.value.content.includes(v.url)
         )
         form.value.files = files.value.filter((file: FileArray) =>
           form.value.content.includes(file.url)
         )
-        //NOTE:一度アップロードしたが、削除てしまったファイルがあればstorageから削除
+        // NOTE:一度アップロードしたが、削除てしまったファイルがあればstorageから削除
         if (deleteFiles.length) {
           await deleteFiles.map((file: FileArray) => {
             const id = file.id

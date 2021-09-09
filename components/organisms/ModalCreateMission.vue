@@ -3,20 +3,15 @@
     <TheMissionForm
       :propsform="missionForm"
       :title="types === 'new' ? '新規作成' : '編集'"
+      :prop-loading="isLoading"
       @on-submit="onSubmit"
       @img-add="fileChanged"
-      :propLoading="isLoading"
     />
   </BaseModal>
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  useStore,
-  useRouter,
-  PropType,
-} from '@nuxtjs/composition-api'
+import { defineComponent, useStore, PropType } from '@nuxtjs/composition-api'
 import TheMissionForm from '@/components/organisms/TheMissionForm.vue'
 import { FileArray, MissionPost } from '@/types/props-types'
 import { firestore } from '@/plugins/firebase'
@@ -51,7 +46,6 @@ export default defineComponent({
   setup(props, ctx) {
     // compositionAPI
     const store = useStore()
-    const Router = useRouter()
     const {
       fileChanged,
       deleteUnNecessaryFiles,
@@ -77,13 +71,13 @@ export default defineComponent({
       try {
         missionForm.value = data.formData
         const deleteFiles = JSON.parse(JSON.stringify(files.value)).filter(
-          (v: FileArray) => missionForm.value.content.indexOf(v.url) === -1
+          (v: FileArray) => !missionForm.value.content.includes(v.url)
         )
-        //NOTE:一度アップロードしたが、削除てしまったファイルがあればstorageから削除
+        // NOTE:一度アップロードしたが、削除てしまったファイルがあればstorageから削除
         if (deleteFiles.length) {
           await deleteFiles.map((file: FileArray) => {
             const id = file.id
-            store.dispatch('deleteFile', {
+            return store.dispatch('deleteFile', {
               id,
             })
           })
@@ -110,16 +104,15 @@ export default defineComponent({
       types: string
     }) => {
       try {
-        console.log('編集')
         missionForm.value = data.formData
         const deleteFiles = JSON.parse(JSON.stringify(files.value)).filter(
-          (v: FileArray) => missionForm.value.content.indexOf(v.url) === -1
+          (v: FileArray) => !missionForm.value.content.includes(v.url)
         )
-        //NOTE:一度アップロードしたが、削除てしまったファイルがあればstorageから削除
+        // NOTE:一度アップロードしたが、削除てしまったファイルがあればstorageから削除
         if (deleteFiles.length) {
           await deleteFiles.map((file: FileArray) => {
             const id = file.id
-            store.dispatch('deleteFile', {
+            return store.dispatch('deleteFile', {
               id,
             })
           })

@@ -1,6 +1,6 @@
 import { ref, useStore, watch } from '@nuxtjs/composition-api'
-import { FileArray, PostForm } from '@/types/props-types'
 import { v4 as uuidv4 } from 'uuid'
+import { FileArray, PostForm } from '@/types/props-types'
 export const useUploadFile = () => {
   const store = useStore()
   const isLoading = ref<boolean>(false)
@@ -32,13 +32,13 @@ export const useUploadFile = () => {
         file,
         id,
       })
-      var reg = new RegExp('\\([.\\d]+?\\)', 'g')
+      const reg = new RegExp('\\([.\\d]+?\\)', 'g')
       form.value.content = file.content.replace(reg, `(${url}})`)
       document
         .querySelector('.auto-textarea-input')
         ?.classList.remove('-hidden')
       document.querySelector('.v-note-show')?.classList.remove('-hidden')
-      files.value = [...files.value, { id: id, url: url }]
+      files.value = [...files.value, { id, url }]
     } catch (error) {
       console.error('file upload', error)
     } finally {

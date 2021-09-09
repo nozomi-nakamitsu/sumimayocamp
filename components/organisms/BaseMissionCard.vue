@@ -94,7 +94,7 @@ export default defineComponent({
         console.error(error)
       }
     }
-    const UpdateMission = async (data: Mission) => {
+    const UpdateMission =  (data: Mission) => {
       ctx.emit('update', data)
     }
     return {

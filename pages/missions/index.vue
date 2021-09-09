@@ -11,7 +11,7 @@
               :key="mission.id"
               style="margin: 20px"
             >
-              <BaseMissionCard :propMission="mission" @update="updateMission" />
+              <BaseMissionCard :prop-mission="mission" @update="updateMission" />
             </div>
           </div>
           <div class="mission-list-container -pink">
@@ -22,18 +22,18 @@
               :key="mission.id"
               style="margin: 20px"
             >
-              <BaseMissionCard :propMission="mission" @update="updateMission" />
+              <BaseMissionCard :prop-mission="mission" @update="updateMission" />
             </div>
           </div>
         </div>
       </div>
     </div>
     <ModalCreateMission
-      :controlFlag="isOpened"
+      :control-flag="isOpened"
       title="挑戦状を作成する"
-      @click="closeFunc"
-      :defaultData="defaultData"
+      :default-data="defaultData"
       :types="defaultData !== null ? 'edit' : 'new'"
+      @click="closeFunc"
     />
   </div>
 </template>
@@ -46,7 +46,7 @@ import {
   ref,
   useStore,
 } from '@nuxtjs/composition-api'
-import { CurrentUser, Mission } from '@/types/props-types'
+import { Mission } from '@/types/props-types'
 import BaseMissionCard from '@/components/organisms/BaseMissionCard.vue'
 import ModalCreateMission from '@/components/organisms/ModalCreateMission.vue'
 import { useModal } from '@/compositions/useModal'
@@ -59,7 +59,6 @@ export default defineComponent({
   setup() {
     // compositionAPI
     const store = useStore()
-    const currentUser = store.getters.getCurrentUser
     const missions = ref<Mission[]>([])
     let unsubscribe = null as any
 
@@ -71,10 +70,8 @@ export default defineComponent({
         .onSnapshot((snapshot) => {
           snapshot.docChanges().forEach(
             (change) => {
-              console.log(change.type)
               // 変更後のデータが取得できる
               if (change.type === 'added') {
-                console.log('snapshot')
                 const missionData = change.doc.data() as Mission
                 missions.value = [...missions.value, missionData]
               } else if (change.type === 'removed') {
@@ -105,7 +102,7 @@ export default defineComponent({
       openModal()
       defaultData.value = data
     }
-    const closeFunc = (data: Mission) => {
+    const closeFunc = () => {
       closeModal()
       defaultData.value = null
     }
