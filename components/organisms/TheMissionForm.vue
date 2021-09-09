@@ -114,6 +114,7 @@ export default defineComponent({
      * NOTE:fireStoreに投稿する
      */
     const onSubmit = () => {
+      console.log("aaaaaaaaaaaa")
       context.emit('on-submit', {
         formData: form.value,
         types: props.title,

@@ -1,7 +1,7 @@
 <template>
   <div class="card-container">
     <v-card class="mx-auto" width="500">
-      <div style="display: flex;">
+      <div style="display: flex">
         <v-list-item-avatar color="grey darken-3">
           <v-img
             class="elevation-6"
@@ -38,7 +38,7 @@
           >
             <v-list-item-title
               style="cursor: pointer"
-              @click="Router.push(`/missions/edit/${mission.id}`)"
+              @click="UpdateMission(mission)"
               >編集</v-list-item-title
             >
           </v-list-item-content>
@@ -58,6 +58,7 @@
 </template>
 <script lang="ts">
 import {
+  computed,
   defineComponent,
   PropType,
   useRouter,
@@ -72,31 +73,36 @@ import { isCurrentUser } from '@/compositions/useAuth'
 export default defineComponent({
   components: {},
   props: {
-    mission: {
+    propMission: {
       type: Object as PropType<Mission>,
       required: true,
     },
   },
-
-  setup(props) {
+  emits: ['update'],
+  setup(props, ctx) {
     // compositionAPI
     const Router = useRouter()
     const store = useStore()
     // ref系
     const currentUser = store.getters.getCurrentUser
+    const mission = computed(() => props.propMission)
 
     const DeleteMission = async (id: string) => {
       try {
         await firestore.collection('missions').doc(id).delete()
-        Router.push('/')
       } catch (error) {
         console.error(error)
       }
     }
+    const UpdateMission = async (data: Mission) => {
+      ctx.emit('update', data)
+    }
     return {
       DeleteMission,
+      UpdateMission,
       isCurrentUser,
       currentUser,
+      mission,
       // フォーマット
       formatDateToSlashWithTime,
       // compositionAPI

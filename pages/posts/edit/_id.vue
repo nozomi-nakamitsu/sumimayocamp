@@ -58,10 +58,6 @@ export default defineComponent({
       form,
       currentUser,
     } = useUploadFile()
-
-    watchEffect(() => {
-      console.log('files', JSON.parse(JSON.stringify(files.value)))
-    })
     /**
      * NOTE:更新処理
      *

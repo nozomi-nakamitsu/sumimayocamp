@@ -11,7 +11,7 @@
               :key="mission.id"
               style="margin: 20px"
             >
-              <BaseMissionCard :mission="mission" />
+              <BaseMissionCard :propMission="mission" @update="updateMission" />
             </div>
           </div>
           <div class="mission-list-container -pink">
@@ -22,7 +22,7 @@
               :key="mission.id"
               style="margin: 20px"
             >
-              <BaseMissionCard :mission="mission" />
+              <BaseMissionCard :propMission="mission" @update="updateMission" />
             </div>
           </div>
         </div>
@@ -31,7 +31,9 @@
     <ModalCreateMission
       :controlFlag="isOpened"
       title="挑戦状を作成する"
-      @click="closeModal"
+      @click="closeFunc"
+      :defaultData="defaultData"
+      :types="defaultData !== null ? 'edit' : 'new'"
     />
   </div>
 </template>
@@ -69,15 +71,22 @@ export default defineComponent({
         .onSnapshot((snapshot) => {
           snapshot.docChanges().forEach(
             (change) => {
+              console.log(change.type)
               // 変更後のデータが取得できる
               if (change.type === 'added') {
+                console.log('snapshot')
                 const missionData = change.doc.data() as Mission
                 missions.value = [...missions.value, missionData]
-                console.log('    missions.value', missions.value)
               } else if (change.type === 'removed') {
                 missions.value = missions.value.filter(
                   (v: Mission) => v.id !== change.doc.data().id
                 )
+              } else if (change.type === 'modified') {
+                const removeBeforeData = missions.value.filter(
+                  (v: Mission) => v.id !== change.doc.data().id
+                )
+                const missionData = change.doc.data() as Mission
+                missions.value = [missionData, ...removeBeforeData]
               }
             },
             (error: any) => {
@@ -90,7 +99,18 @@ export default defineComponent({
     onBeforeUnmount(() => {
       unsubscribe()
     })
+
+    const defaultData = ref<Mission | null>(null)
+    const updateMission = (data: Mission) => {
+      openModal()
+      defaultData.value = data
+    }
+    const closeFunc = (data: Mission) => {
+      closeModal()
+      defaultData.value = null
+    }
     const { isOpened, openModal, closeModal } = useModal()
+
     return {
       // 全投稿データ
       missions,
@@ -98,6 +118,10 @@ export default defineComponent({
       isOpened,
       openModal,
       closeModal,
+      closeFunc,
+      // 挑戦状編集
+      defaultData,
+      updateMission,
     }
   },
 })

@@ -1,12 +1,8 @@
 <template>
-  <BaseModal
-    :control-flag="controlFlag"
-    :title="title"
-    @click="$emit('click')"
-  >
+  <BaseModal :control-flag="controlFlag" :title="title" @click="$emit('click')">
     <TheMissionForm
       :propsform="missionForm"
-      :title="'ミッションを作成'"
+      :title="types === 'new' ? '新規作成' : '編集'"
       @on-submit="onSubmit"
       @img-add="fileChanged"
       :propLoading="isLoading"
@@ -19,7 +15,7 @@ import {
   defineComponent,
   useStore,
   useRouter,
-  watchEffect,
+  PropType,
 } from '@nuxtjs/composition-api'
 import TheMissionForm from '@/components/organisms/TheMissionForm.vue'
 import { FileArray, MissionPost } from '@/types/props-types'
@@ -41,10 +37,18 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    defaultData: {
+      type: Object as PropType<MissionPost> | null,
+      default: null,
+    },
+    types: {
+      type: String,
+      required: true,
+    },
   },
   emits: ['click', 'created'],
 
-  setup(_, ctx) {
+  setup(props, ctx) {
     // compositionAPI
     const store = useStore()
     const Router = useRouter()
@@ -55,13 +59,10 @@ export default defineComponent({
       files,
       missionForm,
       currentUser,
-    } = useMissions()
+    } = useMissions(props)
 
-    watchEffect(() => {
-      console.log(missionForm.value)
-    })
     /**
-     * NOTE:fireStoreに投稿する
+     * NOTE:ミッションを新規投稿する
      *
      */
     const onSubmit = async (data: {
@@ -69,9 +70,12 @@ export default defineComponent({
       file: string
       types: string
     }) => {
+      if (props.types === 'edit') {
+        onUpdate(data)
+        return
+      }
       try {
         missionForm.value = data.formData
-        console.log('form.value1', missionForm.value)
         const deleteFiles = JSON.parse(JSON.stringify(files.value)).filter(
           (v: FileArray) => missionForm.value.content.indexOf(v.url) === -1
         )
@@ -96,6 +100,43 @@ export default defineComponent({
         console.error(error)
       }
     }
+    /**
+     * NOTE:ミッションを編集する
+     *
+     */
+    const onUpdate = async (data: {
+      formData: MissionPost
+      file: string
+      types: string
+    }) => {
+      try {
+        console.log('編集')
+        missionForm.value = data.formData
+        const deleteFiles = JSON.parse(JSON.stringify(files.value)).filter(
+          (v: FileArray) => missionForm.value.content.indexOf(v.url) === -1
+        )
+        //NOTE:一度アップロードしたが、削除てしまったファイルがあればstorageから削除
+        if (deleteFiles.length) {
+          await deleteFiles.map((file: FileArray) => {
+            const id = file.id
+            store.dispatch('deleteFile', {
+              id,
+            })
+          })
+        }
+        missionForm.value.files = files.value.filter((file: FileArray) =>
+          missionForm.value.content.includes(file.url)
+        )
+
+        await firestore
+          .collection('missions')
+          .doc(missionForm.value.id)
+          .update(missionForm.value)
+        ctx.emit('click')
+      } catch (error) {
+        console.error(error)
+      }
+    }
     return {
       fileChanged,
       deleteUnNecessaryFiles,
@@ -104,6 +145,7 @@ export default defineComponent({
       missionForm,
       currentUser,
       onSubmit,
+      onUpdate,
     }
   },
 })

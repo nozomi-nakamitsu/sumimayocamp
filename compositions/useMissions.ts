@@ -1,12 +1,11 @@
 import { ref, useStore, watch } from '@nuxtjs/composition-api'
 import { FileArray, MissionPost } from '@/types/props-types'
 import { v4 as uuidv4 } from 'uuid'
-export const useMissions = () => {
+export const useMissions = (props: any) => {
   const store = useStore()
   const isLoading = ref<boolean>(false)
 
   const currentUser = store.getters.getCurrentUser
-  console.log(currentUser)
   const missionForm = ref<MissionPost>({
     id: '',
     title: '',
@@ -24,6 +23,27 @@ export const useMissions = () => {
     () => missionForm.value.files,
     () => {
       files.value = [...missionForm.value.files]
+    }
+  )
+
+  watch(
+    () => props.defaultData,
+    () => {
+      if (!props.defaultData) {
+        missionForm.value = {
+          id: '',
+          title: '',
+          content: '',
+          created_at: new Date(),
+          updated_at: new Date(),
+          sendUser: { ...currentUser },
+          receiveUser: [],
+          files: [],
+          status: null,
+        }
+        return
+      }
+      missionForm.value = { ...props.defaultData }
     }
   )
   const fileChanged = async (file: any) => {
