@@ -44,8 +44,8 @@ import {
   onBeforeUnmount,
   computed,
 } from '@nuxtjs/composition-api'
-import { firestore } from '@/plugins/firebase.js'
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
+import { firestore } from '@/plugins/firebase.js'
 import Icon from '@/components/molecules/Icon.vue'
 
 export default defineComponent({
@@ -89,7 +89,7 @@ export default defineComponent({
         text: message.value,
         postId: props.postId,
         createdAt: Date.now(),
-        id: id,
+        id,
       }
       await firestore
         .collection('posts')

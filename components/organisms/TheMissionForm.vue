@@ -1,6 +1,5 @@
 <template>
   <div class="form-container">
-    <div>{{ title }}</div>
     <!-- TODO: style実装時にフォームのコンポーネントに分ける -->
     <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
       <form class="form-area" @submit.prevent="handleSubmit(onSubmit)">
@@ -97,12 +96,13 @@ export default defineComponent({
     const form = computed(() => ({
       id: props.propsform.id,
       title: props.propsform.title,
-      user_id: currentUser.uid,
       content: props.propsform.content,
       created_at:
         props.title === '新規作成' ? new Date() : props.propsform.created_at,
       updated_at: new Date(),
-      user: props.propsform.user,
+      sendUser: props.propsform.sendUser,
+      receiveUser: props.propsform.receiveUser,
+      status: props.propsform.status,
     }))
 
     const fileUploadEvent = ref<any>(null)
