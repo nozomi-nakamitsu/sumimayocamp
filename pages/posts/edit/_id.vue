@@ -34,6 +34,7 @@ export default defineComponent({
     const store = useStore()
     const Router = useRouter()
     const Route = useRoute()
+    const currentUser = store.getters.getCurrentUser
     onBeforeMount(() => {
       const id = Route.value.params.id
       try {
@@ -55,8 +56,7 @@ export default defineComponent({
       isLoading,
       files,
       form,
-      currentUser,
-    } = useUploadFile()
+    } = useUploadFile(currentUser)
     /**
      * NOTE:更新処理
      *

@@ -7,6 +7,7 @@ export interface CurrentUser {
   photoURL: string
   displayName: string
   nickName: string
+  fcmToken:string
 }
 // マークダウンエディター用にファイル情報保有用の配列の型
 export interface FileArray {

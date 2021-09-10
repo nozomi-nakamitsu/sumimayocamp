@@ -11,7 +11,8 @@ export default function ({ route, store, redirect }: Context) {
         //   uid: user.uid,
         //   photoURL: user.photoURL,
         //   displayName: user.displayName,
-        //   nickName: user.nickName,
+        //   nickName: user.displayName,
+        //   fcmToken: user.fcmToken,
         // })
         if (route.name === 'login___ja') {
           redirect('/')
