@@ -2,9 +2,9 @@
   <ThePostForm
     :propsform="form"
     :title="'新規作成'"
+    :prop-loading="isLoading"
     @on-submit="onSubmit"
     @img-add="fileChanged"
-    :propLoading="isLoading"
   />
 </template>
 
@@ -41,9 +41,9 @@ export default defineComponent({
       try {
         form.value = data.formData
         const deleteFiles = JSON.parse(JSON.stringify(files.value)).filter(
-          (v: FileArray) => form.value.content.indexOf(v.url) === -1
+          (v: FileArray) => !form.value.content.includes(v.url)
         )
-        //NOTE:一度アップロードしたが、削除てしまったファイルがあればstorageから削除
+        // NOTE:一度アップロードしたが、削除てしまったファイルがあればstorageから削除
         if (deleteFiles.length) {
           await deleteFiles.map((file: FileArray) => {
             const id = file.id

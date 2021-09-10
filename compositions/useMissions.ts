@@ -1,25 +1,49 @@
-import { ref, useStore, watch,  } from '@nuxtjs/composition-api'
-import { CurrentUser, FileArray, PostForm } from '@/types/props-types'
+import { ref, useStore, watch } from '@nuxtjs/composition-api'
 import { v4 as uuidv4 } from 'uuid'
-export const useUploadFile = (currentUser :CurrentUser) => {
+import { FileArray, MissionPost } from '@/types/props-types'
+export const useMissions = (props: any) => {
   const store = useStore()
   const isLoading = ref<boolean>(false)
 
-  const form = ref<PostForm>({
+  const currentUser = store.getters.getCurrentUser
+  const missionForm = ref<MissionPost>({
     id: '',
-    user_id: currentUser.uid,
     title: '',
     content: '',
     created_at: new Date(),
     updated_at: new Date(),
-    user: { ...currentUser },
+    sendUser: { ...currentUser },
+    receiveUser: [],
     files: [],
+    status: null,
   })
-  const files = ref<FileArray[]>(form.value.files)
+
+  const files = ref<FileArray[]>(missionForm.value.files)
   watch(
-    () => form.value.files,
+    () => missionForm.value.files,
     () => {
-      files.value = [...form.value.files]
+      files.value = [...missionForm.value.files]
+    }
+  )
+
+  watch(
+    () => props.defaultData,
+    () => {
+      if (!props.defaultData) {
+        missionForm.value = {
+          id: '',
+          title: '',
+          content: '',
+          created_at: new Date(),
+          updated_at: new Date(),
+          sendUser: { ...currentUser },
+          receiveUser: [],
+          files: [],
+          status: null,
+        }
+        return
+      }
+      missionForm.value = { ...props.defaultData }
     }
   )
   const fileChanged = async (file: any) => {
@@ -31,7 +55,7 @@ export const useUploadFile = (currentUser :CurrentUser) => {
         id,
       })
       const reg = new RegExp('\\([.\\d]+?\\)', 'g')
-      form.value.content = file.content.replace(reg, `(${url}})`)
+      missionForm.value.content = file.content.replace(reg, `(${url}})`)
       document
         .querySelector('.auto-textarea-input')
         ?.classList.remove('-hidden')
@@ -49,7 +73,7 @@ export const useUploadFile = (currentUser :CurrentUser) => {
   const deleteUnNecessaryFiles = () => {
     files.value.map((file) => {
       const id = file.id
-      store.dispatch('deleteFile', {
+    return  store.dispatch('deleteFile', {
         id,
       })
     })
@@ -58,7 +82,7 @@ export const useUploadFile = (currentUser :CurrentUser) => {
     isLoading,
     fileChanged,
     files,
-    form,
+    missionForm,
     currentUser,
     deleteUnNecessaryFiles,
   }

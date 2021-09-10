@@ -1,0 +1,16 @@
+.mission-list-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  &.-beige {
+    background-color: beige;
+  }
+  &.-pink {
+    background-color: pink;
+  }
+  > .title {
+    padding-bottom: 35px;
+  }
+}
