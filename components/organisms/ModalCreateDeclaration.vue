@@ -4,15 +4,17 @@
       <!-- TODO: style実装時にフォームのコンポーネントに分ける -->
       <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
         <form class="form-area" @submit.prevent="handleSubmit(onSubmit)">
-          <ValidationInput
+          <ValidationTextArea
             label="今週やることを宣言しよう"
             input-name="declaration"
             rules="required"
             class="nameinput"
             :set-value="form.declaration"
             @input="change($event)"
-          ></ValidationInput>
-          <BaseSelectBox />
+          ></ValidationTextArea>
+
+          <p></p>
+          <BaseSelectBox @on-selected="onSelected" />
           <div>
             <input
               type="submit"
@@ -35,17 +37,17 @@ import {
   PropType,
   ref,
 } from '@nuxtjs/composition-api'
-import { FileArray, MissionPost } from '@/types/props-types'
+import { FileArray, Mission, MissionPost } from '@/types/props-types'
 import { firestore } from '@/plugins/firebase'
 import BaseModal from '@/components/atoms/BaseModal.vue'
 import BaseSelectBox from '../molecules/form/BaseSelectBox.vue'
-import ValidationInput from '../molecules/form/ValidationInput.vue'
+import ValidationTextArea from '../molecules/form/ValidationTextArea.vue'
 
 export default defineComponent({
   components: {
     BaseModal,
     BaseSelectBox,
-    ValidationInput,
+    ValidationTextArea,
   },
   props: {
     controlFlag: {
@@ -81,10 +83,26 @@ export default defineComponent({
     const change = () => {
       console.log('change')
     }
+    const prev = ref('')
+    const onSelected = (selectedMissions: Mission[]) => {
+      const titles = selectedMissions.map((mission) => {
+        return `${mission.title}に挑戦する!`
+      })
+      if (prev.value === '') {
+        form.value.declaration = form.value.declaration.concat(titles.join(''))
+      } else {
+        form.value.declaration = form.value.declaration.replace(
+          prev.value,
+          titles.join('')
+        )
+      }
+      prev.value = titles.join('')
+    }
 
     return {
       form,
       change,
+      onSelected,
     }
   },
 })
