@@ -93,3 +93,4 @@ sw.*
 *.firebase
 # .vscode
 .vscode
+.firebase
