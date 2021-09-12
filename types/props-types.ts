@@ -7,7 +7,7 @@ export interface CurrentUser {
   photoURL: string
   displayName: string
   nickName: string
-  fcmToken:string
+  fcmToken: string
 }
 // マークダウンエディター用にファイル情報保有用の配列の型
 export interface FileArray {
@@ -104,4 +104,13 @@ export interface Mission {
   receiveUser: CurrentUser[] | null
   files: FileArray[]
   status: MissionStatus | null
+}
+/**
+ * NOTE:
+ * 宣言の表示用の型
+ */
+export interface Declaration {
+  declaration: string
+  Mission: Mission
+  uid: string
 }

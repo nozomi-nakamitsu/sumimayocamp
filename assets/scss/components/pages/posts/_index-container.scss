@@ -1,9 +1,13 @@
 .index-container {
+  display: flex;
   > .container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    &.-start {
+      justify-content: flex-start;
+    }
   }
   > .container > .flex {
     display: flex;

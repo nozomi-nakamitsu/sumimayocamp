@@ -8,4 +8,7 @@
     background-color: $red-coy;
     border: 1px solid $red-orko;
   }
+  &.-textarea {
+    height: 100%;
+  }
 }

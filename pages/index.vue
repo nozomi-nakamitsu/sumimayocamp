@@ -5,6 +5,9 @@
         <Card :post="post" />
       </div>
     </div>
+    <div class="container -start">
+      <TheDeclaration />
+    </div>
   </div>
 </template>
 
@@ -19,9 +22,11 @@ import {
 import { CurrentUser, Post } from '@/types/props-types'
 import Card from '@/components/organisms/Card.vue'
 import { firestore } from '@/plugins/firebase'
+import TheDeclaration from '~/components/organisms/TheDeclaration.vue'
 export default defineComponent({
   components: {
     Card,
+    TheDeclaration,
   },
   setup() {
     // compositionAPI
@@ -150,7 +155,6 @@ export default defineComponent({
     onBeforeUnmount(() => {
       unsubscribe()
     })
-    
 
     // 絵文字押されたときに、user情報EmojiItemに追加する
     const addEmojiMember = (item: any, emojiUser: any, postData: Post) => {
