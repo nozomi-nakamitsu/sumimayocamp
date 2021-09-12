@@ -24,15 +24,20 @@
         <div ref="scrollable"></div>
       </main>
 
-      <form @submit.prevent="sendMessage">
-        <input
+      <form @submit.prevent="sendMessage" class="form">
+        <textarea
           v-model="message"
           type="text"
           placeholder="Enter your message!"
+          @keydown="onKeypress($event)"
         />
         <button :disabled="!message" type="submit">📩</button>
       </form>
     </section>
+    <BaseMenu
+      :isMenstionWriting="isMenstionWriting"
+      @on-selected="onSelected"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -47,10 +52,13 @@ import {
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
 import { firestore } from '@/plugins/firebase.js'
 import Icon from '@/components/molecules/Icon.vue'
+import BaseMenu from '@/components/molecules/BaseMenu.vue'
+import { CurrentUser } from '~/types/props-types'
 
 export default defineComponent({
   components: {
     Icon,
+    BaseMenu,
   },
   props: {
     postId: {
@@ -125,6 +133,25 @@ export default defineComponent({
         console.error(e)
       }
     }
+    const isMenstionWriting = ref<boolean>(false)
+    // メンション機能
+    const onKeypress = (event: any) => {
+      if (event.key !== '@' && event.key !== 'Enter') {
+        return
+      }
+      if (event.key === 'Enter') {
+        isMenstionWriting.value = false
+        return
+      }
+      if (event.key === '@') {
+        isMenstionWriting.value = true
+        return
+      }
+    }
+    const onSelected = (user: CurrentUser) => {
+      isMenstionWriting.value = false
+      console.log(user)
+    }
 
     return {
       // 認証系
@@ -138,6 +165,10 @@ export default defineComponent({
       onDelete,
       // アイコン
       faEllipsisH,
+      // メンション機能
+      onKeypress,
+      isMenstionWriting,
+      onSelected,
     }
   },
 })
