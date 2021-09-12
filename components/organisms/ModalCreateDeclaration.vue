@@ -94,7 +94,6 @@ export default defineComponent({
     }
     // NOTE: 入力した値を親コンポーネントに渡す
     const change = (event: InputEvent) => {
-      console.log('event', event)
       form.value.declaration = event
     }
 
@@ -106,6 +105,11 @@ export default defineComponent({
         formData: form.value,
         types: props.title,
       })
+      form.value = {
+        declaration: '',
+        mission: '',
+        uid: currentUser.uid,
+      }
     }
 
     return {
