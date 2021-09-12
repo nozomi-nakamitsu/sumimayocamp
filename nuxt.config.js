@@ -50,6 +50,7 @@ export default {
     { src: '@/plugins/vue-mavon-editor', ssr: false },
     '@/plugins/vee-validate',
     '@/plugins/i18n.ts',
+    '@/plugins/nuxt-quill-plugin.ts',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

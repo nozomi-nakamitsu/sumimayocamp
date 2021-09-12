@@ -1,22 +1,32 @@
 <template>
-  <div class="quill-editor">
+  <!-- <div class="quill-editor">
     <div id="editor" />
+  </div> -->
+  <div id="app" class="quill-editor">
+    <quillEditor
+      ref="myQuillEditor"
+      v-model="content"
+      :options="editorOption"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
-
-import Quill from 'quill'
+import { quillEditor } from 'vue-quill-editor'
 export default defineComponent({
+  components: {
+    quillEditor,
+  },
   setup(props) {
-    setTimeout(() => {
-      let editor = new Quill('#editor', {
-        placeholder: 'Compose an epic...',
-        theme: 'bubble',
-      })
-    }, 10)
-    return {}
+    const editorOption = {
+      placeholder: 'Enter your message!',
+      theme: 'bubble',
+    }
+
+    return {
+      editorOption,
+    }
   },
 })
 </script>
