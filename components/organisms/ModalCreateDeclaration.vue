@@ -69,9 +69,12 @@ export default defineComponent({
   emits: ['click', 'created'],
 
   setup(props, ctx) {
+    const store = useStore()
+    const currentUser = store.getters.getCurrentUser
     const form = ref<any>({
       declaration: '',
       mission: '',
+      uid: currentUser.uid,
     })
     const prev = ref('')
     const onSelected = (selectedMissions: Mission[]) => {
