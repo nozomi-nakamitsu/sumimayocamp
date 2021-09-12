@@ -10,7 +10,7 @@
             rules="required"
             class="nameinput"
             :set-value="form.declaration"
-            @input="change($event)"
+            @input="change"
           ></ValidationTextArea>
 
           <p></p>
@@ -42,7 +42,6 @@ import { firestore } from '@/plugins/firebase'
 import BaseModal from '@/components/atoms/BaseModal.vue'
 import BaseSelectBox from '../molecules/form/BaseSelectBox.vue'
 import ValidationTextArea from '../molecules/form/ValidationTextArea.vue'
-
 export default defineComponent({
   components: {
     BaseModal,
@@ -70,19 +69,10 @@ export default defineComponent({
   emits: ['click', 'created'],
 
   setup(props, ctx) {
-    // compositionAPI
-    const store = useStore()
     const form = ref<any>({
       declaration: '',
       mission: '',
     })
-    /**
-     * NOTE:
-     *
-     */
-    const change = () => {
-      console.log('change')
-    }
     const prev = ref('')
     const onSelected = (selectedMissions: Mission[]) => {
       const titles = selectedMissions.map((mission) => {
@@ -96,13 +86,30 @@ export default defineComponent({
           titles.join('')
         )
       }
+      form.value.mission = selectedMissions
       prev.value = titles.join('')
+    }
+    // NOTE: 入力した値を親コンポーネントに渡す
+    const change = (event: InputEvent) => {
+      console.log('event', event)
+      form.value.declaration = event
+    }
+
+    /**
+     * NOTE:fireStoreに投稿する
+     */
+    const onSubmit = () => {
+      ctx.emit('on-submit', {
+        formData: form.value,
+        types: props.title,
+      })
     }
 
     return {
       form,
-      change,
       onSelected,
+      onSubmit,
+      change,
     }
   },
 })

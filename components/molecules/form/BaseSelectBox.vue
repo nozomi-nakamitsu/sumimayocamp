@@ -75,7 +75,6 @@ export default defineComponent({
       unsubscribe()
     })
     const onSelected = () => {
-      console.log('selectedMissions', selectedMissions.value)
       ctx.emit('on-selected', selectedMissions.value)
     }
     return {

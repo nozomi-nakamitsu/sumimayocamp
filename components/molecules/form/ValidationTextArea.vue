@@ -16,7 +16,7 @@
         :placeholder="placeholder"
         :class="doneOrError(failed)"
         :name="inputName"
-        @input="inputFunc"
+        @blur="inputFunc"
       ></textarea>
       <p v-if="errors.length > 0" class="error">
         {{ errors[0] }}
@@ -36,7 +36,7 @@
  * disabled 非活性にする場合にtrueを渡す
  * rules vee validateと同じ規則でバリデーションルールを指定
  */
-import { defineComponent, computed } from '@nuxtjs/composition-api'
+import { defineComponent, computed, watchEffect } from '@nuxtjs/composition-api'
 // バリデーション周り
 import { ValidationProvider } from 'vee-validate'
 import { doneOrError } from '@/compositions/validation-styles'
@@ -82,11 +82,7 @@ export default defineComponent({
     const form = computed(() => ({
       inputValue: props.setValue,
     }))
-    const inputFunc = (e: Event) => {
-      if (!(e.target instanceof HTMLInputElement)) {
-        return
-      }
-      form.value.inputValue = e.target.value
+    const inputFunc = () => {
       ctx.emit('input', form.value.inputValue)
     }
 
