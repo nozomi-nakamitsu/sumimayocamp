@@ -25,13 +25,13 @@
       </main>
 
       <form @submit.prevent="sendMessage" class="form">
-        <textarea
+        <!-- <textarea
           v-model="message"
           type="text"
           placeholder="Enter your message!"
           @keydown="onKeypress($event)"
-        />
-        
+        /> -->
+        <TheQuill />
         <button :disabled="!message" type="submit">📩</button>
       </form>
     </section>
@@ -54,12 +54,15 @@ import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
 import { firestore } from '@/plugins/firebase.js'
 import Icon from '@/components/molecules/Icon.vue'
 import BaseMenu from '@/components/molecules/BaseMenu.vue'
+import TheQuill from '@/components/molecules/form/TheQuill.vue'
+
 import { CurrentUser } from '~/types/props-types'
 
 export default defineComponent({
   components: {
     Icon,
     BaseMenu,
+    TheQuill,
   },
   props: {
     postId: {
