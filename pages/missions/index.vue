@@ -44,7 +44,6 @@ import {
   onBeforeUnmount,
   onMounted,
   ref,
-  useStore,
 } from '@nuxtjs/composition-api'
 import { Mission } from '@/types/props-types'
 import BaseMissionCard from '@/components/organisms/BaseMissionCard.vue'
@@ -58,7 +57,6 @@ export default defineComponent({
   },
   setup() {
     // compositionAPI
-    const store = useStore()
     const missions = ref<Mission[]>([])
     let unsubscribe = null as any
 

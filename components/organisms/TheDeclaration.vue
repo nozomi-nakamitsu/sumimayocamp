@@ -69,11 +69,11 @@ export default defineComponent({
      */
     const onSubmit = async (data: { formData: any; types: string }) => {
       try {
-        firestore
+        closeModal()
+        await firestore
           .collection('declaration')
           .doc(currentUser.uid)
           .set(data.formData)
-        closeModal()
       } catch (error) {
         console.error(error)
       }

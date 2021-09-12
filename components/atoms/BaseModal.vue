@@ -40,7 +40,7 @@ export default defineComponent({
     },
   },
   emits: ['click'],
-  setup(props) {
+  setup() {
     return {
       faTimes,
     }

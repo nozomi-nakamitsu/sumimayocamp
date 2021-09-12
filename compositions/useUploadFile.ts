@@ -1,6 +1,6 @@
 import { ref, useStore, watch,  } from '@nuxtjs/composition-api'
-import { CurrentUser, FileArray, PostForm } from '@/types/props-types'
 import { v4 as uuidv4 } from 'uuid'
+import { CurrentUser, FileArray, PostForm } from '@/types/props-types'
 export const useUploadFile = (currentUser :CurrentUser) => {
   const store = useStore()
   const isLoading = ref<boolean>(false)

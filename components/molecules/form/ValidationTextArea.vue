@@ -36,7 +36,7 @@
  * disabled 非活性にする場合にtrueを渡す
  * rules vee validateと同じ規則でバリデーションルールを指定
  */
-import { defineComponent, computed, watchEffect } from '@nuxtjs/composition-api'
+import { defineComponent, computed } from '@nuxtjs/composition-api'
 // バリデーション周り
 import { ValidationProvider } from 'vee-validate'
 import { doneOrError } from '@/compositions/validation-styles'

@@ -34,14 +34,12 @@
 import {
   defineComponent,
   useStore,
-  PropType,
   ref,
 } from '@nuxtjs/composition-api'
-import { FileArray, Mission, MissionPost } from '@/types/props-types'
-import { firestore } from '@/plugins/firebase'
-import BaseModal from '@/components/atoms/BaseModal.vue'
 import BaseSelectBox from '../molecules/form/BaseSelectBox.vue'
 import ValidationTextArea from '../molecules/form/ValidationTextArea.vue'
+import { Mission } from '@/types/props-types'
+import BaseModal from '@/components/atoms/BaseModal.vue'
 export default defineComponent({
   components: {
     BaseModal,
@@ -57,10 +55,6 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    // defaultData: {
-    //   type: Object as PropType<MissionPost> | null,
-    //   default: null,
-    // },
     types: {
       type: String,
       required: true,

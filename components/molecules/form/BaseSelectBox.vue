@@ -36,7 +36,7 @@ import { Mission } from '@/types/props-types'
 
 export default defineComponent({
   emits: ['on-selected'],
-  setup(props, ctx) {
+  setup(_, ctx) {
     const selectedMissions = ref<Mission[]>([])
     const missions = ref<Mission[]>([])
     let unsubscribe = null as any
