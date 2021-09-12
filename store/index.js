@@ -61,7 +61,6 @@ export const actions = {
         const user = result.user
         await messaging.requestPermission()
         var currentToken = await messaging.getToken()
-        console.log('aaaaaaaaa')
         messaging.onTokenRefresh(async () => {
           // トークンがリフレッシュされた場合
           await messaging.requestPermission()

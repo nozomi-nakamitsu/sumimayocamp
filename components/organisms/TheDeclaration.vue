@@ -68,7 +68,6 @@ export default defineComponent({
      *
      */
     const onSubmit = async (data: { formData: any; types: string }) => {
-      console.log('data.formData', data.formData)
       try {
         firestore
           .collection('declaration')
