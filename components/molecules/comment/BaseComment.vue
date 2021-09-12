@@ -31,6 +31,7 @@
           placeholder="Enter your message!"
           @keydown="onKeypress($event)"
         />
+        
         <button :disabled="!message" type="submit">📩</button>
       </form>
     </section>
@@ -148,9 +149,24 @@ export default defineComponent({
         return
       }
     }
+    const prev = ref('')
+    const mentionsNames = ref<string[]>([])
+    const mentions = ref<CurrentUser[]>([])
     const onSelected = (user: CurrentUser) => {
       isMenstionWriting.value = false
-      console.log(user)
+      mentionsNames.value = [...mentionsNames.value, user.nickName]
+      if (prev.value === '') {
+        message.value = message.value.concat(mentionsNames.value.join('＠'))
+      } else {
+        message.value = message.value.slice(0, -1)
+        message.value = message.value.replace(
+          prev.value,
+          mentionsNames.value.join('＠')
+        )
+      }
+      mentions.value = [...mentions.value, user]
+
+      prev.value = mentionsNames.value.join('＠')
     }
 
     return {
