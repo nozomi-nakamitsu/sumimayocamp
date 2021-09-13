@@ -24,12 +24,8 @@
         <div ref="scrollable"></div>
       </main>
 
-      <form @submit.prevent="sendMessage">
-        <input
-          v-model="message"
-          type="text"
-          placeholder="Enter your message!"
-        />
+      <form @submit.prevent="sendMessage" class="form">
+        <TheMentionable :setValue="message" @on-selected="changeMessage" />
         <button :disabled="!message" type="submit">📩</button>
       </form>
     </section>
@@ -47,10 +43,15 @@ import {
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
 import { firestore } from '@/plugins/firebase.js'
 import Icon from '@/components/molecules/Icon.vue'
+import TheMentionable from '~/components/molecules/form/TheMentionable.vue'
+
+import _ from 'lodash'
+import { CurrentUser } from '~/types/props-types'
 
 export default defineComponent({
   components: {
     Icon,
+    TheMentionable,
   },
   props: {
     postId: {
@@ -81,6 +82,10 @@ export default defineComponent({
     })
     // メッセージを送信する
     const sendMessage = async () => {
+      mentions.value = _.filter(mentions.value, function (item) {
+        return message.value.indexOf(item.nickName) !== -1
+      })
+
       const id = await firestore.collection('posts').doc().id
       const messageInfo = {
         uid: currentUser.uid,
@@ -90,6 +95,7 @@ export default defineComponent({
         postId: props.postId,
         createdAt: Date.now(),
         id,
+        mentions: mentions.value,
       }
       await firestore
         .collection('posts')
@@ -126,6 +132,16 @@ export default defineComponent({
       }
     }
 
+    const mentions = ref<any[]>([])
+    // quillEditerに入力された時に発火
+    const changeMessage = (data: {
+      selectedUser: CurrentUser[]
+      text: string
+    }) => {
+      mentions.value = [...data.selectedUser]
+      message.value = data.text
+    }
+
     return {
       // 認証系
       currentUser,
@@ -136,8 +152,11 @@ export default defineComponent({
       sendMessage,
       sentOrReceived,
       onDelete,
+      changeMessage,
       // アイコン
       faEllipsisH,
+      // メンション機能
+      mentions,
     }
   },
 })

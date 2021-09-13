@@ -41,7 +41,7 @@
         width: 20%;
         background-color: rgb(56, 56, 143);
       }
-      input {
+      textarea {
         line-height: 1.5;
         width: 100%;
         font-size: 1.5rem;
@@ -50,6 +50,7 @@
         outline: none;
         border: none;
         padding: 0 10px;
+        position: relative;
       }
     }
   }
@@ -81,7 +82,7 @@
     border-radius: 25px;
     position: relative;
     color: white;
-    text-align: center;
+    // text-align: center;
   }
   .message {
     display: flex;

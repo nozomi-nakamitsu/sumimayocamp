@@ -25,6 +25,18 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
     ],
+    script: [
+      {
+        src: '//cdn.quilljs.com/1.3.6/quill.js',
+        src: '//cdn.quilljs.com/1.3.6/quill.min.js',
+        // src: '//cdn.quilljs.com/1.3.6/quill.core.js',
+      },
+    ],
+    link: [
+      { rel: 'stylesheet', href: '//cdn.quilljs.com/1.3.6/quill.snow.css' },
+      { rel: 'stylesheet', href: '//cdn.quilljs.com/1.3.6/quill.bubble.css' },
+      // { rel: 'stylesheet', href: '//cdn.quilljs.com/1.3.6/quill.core.css' },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -38,6 +50,8 @@ export default {
     { src: '@/plugins/vue-mavon-editor', ssr: false },
     '@/plugins/vee-validate',
     '@/plugins/i18n.ts',
+    '@/plugins/nuxt-quill-plugin.ts',
+    '@/plugins/vue-mention.ts',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
