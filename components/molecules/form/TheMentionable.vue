@@ -16,7 +16,7 @@
         <template #item-@="{ item }">
           <div class="user">
             {{ item.user.nickName }}
-            <span class="dim"> ({{ item.user.nickName }}) </span>
+            <!-- <span class="dim"> ({{ item.user.nickName }}) </span> -->
           </div>
         </template>
       </Mentionable>
@@ -31,12 +31,10 @@ import {
   ref,
   onBeforeUnmount,
   watch,
-  watchEffect,
 } from '@nuxtjs/composition-api'
 import { firestore } from '@/plugins/firebase'
 import { CurrentUser } from '@/types/props-types'
 import _ from 'lodash'
-// バリデーション周り
 
 export default defineComponent({
   emits: ['on-selected'],
@@ -60,7 +58,7 @@ export default defineComponent({
     )
     const usersNames = ref<string[]>([])
     // 投稿一覧データを取得する
-    onMounted(async () => {
+    onMounted(() => {
       unsubscribe = firestore.collection('users').onSnapshot((snapshot) => {
         snapshot.docChanges().forEach(
           (change) => {
@@ -96,7 +94,8 @@ export default defineComponent({
           console.log('selectedUser.value', selectedUser.value)
         }
       })
-      ctx.emit('on-selected', selectedUser.value)
+      const data = { selectedUser: selectedUser.value, text: text }
+      ctx.emit('on-selected', data)
     }
 
     return {

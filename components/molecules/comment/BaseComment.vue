@@ -25,26 +25,10 @@
       </main>
 
       <form @submit.prevent="sendMessage" class="form">
-        <!-- <textarea
-          v-model="message"
-          type="text"
-          placeholder="Enter your message!"
-          @keydown="onKeypress($event)"
-        /> -->
-        <TheQuill
-          :setValue="message"
-          @keydown-enter="keydownEnter"
-          @keydown-mension="keydownMension"
-          @on-selected="changeMessage"
-        />
+        <TheMentionable :setValue="message" @on-selected="changeMessage" />
         <button :disabled="!message" type="submit">📩</button>
       </form>
     </section>
-
-    <BaseMenu
-      :isMenstionWriting="isMenstionWriting"
-      @on-selected="onSelected"
-    />
   </div>
 </template>
 <script lang="ts">
@@ -59,16 +43,15 @@ import {
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
 import { firestore } from '@/plugins/firebase.js'
 import Icon from '@/components/molecules/Icon.vue'
-import BaseMenu from '@/components/molecules/BaseMenu.vue'
-import TheQuill from '@/components/molecules/form/TheQuill.vue'
+import TheMentionable from '~/components/molecules/form/TheMentionable.vue'
 
+import _ from 'lodash'
 import { CurrentUser } from '~/types/props-types'
 
 export default defineComponent({
   components: {
     Icon,
-    BaseMenu,
-    TheQuill,
+    TheMentionable,
   },
   props: {
     postId: {
@@ -99,6 +82,10 @@ export default defineComponent({
     })
     // メッセージを送信する
     const sendMessage = async () => {
+      mentions.value = _.filter(mentions.value, function (item) {
+        return message.value.indexOf(item.nickName) !== -1
+      })
+
       const id = await firestore.collection('posts').doc().id
       const messageInfo = {
         uid: currentUser.uid,
@@ -108,6 +95,7 @@ export default defineComponent({
         postId: props.postId,
         createdAt: Date.now(),
         id,
+        mentions: mentions.value,
       }
       await firestore
         .collection('posts')
@@ -143,47 +131,15 @@ export default defineComponent({
         console.error(e)
       }
     }
-    const isMenstionWriting = ref<boolean>(false)
-    // メンション機能
 
-    const keydownEnter = () => {
-      isMenstionWriting.value = false
-    }
-    const keydownMension = () => {
-      isMenstionWriting.value = true
-    }
-    const prev = ref('')
-    const mentionsNames = ref<string[]>([])
-    const mentions = ref<CurrentUser[]>([])
-    const onSelected = (user: CurrentUser) => {
-      isMenstionWriting.value = false
-      mentionsNames.value = [...mentionsNames.value, `@${user.nickName}`]
-
-      const name = mentionsNames.value.map(
-        (mensionName) =>
-          `<span class='mentionName' style='background-color: pink' >${mensionName}</span>`
-      )
-      if (prev.value === '') {
-        message.value = message.value.concat(name.join(''))
-      } else {
-        message.value = message.value.slice(0, -1)
-
-        const child = document.querySelector('.spanblock')
-        console.log(child)
-        if (child) {
-          message.value = message.value.replace(
-            `<p>${prev.value}</p`,
-            name.join('')
-          )
-          document.querySelector('.ql-editor')?.removeChild(child)
-        }
-      }
-      mentions.value = [...mentions.value, user]
-      prev.value = name.join('')
-    }
+    const mentions = ref<any[]>([])
     // quillEditerに入力された時に発火
-    const changeMessage = (selectedUser: CurrentUser[]) => {
-      console.log(selectedUser)
+    const changeMessage = (data: {
+      selectedUser: CurrentUser[]
+      text: string
+    }) => {
+      mentions.value = [...data.selectedUser]
+      message.value = data.text
     }
 
     return {
@@ -200,10 +156,6 @@ export default defineComponent({
       // アイコン
       faEllipsisH,
       // メンション機能
-      isMenstionWriting,
-      onSelected,
-      keydownEnter,
-      keydownMension,
       mentions,
     }
   },
