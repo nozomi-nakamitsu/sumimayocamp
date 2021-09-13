@@ -31,10 +31,16 @@
           placeholder="Enter your message!"
           @keydown="onKeypress($event)"
         /> -->
-        <TheQuill />
+        <TheQuill
+          :setValue="message"
+          @keydown-enter="keydownEnter"
+          @keydown-mension="keydownMension"
+          @on-selected="changeMessage"
+        />
         <button :disabled="!message" type="submit">📩</button>
       </form>
     </section>
+
     <BaseMenu
       :isMenstionWriting="isMenstionWriting"
       @on-selected="onSelected"
@@ -139,37 +145,45 @@ export default defineComponent({
     }
     const isMenstionWriting = ref<boolean>(false)
     // メンション機能
-    const onKeypress = (event: any) => {
-      if (event.key !== '@' && event.key !== 'Enter') {
-        return
-      }
-      if (event.key === 'Enter') {
-        isMenstionWriting.value = false
-        return
-      }
-      if (event.key === '@') {
-        isMenstionWriting.value = true
-        return
-      }
+
+    const keydownEnter = () => {
+      isMenstionWriting.value = false
+    }
+    const keydownMension = () => {
+      isMenstionWriting.value = true
     }
     const prev = ref('')
     const mentionsNames = ref<string[]>([])
     const mentions = ref<CurrentUser[]>([])
     const onSelected = (user: CurrentUser) => {
       isMenstionWriting.value = false
-      mentionsNames.value = [...mentionsNames.value, user.nickName]
+      mentionsNames.value = [...mentionsNames.value, `@${user.nickName}`]
+
+      const name = mentionsNames.value.map(
+        (mensionName) =>
+          `<span class='mentionName' style='background-color: pink' >${mensionName}</span>`
+      )
       if (prev.value === '') {
-        message.value = message.value.concat(mentionsNames.value.join('＠'))
+        message.value = message.value.concat(name.join(''))
       } else {
         message.value = message.value.slice(0, -1)
-        message.value = message.value.replace(
-          prev.value,
-          mentionsNames.value.join('＠')
-        )
+
+        const child = document.querySelector('.spanblock')
+        console.log(child)
+        if (child) {
+          message.value = message.value.replace(
+            `<p>${prev.value}</p`,
+            name.join('')
+          )
+          document.querySelector('.ql-editor')?.removeChild(child)
+        }
       }
       mentions.value = [...mentions.value, user]
-
-      prev.value = mentionsNames.value.join('＠')
+      prev.value = name.join('')
+    }
+    // quillEditerに入力された時に発火
+    const changeMessage = (selectedUser: CurrentUser[]) => {
+      console.log(selectedUser)
     }
 
     return {
@@ -182,12 +196,15 @@ export default defineComponent({
       sendMessage,
       sentOrReceived,
       onDelete,
+      changeMessage,
       // アイコン
       faEllipsisH,
       // メンション機能
-      onKeypress,
       isMenstionWriting,
       onSelected,
+      keydownEnter,
+      keydownMension,
+      mentions,
     }
   },
 })
