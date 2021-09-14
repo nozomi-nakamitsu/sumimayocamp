@@ -11,7 +11,10 @@
               :key="mission.id"
               style="margin: 20px"
             >
-              <BaseMissionCard :prop-mission="mission" @update="updateMission" />
+              <BaseMissionCard
+                :prop-mission="mission"
+                @update="updateMission"
+              />
             </div>
           </div>
           <div class="mission-list-container -pink">
@@ -22,7 +25,10 @@
               :key="mission.id"
               style="margin: 20px"
             >
-              <BaseMissionCard :prop-mission="mission" @update="updateMission" />
+              <BaseMissionCard
+                :prop-mission="mission"
+                @update="updateMission"
+              />
             </div>
           </div>
         </div>
@@ -50,6 +56,7 @@ import BaseMissionCard from '@/components/organisms/BaseMissionCard.vue'
 import ModalCreateMission from '@/components/organisms/ModalCreateMission.vue'
 import { useModal } from '@/compositions/useModal'
 import { firestore } from '@/plugins/firebase'
+import _ from 'lodash'
 export default defineComponent({
   components: {
     BaseMissionCard,
@@ -77,11 +84,12 @@ export default defineComponent({
                   (v: Mission) => v.id !== change.doc.data().id
                 )
               } else if (change.type === 'modified') {
-                const removeBeforeData = missions.value.filter(
-                  (v: Mission) => v.id !== change.doc.data().id
-                )
-                const missionData = change.doc.data() as Mission
-                missions.value = [missionData, ...removeBeforeData]
+                const data = [...missions.value]
+                const targetIndex = _.findIndex(data, function (o) {
+                  return o.id == change.doc.data().id
+                })
+                data[targetIndex] = change.doc.data() as Mission
+                missions.value = [...data]
               }
             },
             (error: any) => {

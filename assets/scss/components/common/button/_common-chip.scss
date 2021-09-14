@@ -1,0 +1,11 @@
+.common-chip {
+  &.-blue {
+    background-color: #65bade !important;
+  }
+  &.-white {
+    background-color: $gray-lightpowdered !important;
+  }
+}
+.theme--light.v-chip:not(.v-chip--active) {
+  background-color: transparent;
+}

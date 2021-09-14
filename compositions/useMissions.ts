@@ -4,7 +4,6 @@ import { FileArray, MissionPost } from '@/types/props-types'
 export const useMissions = (props: any) => {
   const store = useStore()
   const isLoading = ref<boolean>(false)
-
   const currentUser = store.getters.getCurrentUser
   const missionForm = ref<MissionPost>({
     id: '',
@@ -15,7 +14,7 @@ export const useMissions = (props: any) => {
     sendUser: { ...currentUser },
     receiveUser: [],
     files: [],
-    status: null,
+    status: [],
   })
 
   const files = ref<FileArray[]>(missionForm.value.files)
@@ -39,7 +38,7 @@ export const useMissions = (props: any) => {
           sendUser: { ...currentUser },
           receiveUser: [],
           files: [],
-          status: null,
+          status: [],
         }
         return
       }
@@ -73,7 +72,7 @@ export const useMissions = (props: any) => {
   const deleteUnNecessaryFiles = () => {
     files.value.map((file) => {
       const id = file.id
-    return  store.dispatch('deleteFile', {
+      return store.dispatch('deleteFile', {
         id,
       })
     })
