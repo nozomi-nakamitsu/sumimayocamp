@@ -29,6 +29,25 @@
         {{ mission.content }}
       </v-card-text> -->
       <v-card-text class="text-h5 font-weight-bold">
+        <v-btn
+          elevation="2"
+          v-if="!isMyMission(mission)"
+          @click="joinMission(mission)"
+          >私がやる！</v-btn
+        >
+        <v-btn elevation="2" disabled v-if="isMyMission(mission)"
+          >挑戦中！！</v-btn
+        >
+
+        <v-chip
+          class="ma-2 common-chip"
+          :class="missionLabelColor(mission, currentUser.uid)"
+          v-if="isMyMission(mission)"
+          @click="changeStatus(mission)"
+          >{{ missionLabelText(mission, currentUser.uid) }}</v-chip
+        >
+      </v-card-text>
+      <v-card-text class="text-h5 font-weight-bold">
         {{ formatDateToSlashWithTime(mission.updated_at) }}
       </v-card-text>
       <v-card-actions>
@@ -64,12 +83,12 @@ import {
   useRouter,
   useStore,
 } from '@nuxtjs/composition-api'
-import { Mission } from '@/types/props-types'
+import { Mission, MissionStatus } from '@/types/props-types'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 
 import { firestore } from '@/plugins/firebase.js'
 import { isCurrentUser } from '@/compositions/useAuth'
-
+import _ from 'lodash'
 export default defineComponent({
   components: {},
   props: {
@@ -94,8 +113,67 @@ export default defineComponent({
         console.error(error)
       }
     }
-    const UpdateMission =  (data: Mission) => {
+    const UpdateMission = (data: Mission) => {
       ctx.emit('update', data)
+    }
+    // ログインユーザーを挑戦者として登録する
+    const joinMission = async (mission: Mission) => {
+      const data = { ...mission }
+      data.status = [
+        ...data.status,
+        {
+          uid: currentUser.uid,
+          nickName: currentUser.nickName,
+          status: false,
+        },
+      ]
+      try {
+        await firestore.collection('missions').doc(mission.id).update(data)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    // ログインユーザーが挑戦しているミッションかを判断する
+    const isMyMission = computed(() => (mission: Mission): boolean => {
+      if (mission.status.length === 0) {
+        return false
+      }
+      return _.every(mission.status, function (item: MissionStatus) {
+        return (item.uid = currentUser.uid)
+      })
+    })
+    // 挑戦しているユーザーごとのミッションのステータスに応じてラベルの色を変更する
+    const missionLabelColor = computed(
+      () =>
+        (mission: Mission, uid: string): string => {
+          const target = _.find(mission.status, function (item: MissionStatus) {
+            return (item.uid = uid)
+          }) as MissionStatus
+          return target.status ? '-blue' : '-white'
+        }
+    )
+    // 挑戦しているユーザーごとのミッションのステータスに応じてラベルの文字を変更する
+    const missionLabelText = computed(
+      () =>
+        (mission: Mission, uid: string): string => {
+          const target = _.find(mission.status, function (item: MissionStatus) {
+            return (item.uid = uid)
+          }) as MissionStatus
+          return target.status ? 'すみマヨ' : 'まだマヨ'
+        }
+    )
+    // ミッションのステータスを変更する
+    const changeStatus = async (mission: Mission) => {
+      const data = mission
+      const target = _.find(data.status, function (item: MissionStatus) {
+        return (item.uid = currentUser.uid)
+      }) as MissionStatus
+      target.status = !target.status
+      try {
+        await firestore.collection('missions').doc(mission.id).update(data)
+      } catch (error) {
+        console.error(error)
+      }
     }
     return {
       DeleteMission,
@@ -107,6 +185,12 @@ export default defineComponent({
       formatDateToSlashWithTime,
       // compositionAPI
       Router,
+      // ステータス変更
+      joinMission,
+      isMyMission,
+      missionLabelColor,
+      changeStatus,
+      missionLabelText,
     }
   },
 })
