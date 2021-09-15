@@ -19,8 +19,9 @@ export interface FileArray {
  * 学習内容のステータス用の型
  */
 export interface MissionStatus {
-  userId: string
-  status: string
+  uid: string
+  nickName: string
+  status: boolean
 }
 /**
  * NOTE:
@@ -35,7 +36,7 @@ export interface MissionPost {
   sendUser: CurrentUser
   receiveUser: CurrentUser[] | null
   files: FileArray[]
-  status: MissionStatus | null
+  status: MissionStatus[]
 }
 /**
  * NOTE:
@@ -103,7 +104,7 @@ export interface Mission {
   sendUser: CurrentUser
   receiveUser: CurrentUser[] | null
   files: FileArray[]
-  status: MissionStatus | null
+  status: MissionStatus[]
 }
 /**
  * NOTE:

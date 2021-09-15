@@ -24,8 +24,8 @@
         <div ref="scrollable"></div>
       </main>
 
-      <form @submit.prevent="sendMessage" class="form">
-        <TheMentionable :setValue="message" @on-selected="changeMessage" />
+      <form class="form" @submit.prevent="sendMessage">
+        <TheMentionable :set-value="message" @on-selected="changeMessage" />
         <button :disabled="!message" type="submit">📩</button>
       </form>
     </section>
@@ -41,11 +41,11 @@ import {
   computed,
 } from '@nuxtjs/composition-api'
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
+import _ from 'lodash'
 import { firestore } from '@/plugins/firebase.js'
 import Icon from '@/components/molecules/Icon.vue'
 import TheMentionable from '~/components/molecules/form/TheMentionable.vue'
 
-import _ from 'lodash'
 import { CurrentUser } from '~/types/props-types'
 
 export default defineComponent({
@@ -83,7 +83,7 @@ export default defineComponent({
     // メッセージを送信する
     const sendMessage = async () => {
       mentions.value = _.filter(mentions.value, function (item) {
-        return message.value.indexOf(item.nickName) !== -1
+        return message.value.includes(item.nickName)
       })
 
       const id = await firestore.collection('posts').doc().id

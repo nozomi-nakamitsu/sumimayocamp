@@ -32,18 +32,18 @@ import {
   onBeforeUnmount,
   watch,
 } from '@nuxtjs/composition-api'
+import _ from 'lodash'
 import { firestore } from '@/plugins/firebase'
 import { CurrentUser } from '@/types/props-types'
-import _ from 'lodash'
 
 export default defineComponent({
-  emits: ['on-selected'],
   props: {
     setValue: {
       type: String,
       default: '',
     },
   },
+  emits: ['on-selected'],
   setup(props, ctx) {
     const offset = ref(true)
     let unsubscribe = null as any
@@ -63,7 +63,7 @@ export default defineComponent({
         snapshot.docChanges().forEach(
           (change) => {
             const user = change.doc.data() as CurrentUser
-            users.value = [...users.value, { user: user, value: user.nickName }]
+            users.value = [...users.value, { user, value: user.nickName }]
             usersNames.value = [...usersNames.value, user.nickName]
           },
           (error: any) => {
@@ -84,17 +84,16 @@ export default defineComponent({
     const onSelected = (text: string) => {
       usersNames.value.map((name) => {
         if (
-          text.indexOf(name) != -1 &&
+          text.includes(name) &&
           _.every(selectedUser.value, function (item) {
             return item.nickName !== name
           })
         ) {
           const target = users.value.find((user) => user.user.nickName === name)
           selectedUser.value = [...selectedUser.value, target.user]
-          console.log('selectedUser.value', selectedUser.value)
         }
       })
-      const data = { selectedUser: selectedUser.value, text: text }
+      const data = { selectedUser: selectedUser.value, text }
       ctx.emit('on-selected', data)
     }
 

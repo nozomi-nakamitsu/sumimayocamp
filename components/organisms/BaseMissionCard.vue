@@ -29,6 +29,34 @@
         {{ mission.content }}
       </v-card-text> -->
       <v-card-text class="text-h5 font-weight-bold">
+        <v-btn
+          v-if="!isMyMission(mission)"
+          elevation="2"
+          @click="joinMission(mission)"
+          >私がやる！</v-btn
+        >
+        <v-btn v-if="isMyMission(mission)" elevation="2" disabled
+          >挑戦中！！</v-btn
+        >
+
+        <v-chip
+          v-if="isMyMission(mission)"
+          class="ma-2 common-chip"
+          :class="missionLabelColor(mission, currentUser.uid)"
+          @click="changeStatus(mission)"
+          >{{ missionLabelText(mission, currentUser.uid) }}</v-chip
+        >
+      </v-card-text>
+      <v-card-text class="text-h5 font-weight-bold" style="display: flex">
+        <div v-for="(status, index) in mission.status" :key="index">
+          <v-chip
+            class="ma-2 common-chip"
+            :class="missionLabelColor(mission, status.uid)"
+            >{{ status.nickName }}</v-chip
+          >
+        </div>
+      </v-card-text>
+      <v-card-text class="text-h5 font-weight-bold">
         {{ formatDateToSlashWithTime(mission.updated_at) }}
       </v-card-text>
       <v-card-actions>
@@ -63,13 +91,15 @@ import {
   PropType,
   useRouter,
   useStore,
+  ref,
+  watch,
 } from '@nuxtjs/composition-api'
-import { Mission } from '@/types/props-types'
+import _ from 'lodash'
+import { Mission, MissionStatus } from '@/types/props-types'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 
 import { firestore } from '@/plugins/firebase.js'
 import { isCurrentUser } from '@/compositions/useAuth'
-
 export default defineComponent({
   components: {},
   props: {
@@ -85,8 +115,14 @@ export default defineComponent({
     const store = useStore()
     // ref系
     const currentUser = store.getters.getCurrentUser
-    const mission = computed(() => props.propMission)
-
+    // const mission = computed(() => props.propMission)
+    const mission = ref<Mission>(props.propMission)
+    watch(
+      () => props.propMission,
+      () => {
+        mission.value = props.propMission
+      }
+    )
     const DeleteMission = async (id: string) => {
       try {
         await firestore.collection('missions').doc(id).delete()
@@ -94,8 +130,76 @@ export default defineComponent({
         console.error(error)
       }
     }
-    const UpdateMission =  (data: Mission) => {
+    const UpdateMission = (data: Mission) => {
       ctx.emit('update', data)
+    }
+    // ログインユーザーを挑戦者として登録する
+    const joinMission = async (mission: Mission) => {
+      const data = { ...mission }
+      data.status = [
+        ...data.status,
+        {
+          uid: currentUser.uid,
+          nickName: currentUser.nickName,
+          status: false,
+        },
+      ]
+      try {
+        await firestore.collection('missions').doc(mission.id).update(data)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    // ログインユーザーが挑戦しているミッションかを判断する
+    const isMyMission = computed(() => (mission: Mission): boolean => {
+      if (mission.status.length === 0) {
+        return false
+      }
+      return _.some(mission.status, function (item: MissionStatus) {
+        return item.uid === currentUser.uid
+      })
+    })
+    // 挑戦しているユーザーごとのミッションのステータスに応じてラベルの色を変更する
+    const missionLabelColor = computed(
+      () =>
+        (mission: Mission, uid: string): string => {
+          const target = _.find(mission.status, function (item: MissionStatus) {
+            return item.uid === uid
+          }) as MissionStatus
+          return target.status ? '-blue' : '-white'
+        }
+    )
+    // 挑戦しているユーザーごとのミッションのステータスに応じてラベルの文字を変更する
+    const missionLabelText = computed(
+      () =>
+        (mission: Mission, uid: string): string => {
+          const target = _.find(mission.status, function (item: MissionStatus) {
+            return item.uid === uid
+          }) as MissionStatus
+          return target.status ? 'すみマヨ' : 'まだマヨ'
+        }
+    )
+    // ミッションのステータスを変更する
+    const changeStatus = async (mission: Mission) => {
+      const data = mission as Mission
+      const target = _.find(data.status, function (o) {
+        return o.uid === currentUser.uid
+      })
+      if (target) {
+        target.status = !target.status
+        const targetIndex = _.findIndex(
+          data.status,
+          function (o: MissionStatus) {
+            return o.uid === currentUser.uid
+          }
+        )
+        data.status[targetIndex].status = target.status
+        try {
+          await firestore.collection('missions').doc(mission.id).update(data)
+        } catch (error) {
+          console.error(error)
+        }
+      }
     }
     return {
       DeleteMission,
@@ -107,6 +211,12 @@ export default defineComponent({
       formatDateToSlashWithTime,
       // compositionAPI
       Router,
+      // ステータス変更
+      joinMission,
+      isMyMission,
+      missionLabelColor,
+      changeStatus,
+      missionLabelText,
     }
   },
 })
