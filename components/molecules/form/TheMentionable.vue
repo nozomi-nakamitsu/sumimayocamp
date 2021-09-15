@@ -91,7 +91,6 @@ export default defineComponent({
         ) {
           const target = users.value.find((user) => user.user.nickName === name)
           selectedUser.value = [...selectedUser.value, target.user]
-          console.log('selectedUser.value', selectedUser.value)
         }
       })
       const data = { selectedUser: selectedUser.value, text: text }
