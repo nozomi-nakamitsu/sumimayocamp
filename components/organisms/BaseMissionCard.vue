@@ -29,7 +29,6 @@
         {{ mission.content }}
       </v-card-text> -->
       <v-card-text class="text-h5 font-weight-bold">
-        {{ isMyMission(mission) }}
         <v-btn
           elevation="2"
           v-if="!isMyMission(mission)"
