@@ -1,5 +1,5 @@
 <template>
-  <div class="user-menu-container" v-if="isMenstionWriting">
+  <div v-if="isMenstionWriting" class="user-menu-container">
     <div v-for="(user, index) in users" :key="index" class="container">
       <div class="item" @click="onSelected(user)">
         <div class="image">
@@ -23,13 +23,13 @@ import { CurrentUser } from '@/types/props-types'
 // バリデーション周り
 
 export default defineComponent({
-  emits: ['on-selected'],
   props: {
     isMenstionWriting: {
       type: Boolean,
       required: true,
     },
   },
+  emits: ['on-selected'],
   setup(props, ctx) {
     const offset = ref(true)
     let unsubscribe = null as any

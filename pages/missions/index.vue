@@ -51,12 +51,12 @@ import {
   onMounted,
   ref,
 } from '@nuxtjs/composition-api'
+import _ from 'lodash'
 import { Mission } from '@/types/props-types'
 import BaseMissionCard from '@/components/organisms/BaseMissionCard.vue'
 import ModalCreateMission from '@/components/organisms/ModalCreateMission.vue'
 import { useModal } from '@/compositions/useModal'
 import { firestore } from '@/plugins/firebase'
-import _ from 'lodash'
 export default defineComponent({
   components: {
     BaseMissionCard,
@@ -86,7 +86,7 @@ export default defineComponent({
               } else if (change.type === 'modified') {
                 const data = [...missions.value]
                 const targetIndex = _.findIndex(data, function (o) {
-                  return o.id == change.doc.data().id
+                  return o.id === change.doc.data().id
                 })
                 data[targetIndex] = change.doc.data() as Mission
                 missions.value = [...data]

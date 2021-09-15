@@ -30,19 +30,19 @@
       </v-card-text> -->
       <v-card-text class="text-h5 font-weight-bold">
         <v-btn
-          elevation="2"
           v-if="!isMyMission(mission)"
+          elevation="2"
           @click="joinMission(mission)"
           >私がやる！</v-btn
         >
-        <v-btn elevation="2" disabled v-if="isMyMission(mission)"
+        <v-btn v-if="isMyMission(mission)" elevation="2" disabled
           >挑戦中！！</v-btn
         >
 
         <v-chip
+          v-if="isMyMission(mission)"
           class="ma-2 common-chip"
           :class="missionLabelColor(mission, currentUser.uid)"
-          v-if="isMyMission(mission)"
           @click="changeStatus(mission)"
           >{{ missionLabelText(mission, currentUser.uid) }}</v-chip
         >
@@ -94,12 +94,12 @@ import {
   ref,
   watch,
 } from '@nuxtjs/composition-api'
+import _ from 'lodash'
 import { Mission, MissionStatus } from '@/types/props-types'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 
 import { firestore } from '@/plugins/firebase.js'
 import { isCurrentUser } from '@/compositions/useAuth'
-import _ from 'lodash'
 export default defineComponent({
   components: {},
   props: {
@@ -181,7 +181,7 @@ export default defineComponent({
     )
     // ミッションのステータスを変更する
     const changeStatus = async (mission: Mission) => {
-      var data = mission as Mission
+      const data = mission as Mission
       const target = _.find(data.status, function (o) {
         return o.uid === currentUser.uid
       })
