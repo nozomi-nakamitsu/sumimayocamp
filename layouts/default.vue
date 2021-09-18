@@ -34,7 +34,10 @@ export default defineComponent({
     /**
      *headerを表示するか判断
      */
-    const showHeader = computed((): Boolean => Route.value.path !== '/login')
+    const showHeader = computed(
+      (): Boolean =>
+        Route.value.path !== '/login' && Route.value.path !== '/login/'
+    )
 
     return {
       // vuex
