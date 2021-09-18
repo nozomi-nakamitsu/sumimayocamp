@@ -29,7 +29,7 @@
           <v-list-item-content v-if="isCurrentUser(post.user_id, currentUser)">
             <v-list-item-title
               style="cursor: pointer"
-              @click="DeletePost(post.id)"
+              @click="DeletePost(post.id, post.files)"
               >削除</v-list-item-title
             >
           </v-list-item-content>
@@ -66,8 +66,7 @@ import Emojifrom from '../molecules/EmojiItems.vue'
 import { Post } from '@/types/props-types'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 import { useEmoji } from '@/compositions/useEmoji'
-
-import { firestore } from '@/plugins/firebase.js'
+import { usePost } from '~/compositions/usePost'
 import { isCurrentUser } from '@/compositions/useAuth'
 
 export default defineComponent({
@@ -98,15 +97,8 @@ export default defineComponent({
       selectEmoji,
       switchVisible,
     } = useEmoji(props, currentUser)
-
-    const DeletePost = async (id: string) => {
-      try {
-        await firestore.collection('posts').doc(id).delete()
-        Router.push('/')
-      } catch (error) {
-        console.error(error)
-      }
-    }
+    // 投稿削除
+    const { DeletePost } = usePost()
     return {
       DeletePost,
       isCurrentUser,
