@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="post.user">
     <v-card class="mx-auto" width="100%">
       <v-card-title>
         <span class="text-h6 font-weight-light">
@@ -13,11 +13,11 @@
       <v-card-actions>
         <v-list-item class="grow">
           <v-list-item-avatar color="grey darken-3">
-            <v-img class="elevation-6" alt="" :src="postUser.photoURL"></v-img>
+            <v-img class="elevation-6" alt="" :src="post.user.photoURL"></v-img>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{
-              postUser.nickName ? postUser.nickName : postUser.displayName
+              post.user.nickName ? post.user.nickName : post.user.displayName
             }}</v-list-item-title>
           </v-list-item-content>
           <v-list-item-content v-if="isCurrentUser(post.user_id, currentUser)">
@@ -49,16 +49,21 @@ import {
   defineComponent,
   useStore,
   ref,
-  useAsync,
+
   useRoute,
   useRouter,
   computed,
+  onBeforeMount,
+
+  onMounted,
 } from '@nuxtjs/composition-api'
+import _ from 'lodash'
 import MarkdownViewCard from '@/components/organisms/MarkdownViewCard.vue'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 import { isCurrentUser } from '@/compositions/useAuth'
 import { firestore } from '@/plugins/firebase.js'
 import BaseComment from '~/components/molecules/comment/BaseComment.vue'
+import { CurrentUser } from '@/types/props-types'
 
 export default defineComponent({
   components: {
@@ -75,15 +80,34 @@ export default defineComponent({
     const currentUser = store.getters.getCurrentUser
     const post = ref(store.getters.getPost)
     // 投稿者情報を取得
-    const postUser = ref<object | undefined>({})
     const id = Route.value.params.id
-    useAsync(async () => {
+    const allUsers = ref<CurrentUser[]>([])
+
+    // ユーザー一覧データを取得する
+    onBeforeMount(() => {
+      firestore
+        .collection('users')
+        .get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+            allUsers.value = [...allUsers.value, doc.data()] as CurrentUser[]
+          })
+        })
+    })
+    onMounted(async () => {
       try {
         await store
           .dispatch('getPostData', {
             id,
           })
           .then((result) => {
+            const targetUser = _.find(
+              allUsers.value,
+              function (user: CurrentUser) {
+                return user.uid === result.user_id
+              }
+            )
+            result.user = { ...targetUser }
             post.value = { ...result }
           })
       } catch (error) {
@@ -115,7 +139,6 @@ export default defineComponent({
       // ref系
       post,
       updated_at,
-      postUser,
       id,
       // フォーマット
       formatDateToSlashWithTime,
