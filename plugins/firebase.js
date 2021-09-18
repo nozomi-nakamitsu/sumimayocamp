@@ -14,7 +14,7 @@ if (!firebase.apps.length) {
 }
 const firebaseMessaging = firebase.messaging()
 firebaseMessaging.usePublicVapidKey(
-  'BO0dYgcmtHaJWgQx6nhzIvbVA2N6oZO-6pxdbnLQJB2AQbaSPLqbBTszgswUY_yBGDlvJyQIs0KjlIdcN1zKi0g'
+  'BB703smPTUG97wkNXwEqqNSxyuKEtXdO4JddpBeQfmEYpNIiaLuAzZdDqPr5qNQCGsLQmXyVarKRDTEUjUydmv0'
 )
 
 // Emulatorの有効化
@@ -33,3 +33,4 @@ messaging.onMessage((payload) => {
   console.log('event: onMessage')
   console.log('    ', payload)
 })
+
