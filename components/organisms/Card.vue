@@ -29,7 +29,7 @@
           <v-list-item-content v-if="isCurrentUser(post.user_id, currentUser)">
             <v-list-item-title
               style="cursor: pointer"
-              @click="DeletePost(post.id)"
+              @click="DeletePost(post.id, post.files)"
               >削除</v-list-item-title
             >
           </v-list-item-content>
@@ -63,7 +63,7 @@ import {
 } from '@nuxtjs/composition-api'
 import { Picker } from 'emoji-mart-vue'
 import Emojifrom from '../molecules/EmojiItems.vue'
-import { Post } from '@/types/props-types'
+import { Post, FileArray } from '@/types/props-types'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 import { useEmoji } from '@/compositions/useEmoji'
 
@@ -99,8 +99,54 @@ export default defineComponent({
       switchVisible,
     } = useEmoji(props, currentUser)
 
-    const DeletePost = async (id: string) => {
+    const DeletePost = async (id: string, files: FileArray[]) => {
       try {
+        if (files.length !== 0) {
+          await files.map((file) => {
+            const id = file.id
+            store.dispatch('deleteFile', {
+              id,
+            })
+          })
+        }
+        await firestore
+          .collection('posts')
+          .doc(id)
+          .collection('emojiItems')
+          .get()
+          .then(function (querySnapshot) {
+            querySnapshot.forEach(async (doc) => {
+              doc.ref
+                .collection('users')
+                .get()
+                .then(function (querySnapshot) {
+                  querySnapshot.forEach(async (doc) => {
+                    await doc.ref.delete()
+                  })
+                })
+            })
+          })
+        await firestore
+          .collection('posts')
+          .doc(id)
+          .collection('emojiItems')
+          .get()
+          .then(function (querySnapshot) {
+            querySnapshot.forEach(async (doc) => {
+              await doc.ref.delete()
+            })
+          })
+        await firestore
+          .collection('posts')
+          .doc(id)
+          .collection('messages')
+          .get()
+          .then(function (querySnapshot) {
+            querySnapshot.forEach(async (doc) => {
+              await doc.ref.delete()
+            })
+          })
+
         await firestore.collection('posts').doc(id).delete()
         Router.push('/')
       } catch (error) {
