@@ -75,7 +75,7 @@
           >
             <v-list-item-title
               style="cursor: pointer"
-              @click="DeleteMission(mission.id)"
+              @click="DeleteMission(mission.id, mission.files)"
               >削除</v-list-item-title
             >
           </v-list-item-content>
@@ -95,7 +95,7 @@ import {
   watch,
 } from '@nuxtjs/composition-api'
 import _ from 'lodash'
-import { Mission, MissionStatus } from '@/types/props-types'
+import { FileArray, Mission, MissionStatus } from '@/types/props-types'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 
 import { firestore } from '@/plugins/firebase.js'
@@ -115,7 +115,6 @@ export default defineComponent({
     const store = useStore()
     // ref系
     const currentUser = store.getters.getCurrentUser
-    // const mission = computed(() => props.propMission)
     const mission = ref<Mission>(props.propMission)
     watch(
       () => props.propMission,
@@ -123,13 +122,23 @@ export default defineComponent({
         mission.value = props.propMission
       }
     )
-    const DeleteMission = async (id: string) => {
+    const DeleteMission = async (id: string, files: FileArray[]) => {
       try {
+        //NOTE:ファイルがあれば削除
+        if (files.length !== 0) {
+          await files.map((file) => {
+            const id = file.id
+            store.dispatch('deleteFile', {
+              id,
+            })
+          })
+        }
         await firestore.collection('missions').doc(id).delete()
       } catch (error) {
         console.error(error)
       }
     }
+
     const UpdateMission = (data: Mission) => {
       ctx.emit('update', data)
     }
