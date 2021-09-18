@@ -9,7 +9,7 @@ export const usePost = () => {
   const Router = useRouter()
   const DeletePost = async (id: string, files: FileArray[]) => {
     try {
-      //NOTE:ファイルがあれば削除
+      // NOTE:ファイルがあれば削除
       if (files.length !== 0) {
         await files.map((file) => {
           const id = file.id
@@ -18,14 +18,14 @@ export const usePost = () => {
           })
         })
       }
-      //NOTE:サブコレクションusersを削除
+      // NOTE:サブコレクションusersを削除
       await firestore
         .collection('posts')
         .doc(id)
         .collection('emojiItems')
         .get()
         .then(function (querySnapshot) {
-          querySnapshot.forEach(async (doc) => {
+          querySnapshot.forEach( (doc) => {
             doc.ref
               .collection('users')
               .get()
@@ -36,7 +36,7 @@ export const usePost = () => {
               })
           })
         })
-      //NOTE:サブコレクションemojiItemsを削除
+      // NOTE:サブコレクションemojiItemsを削除
       await firestore
         .collection('posts')
         .doc(id)
@@ -47,7 +47,7 @@ export const usePost = () => {
             await doc.ref.delete()
           })
         })
-      //NOTE:サブコレクションmessagesを削除
+      // NOTE:サブコレクションmessagesを削除
       await firestore
         .collection('posts')
         .doc(id)
@@ -58,7 +58,7 @@ export const usePost = () => {
             await doc.ref.delete()
           })
         })
-      //NOTE:postsを削除
+      // NOTE:postsを削除
       await firestore.collection('posts').doc(id).delete()
       Router.push('/')
     } catch (error) {

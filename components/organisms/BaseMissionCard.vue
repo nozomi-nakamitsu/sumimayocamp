@@ -124,7 +124,7 @@ export default defineComponent({
     )
     const DeleteMission = async (id: string, files: FileArray[]) => {
       try {
-        //NOTE:ファイルがあれば削除
+        // NOTE:ファイルがあれば削除
         if (files.length !== 0) {
           await files.map((file) => {
             const id = file.id
