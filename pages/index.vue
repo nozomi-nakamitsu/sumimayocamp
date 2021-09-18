@@ -20,11 +20,11 @@ import {
   ref,
   useStore,
 } from '@nuxtjs/composition-api'
+import _ from 'lodash'
 import { CurrentUser, Post } from '@/types/props-types'
 import Card from '@/components/organisms/Card.vue'
 import { firestore } from '@/plugins/firebase'
 import TheDeclaration from '~/components/organisms/TheDeclaration.vue'
-import _ from 'lodash'
 export default defineComponent({
   components: {
     Card,

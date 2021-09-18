@@ -49,20 +49,20 @@ import {
   defineComponent,
   useStore,
   ref,
-  useAsync,
+
   useRoute,
   useRouter,
   computed,
   onBeforeMount,
-  onBeforeUnmount,
+
   onMounted,
 } from '@nuxtjs/composition-api'
+import _ from 'lodash'
 import MarkdownViewCard from '@/components/organisms/MarkdownViewCard.vue'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 import { isCurrentUser } from '@/compositions/useAuth'
 import { firestore } from '@/plugins/firebase.js'
 import BaseComment from '~/components/molecules/comment/BaseComment.vue'
-import _ from 'lodash'
 import { CurrentUser } from '@/types/props-types'
 
 export default defineComponent({
