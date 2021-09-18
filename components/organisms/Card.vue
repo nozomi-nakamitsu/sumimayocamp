@@ -63,11 +63,10 @@ import {
 } from '@nuxtjs/composition-api'
 import { Picker } from 'emoji-mart-vue'
 import Emojifrom from '../molecules/EmojiItems.vue'
-import { Post, FileArray } from '@/types/props-types'
+import { Post } from '@/types/props-types'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 import { useEmoji } from '@/compositions/useEmoji'
-
-import { firestore } from '@/plugins/firebase.js'
+import { usePost } from '~/compositions/usePost'
 import { isCurrentUser } from '@/compositions/useAuth'
 
 export default defineComponent({
@@ -98,61 +97,8 @@ export default defineComponent({
       selectEmoji,
       switchVisible,
     } = useEmoji(props, currentUser)
-
-    const DeletePost = async (id: string, files: FileArray[]) => {
-      try {
-        if (files.length !== 0) {
-          await files.map((file) => {
-            const id = file.id
-            store.dispatch('deleteFile', {
-              id,
-            })
-          })
-        }
-        await firestore
-          .collection('posts')
-          .doc(id)
-          .collection('emojiItems')
-          .get()
-          .then(function (querySnapshot) {
-            querySnapshot.forEach(async (doc) => {
-              doc.ref
-                .collection('users')
-                .get()
-                .then(function (querySnapshot) {
-                  querySnapshot.forEach(async (doc) => {
-                    await doc.ref.delete()
-                  })
-                })
-            })
-          })
-        await firestore
-          .collection('posts')
-          .doc(id)
-          .collection('emojiItems')
-          .get()
-          .then(function (querySnapshot) {
-            querySnapshot.forEach(async (doc) => {
-              await doc.ref.delete()
-            })
-          })
-        await firestore
-          .collection('posts')
-          .doc(id)
-          .collection('messages')
-          .get()
-          .then(function (querySnapshot) {
-            querySnapshot.forEach(async (doc) => {
-              await doc.ref.delete()
-            })
-          })
-
-        await firestore.collection('posts').doc(id).delete()
-        Router.push('/')
-      } catch (error) {
-        console.error(error)
-      }
-    }
+    // 投稿削除
+    const { DeletePost } = usePost()
     return {
       DeletePost,
       isCurrentUser,

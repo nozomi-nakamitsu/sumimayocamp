@@ -30,7 +30,7 @@
           <v-list-item-content v-if="isCurrentUser(post.user_id, currentUser)">
             <v-list-item-title
               style="cursor: pointer"
-              @click="DeletePost(post.id)"
+              @click="DeletePost(post.id, post.files)"
               >削除</v-list-item-title
             >
           </v-list-item-content>
@@ -49,12 +49,10 @@ import {
   defineComponent,
   useStore,
   ref,
-
   useRoute,
   useRouter,
   computed,
   onBeforeMount,
-
   onMounted,
 } from '@nuxtjs/composition-api'
 import _ from 'lodash'
@@ -64,7 +62,7 @@ import { isCurrentUser } from '@/compositions/useAuth'
 import { firestore } from '@/plugins/firebase.js'
 import BaseComment from '~/components/molecules/comment/BaseComment.vue'
 import { CurrentUser } from '@/types/props-types'
-
+import { usePost } from '~/compositions/usePost'
 export default defineComponent({
   components: {
     MarkdownViewCard,
@@ -123,15 +121,7 @@ export default defineComponent({
       return formatDateToSlashWithTime(post.value.updated_at)
     })
     // 削除メソッド
-    const DeletePost = async (id: string) => {
-      try {
-        await firestore.collection('posts').doc(id).delete()
-        Router.push('/')
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
+    const { DeletePost } = usePost()
     return {
       // 認証系
       currentUser,
