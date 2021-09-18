@@ -14,6 +14,7 @@
 <script lang="ts">
 import {
   defineComponent,
+  onBeforeMount,
   onBeforeUnmount,
   onMounted,
   ref,
@@ -23,6 +24,7 @@ import { CurrentUser, Post } from '@/types/props-types'
 import Card from '@/components/organisms/Card.vue'
 import { firestore } from '@/plugins/firebase'
 import TheDeclaration from '~/components/organisms/TheDeclaration.vue'
+import _ from 'lodash'
 export default defineComponent({
   components: {
     Card,
@@ -34,7 +36,18 @@ export default defineComponent({
     const currentUser = store.getters.getCurrentUser
     const posts = ref<Post[]>([])
     let unsubscribe = null as any
-
+    const allUsers = ref<CurrentUser[]>([])
+    // ユーザー一覧データを取得する
+    onBeforeMount(() => {
+      firestore
+        .collection('users')
+        .get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+            allUsers.value = [...allUsers.value, doc.data()] as CurrentUser[]
+          })
+        })
+    })
     // 投稿一覧データを取得する
     onMounted(() => {
       unsubscribe = firestore
@@ -136,7 +149,13 @@ export default defineComponent({
                       return { ...item, users: emojiUser as CurrentUser[] }
                     })
                     postData.emojiItems = getEmojiData
-
+                    const targetUser = _.find(
+                      allUsers.value,
+                      function (user: CurrentUser) {
+                        return user.uid === postData.user_id
+                      }
+                    )
+                    postData.user = { ...targetUser }
                     posts.value = [...posts.value, postData as Post]
                   })
               } else if (change.type === 'removed') {

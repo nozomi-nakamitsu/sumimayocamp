@@ -73,13 +73,21 @@ export const actions = {
         userObject.refreshToken = user.refreshToken
         userObject.uid = user.uid
         userObject.displayName = user.displayName
-        userObject.nickName = user.displayName
         userObject.photoURL = user.photoURL
         userObject.uid = user.uid
         userObject.email = user.email
         userObject.isNewUser = result.additionalUserInfo.isNewUser
         userObject.providerId = result.additionalUserInfo.providerId
         userObject.fcmToken = currentToken
+        const docRef = firestore.collection('users').doc(user.id)
+        //NOTE:一度ログインしたことあるユーザーであれば、元のニックネームデータを取得する。初ログインユーザーであれば、displayNameニックネームの初期値にする
+        docRef.get().then((doc) => {
+          if (doc.exists) {
+            userObject.nickName = doc.data().nickName
+          } else {
+            userObject.nickName = user.displayName
+          }
+        })
 
         dispatch('createPhotoURL', userObject)
         dispatch('setPublicUserData', userObject)

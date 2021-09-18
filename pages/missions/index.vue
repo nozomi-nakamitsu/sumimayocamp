@@ -50,9 +50,10 @@ import {
   onBeforeUnmount,
   onMounted,
   ref,
+  onBeforeMount,
 } from '@nuxtjs/composition-api'
 import _ from 'lodash'
-import { Mission } from '@/types/props-types'
+import { Mission, CurrentUser } from '@/types/props-types'
 import BaseMissionCard from '@/components/organisms/BaseMissionCard.vue'
 import ModalCreateMission from '@/components/organisms/ModalCreateMission.vue'
 import { useModal } from '@/compositions/useModal'
@@ -66,7 +67,18 @@ export default defineComponent({
     // compositionAPI
     const missions = ref<Mission[]>([])
     let unsubscribe = null as any
-
+    const allUsers = ref<CurrentUser[]>([])
+    // ユーザー一覧データを取得する
+    onBeforeMount(() => {
+      firestore
+        .collection('users')
+        .get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+            allUsers.value = [...allUsers.value, doc.data()] as CurrentUser[]
+          })
+        })
+    })
     // 投稿一覧データを取得する
     onMounted(() => {
       unsubscribe = firestore
@@ -78,6 +90,15 @@ export default defineComponent({
               // 変更後のデータが取得できる
               if (change.type === 'added') {
                 const missionData = change.doc.data() as Mission
+                const targetUser = _.find(
+                  allUsers.value,
+                  function (user: CurrentUser) {
+                    return user.uid === missionData.sendUser.uid
+                  }
+                )
+                if (targetUser) {
+                  missionData.sendUser = { ...targetUser }
+                }
                 missions.value = [...missions.value, missionData]
               } else if (change.type === 'removed') {
                 missions.value = missions.value.filter(
@@ -89,6 +110,7 @@ export default defineComponent({
                   return o.id === change.doc.data().id
                 })
                 data[targetIndex] = change.doc.data() as Mission
+
                 missions.value = [...data]
               }
             },
