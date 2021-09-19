@@ -6,7 +6,12 @@
       </div>
     </div>
     <div class="container -start">
-      <TheDeclaration />
+      <div>
+        <TheDeclaration />
+      </div>
+      <div class="calendar">
+        <BaseCalendar />
+      </div>
     </div>
   </div>
 </template>
@@ -25,10 +30,13 @@ import { CurrentUser, Post } from '@/types/props-types'
 import Card from '@/components/organisms/Card.vue'
 import { firestore } from '@/plugins/firebase'
 import TheDeclaration from '~/components/organisms/TheDeclaration.vue'
+import BaseCalendar from '~/components/organisms/BaseCalendar.vue'
+
 export default defineComponent({
   components: {
     Card,
     TheDeclaration,
+    BaseCalendar,
   },
   setup() {
     // compositionAPI
