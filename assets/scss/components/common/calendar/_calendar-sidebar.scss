@@ -1,0 +1,28 @@
+.calendar-sidebar {
+  background-color: $gray-lightpowdered;
+  > .items {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  > .items > .item {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 4px;
+  }
+  > .items > .item > .text {
+    font-size: 1.2rem;
+  }
+  > .items > .item > .image {
+    width: 30px;
+    height: 30px;
+  }
+  > .items > .item > .image > .img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}

@@ -125,3 +125,18 @@ export interface CalendarData {
   post: Post
   user: CurrentUser
 }
+
+/**
+ * NOTE:
+ * カレンダーのユーザーの型
+ */
+
+export interface UserWithColor {
+  color: string
+  token: string
+  uid: string
+  photoURL: string
+  displayName: string
+  nickName: string
+  fcmToken: string
+}
