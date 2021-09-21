@@ -10,7 +10,7 @@
         <TheDeclaration />
       </div>
       <div class="calendar">
-        <BaseCalendar />
+        <BaseCalendar :posts="posts" />
       </div>
     </div>
   </div>

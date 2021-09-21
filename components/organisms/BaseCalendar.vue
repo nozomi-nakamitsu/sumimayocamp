@@ -7,56 +7,58 @@ import {
   defineComponent,
   useRouter,
   useStore,
+  ref,
+  watch,
 } from '@nuxtjs/composition-api'
-import { Picker } from 'emoji-mart-vue'
-import Emojifrom from '../molecules/EmojiItems.vue'
-import { Post } from '@/types/props-types'
-// import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
-// import { useEmoji } from '@/compositions/useEmoji'
-// import { usePost } from '~/compositions/usePost'
-// import { isCurrentUser } from '@/compositions/useAuth'
+import { Post, CalendarData } from '@/types/props-types'
 
 export default defineComponent({
-  // props: {
-  //   post: {
-  //     type: Object as PropType<Post>,
-  //     required: true,
-  //   },
-  // },
+  props: {
+    posts: {
+      type: Array as () => Array<Post>,
+      required: true,
+    },
+  },
 
   setup(props) {
     // compositionAPI
-    const Router = useRouter()
     const store = useStore()
     // ref系
     const currentUser = store.getters.getCurrentUser
-    const todos = [
-      {
-        description: 'Take Noah to basketball practice.',
-        isComplete: false,
-        dates: { weekdays: 6 }, // Every Friday
-        color: 'red',
-      },
-    ]
+    const calenderDatas = ref<CalendarData[]>([])
+    watch(
+      () => props.posts,
+      () => {
+        const target = props.posts.map((post: Post) => {
+          return {
+            post: post,
+            color: 'red',
+            user: post.user,
+          }
+        })
+        calenderDatas.value = [...target]
+      }
+    )
+
     const attributes = computed(() => {
       return [
-        // Attributes for todos
-        ...todos.map((todo) => ({
-          dates: todo.dates,
+        // Attributes for calenderDatas
+        ...calenderDatas.value.map((calenderData) => ({
+          dates: calenderData.post.updated_at.toDate(),
           dot: {
-            color: todo.color,
-            class: todo.isComplete ? 'opacity-75' : '',
+            color: calenderData.color,
           },
           popover: {
-            label: todo.description,
+            label: calenderData.post.title,
+            visibility: 'click',
           },
-          customData: todo,
+          customData: calenderData,
         })),
       ]
     })
 
     return {
-      todos,
+      calenderDatas,
       attributes,
     }
   },
