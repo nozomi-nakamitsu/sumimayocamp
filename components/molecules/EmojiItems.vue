@@ -59,6 +59,7 @@ import {
   PropType,
   computed,
   ref,
+  SetupContext,
 } from '@nuxtjs/composition-api'
 
 import { Emoji } from 'emoji-mart-vue'
@@ -85,8 +86,8 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['on-focus', 'on-clicked'],
-  setup(props) {
+  emits: ['on-focus', 'on-clicked', 'delete-select-emoji-item'],
+  setup(props, context: SetupContext) {
     // compositionAPI
     const store = useStore()
     // ref系
@@ -143,6 +144,7 @@ export default defineComponent({
         .collection('users')
         .doc(currentUser.uid)
         .delete()
+      context.emit('delete-select-emoji-item', emojiItem)
     }
 
     return {
