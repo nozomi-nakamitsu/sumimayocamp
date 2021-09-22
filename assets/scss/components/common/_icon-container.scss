@@ -2,7 +2,59 @@
   font-size: 20px;
   margin: 10px 0;
   cursor: pointer;
-  &:hover{
+  &:hover {
     color: pink;
+  }
+  &.-red {
+    color: red;
+    &:hover {
+      color: red;
+    }
+  }
+  &.-blue {
+    color: blue;
+    &:hover {
+      color: blue;
+    }
+  }
+  &.-yellow {
+    color: yellow;
+    &:hover {
+      color: yellow;
+    }
+  }
+
+  &.-green {
+    color: green;
+    &:hover {
+      color: green;
+    }
+  }
+  &.-orange {
+    color: orange;
+    &:hover {
+      color: orange;
+    }
+  }
+  &.-purple {
+    color: purple;
+    &:hover {
+      color: purple;
+    }
+  }
+  &.-indigo {
+    color: indigo;
+    &:hover {
+      color: indigo;
+    }
+  }
+  &.-brown {
+    color: brown;
+    &:hover {
+      color: brown;
+    }
+  }
+  &.-calendar {
+    margin: 5px 0;
   }
 }

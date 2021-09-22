@@ -71,8 +71,8 @@ export interface Post {
   title: string
   content: string
 
-  created_at: Date
-  updated_at: Date
+  created_at: any
+  updated_at: any
   user: CurrentUser
   emojiItems: {
     item: EmojiType | undefined
@@ -114,4 +114,29 @@ export interface Declaration {
   declaration: string
   Mission: Mission
   uid: string
+}
+/**
+ * NOTE:
+ * カレンダーの表示用の型
+ */
+
+export interface CalendarData {
+  color: string
+  post: Post
+  user: CurrentUser
+}
+
+/**
+ * NOTE:
+ * カレンダーのユーザーの型
+ */
+
+export interface UserWithColor {
+  color: string
+  token: string
+  uid: string
+  photoURL: string
+  displayName: string
+  nickName: string
+  fcmToken: string
 }
