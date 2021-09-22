@@ -1,6 +1,11 @@
 <template>
   <div class="calendar-container">
-    <v-calendar :attributes="attributes" />
+    <v-calendar :attributes="attributes">
+      <!-- TODO: v-slotで投稿詳細に飛ぶようにしたい -->
+      <!-- <div slot="todo-row" slot-scope="{ customData }" class="todo-row">
+        <a @click="addTodo(customData)"> + Add Todo </a>
+      </div> -->
+    </v-calendar>
     <div class="calendar-sidebar">
       <div class="items" v-for="(user, index) in allUsers" :key="index">
         <div class="item">
@@ -124,16 +129,22 @@ export default defineComponent({
     const attributes = computed(() => {
       return [
         // Attributes for calenderDatas
+        {
+          key: 'today',
+          highlight: true,
+          dates: new Date(),
+        },
         ...calenderDatas.value.map((calenderData) => ({
           dates: calenderData.post.updated_at.toDate(),
           dot: {
             color: calenderData.color,
           },
+          customData: calenderData,
           popover: {
             label: calenderData.post.title,
             visibility: 'click',
+            slot: 'todo-row',
           },
-          customData: calenderData,
         })),
       ]
     })
