@@ -106,30 +106,15 @@ export default defineComponent({
         active: pathName === routeName,
       }
     })
-    // switch (pathName) {
-    //   case '/posts/create':
-    //     return '/posts/create'
-
-    //   case '/missions':
-    //     return '/missions'
-
-    //   case '/users/edit':
-    //     return '/users/edit'
-
-    //   default:
-    //     return '/'
-    // }
-    // active: window.location.pathname.match(/workspaces/),
 
     return {
       // compositionAPI
       store,
       Router,
-      whereUrl,
-      // ref系
       // 認証
       logout,
       currentUser,
+      whereUrl,
     }
   },
 })
