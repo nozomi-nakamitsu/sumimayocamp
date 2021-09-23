@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="common-container">
     <div class="index-container">
       <div class="container">
         <h2>ミッション一覧</h2>

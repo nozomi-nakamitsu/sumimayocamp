@@ -41,4 +41,9 @@
   > .container > .items {
     margin: 20px 0;
   }
+  > .container > .flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
