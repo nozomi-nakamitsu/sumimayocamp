@@ -1,5 +1,40 @@
 <template>
-  <div class="card-container">
+  <div class="card-container -blue">
+    <div class="container">
+      <div class="card-head">
+        <div class="left">
+          <div class="image">
+            <img class="img" alt="" :src="mission.sendUser.photoURL" />
+          </div>
+        </div>
+        <div class="right">
+          <p class="name">
+            {{
+              mission.sendUser.nickName
+                ? mission.sendUser.nickName
+                : mission.sendUser.displayName
+            }}
+            <span>からの挑戦状</span>
+          </p>
+
+          <p class="date">
+            {{ formatDateToSlashWithTime(mission.updated_at) }}
+          </p>
+        </div>
+      </div>
+      <div class="body">
+        <p>{{ mission.title }}</p>
+      </div>
+      <div class="footer">
+        <div class="emoji">ふったー</div>
+        <div class="button">
+          <BaseSquareButton />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="card-container">
     <v-card class="mx-auto" width="500">
       <div style="display: flex">
         <v-list-item-avatar color="grey darken-3">
@@ -28,7 +63,7 @@
       <!-- <v-card-text class="text-h5 font-weight-bold">
         {{ mission.content }}
       </v-card-text> -->
-      <v-card-text class="text-h5 font-weight-bold">
+  <!-- <v-card-text class="text-h5 font-weight-bold">
         <v-btn
           v-if="!isMyMission(mission)"
           elevation="2"
@@ -82,7 +117,7 @@
         </v-list-item>
       </v-card-actions>
     </v-card>
-  </div>
+  </div> -->
 </template>
 <script lang="ts">
 import {

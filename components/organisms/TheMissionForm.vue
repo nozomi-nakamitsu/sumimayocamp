@@ -4,7 +4,7 @@
     <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
       <form class="form-area" @submit.prevent="handleSubmit(onSubmit)">
         <ValidationInput
-          label="タイトル"
+          label="Title"
           input-name="title"
           rules="required"
           class="nameinput"
@@ -18,6 +18,7 @@
             rules="required"
             name="内容"
           >
+            <label class="label">Content </label>
             <div class="drop_area" @dragover.prevent>
               <div class="markdown-editor">
                 <no-ssr>
@@ -32,13 +33,14 @@
             </div>
           </ValidationProvider>
         </template>
-        <div>
+        <div class="submit">
           <input
             type="submit"
-            class="common-button"
+            class="common-button -submit"
             title="投稿する"
             :disabled="invalid"
             :class="invalid"
+            value="Submit!"
           />
         </div>
       </form>

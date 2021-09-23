@@ -5,7 +5,9 @@
   height: 200px;
   border-radius: 8px;
   padding: 10px;
-
+  &.-blue {
+    background-color: $blue;
+  }
   > .container {
     border: 2px dotted $white;
     border-radius: 8px;
