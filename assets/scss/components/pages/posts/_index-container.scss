@@ -4,10 +4,11 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+
     padding: 0;
     &.-start {
       justify-content: flex-start;
+
     }
   }
   > .container > .flex {
@@ -16,7 +17,11 @@
     justify-content: center;
   }
   > .container > .calendar {
-    margin-top: 50px;
+    margin-top: 20px;
+    background-color: $blue;
+    border-radius: 8px;
+    padding: 8px;
+    height: 340px;
   }
   > .container > .title {
     font-weight: bold;

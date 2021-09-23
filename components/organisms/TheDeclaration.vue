@@ -1,19 +1,22 @@
 <template>
   <div>
     <div class="declaration-container">
-      <h1>今週のキャンプ</h1>
-      <p>
-        {{ declaration ? declaration.declaration : '宣言しよう！' }}
-      </p>
-      <v-btn depressed @click="openModal"> 宣言する </v-btn>
+      <div class="container">
+        <p class="text">
+          {{ declaration ? declaration.declaration : '宣言しよう！' }}
+        </p>
+        <button depressed @click="openModal" class="common-button -declaration">
+          宣言する
+        </button>
+      </div>
+      <ModalCreateDeclaration
+        :control-flag="isOpened"
+        title="宣言する"
+        types="new"
+        @click="closeModal"
+        @on-submit="onSubmit"
+      />
     </div>
-    <ModalCreateDeclaration
-      :control-flag="isOpened"
-      title="宣言する"
-      types="new"
-      @click="closeModal"
-      @on-submit="onSubmit"
-    />
   </div>
 </template>
 <script lang="ts">

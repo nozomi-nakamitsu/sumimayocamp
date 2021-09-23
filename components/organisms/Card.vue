@@ -2,7 +2,7 @@
   <div>
     <div class="card-container">
       <div class="container">
-        <div class="card-head">
+        <div class="card-head" @click.stop="Router.push(`/posts/${post.id}`)">
           <div class="left">
             <div class="image">
               <img class="img" alt="" :src="post.user.photoURL" />
@@ -17,7 +17,7 @@
             <p class="date">{{ formatDateToSlashWithTime(post.updated_at) }}</p>
           </div>
         </div>
-        <div class="body">
+        <div class="body" @click.stop="Router.push(`/posts/${post.id}`)">
           <p>{{ post.title }}</p>
         </div>
         <div class="footer">
