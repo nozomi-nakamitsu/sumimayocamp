@@ -2,7 +2,7 @@
   <fa
     :icon="path"
     class="icon-container"
-    :class="[{ '-calendar': types === 'calendar' }, labelColor]"
+    :class="[{ '-calendar': types === 'calendar' },{ '-button': types === 'button' }, labelColor]"
   />
 </template>
 <script lang="ts">

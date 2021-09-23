@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <Header v-if="showHeader" />
+  <div class="root-container">
+    <Sidebar v-if="showSidebar" />
     <Nuxt />
   </div>
 </template>
@@ -12,10 +12,10 @@ import {
   useRoute,
   computed,
 } from '@nuxtjs/composition-api'
-import Header from '../components/organisms/Header.vue'
+import Sidebar from '../components/organisms/TheSidebar.vue'
 export default defineComponent({
   components: {
-    Header,
+    Sidebar,
   },
   setup() {
     // vuex
@@ -26,9 +26,9 @@ export default defineComponent({
     const isLoading = ref<boolean>(true)
     const currentUser = ref<any>({})
     /**
-     *headerを表示するか判断
+     *Sidebarを表示するか判断
      */
-    const showHeader = computed(
+    const showSidebar = computed(
       (): Boolean =>
         Route.value.path !== '/login' && Route.value.path !== '/login/'
     )
@@ -40,8 +40,8 @@ export default defineComponent({
       isLoading,
       // 認証
       currentUser,
-      // headerを表示するか判断
-      showHeader,
+      // Sidebarを表示するか判断
+      showSidebar,
     }
   },
 })
