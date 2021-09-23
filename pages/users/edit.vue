@@ -25,8 +25,6 @@ import {
   useStore,
   ref,
   useRouter,
-  watchEffect,
-  watch,
 } from '@nuxtjs/composition-api'
 import ValidationInput from '@/components/molecules/form/ValidationInput.vue'
 export default defineComponent({

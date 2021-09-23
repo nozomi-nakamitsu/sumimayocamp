@@ -4,7 +4,7 @@
     <div class="right">
       <p class="title">Get Started!!</p>
       <div class="button">
-        <button @click="login" class="common-button -login">
+        <button class="common-button -login" @click="login">
           Sign In with Google
         </button>
       </div>

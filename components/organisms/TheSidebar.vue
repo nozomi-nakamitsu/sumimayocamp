@@ -18,8 +18,8 @@
       <div class="middle">
         <div
           class="sidebar-item"
-          @click="Router.push('/posts/create')"
           :class="whereUrl('/posts/create')"
+          @click="Router.push('/posts/create')"
         >
           <div class="container" :class="whereUrl('/posts/create')">
             <div class="circle -red"></div>
@@ -29,8 +29,8 @@
         </div>
         <div
           class="sidebar-item"
-          @click="Router.push('/missions')"
           :class="whereUrl('/missions')"
+          @click="Router.push('/missions')"
         >
           <div class="container" :class="whereUrl('/missions')">
             <div class="circle -yellow"></div>
@@ -40,8 +40,8 @@
         </div>
         <div
           class="sidebar-item"
-          @click="Router.push('/users/edit')"
           :class="whereUrl('/users/edit')"
+          @click="Router.push('/users/edit')"
         >
           <div class="container" :class="whereUrl('/users/edit')">
             <div class="circle -green"></div>
@@ -67,11 +67,9 @@
 import {
   defineComponent,
   useStore,
-  ref,
   useRouter,
   computed,
   useRoute,
-  watchEffect,
 } from '@nuxtjs/composition-api'
 import BaseSquareButton from '@/components/atoms/BaseSquareButton.vue'
 export default defineComponent({
@@ -86,7 +84,6 @@ export default defineComponent({
 
     // ref
     const currentUser = store.getters.getCurrentUser
-    const drawer = ref<boolean>(false)
 
     // ログアウト
     const logout = async () => {
@@ -96,10 +93,6 @@ export default defineComponent({
         store.dispatch('onRejectted', error)
       }
     }
-    watchEffect(() => {
-      console.log(Route.value.path)
-    })
-
     const whereUrl = computed(() => (routeName: string) => {
       const pathName = Route.value.path
       return {
