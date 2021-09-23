@@ -36,11 +36,11 @@
     width: 360px;
     height: 60px;
     font-size: 18px;
-    &:hover {
+    &:disabled {
       opacity: 1;
       background-color: $gray-pearl;
     }
-    &:disabled {
+    &:hover {
       color: $white;
       background-color: $black-dugong;
     }
