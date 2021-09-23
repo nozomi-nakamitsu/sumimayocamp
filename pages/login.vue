@@ -1,6 +1,14 @@
 <template>
-  <div>
-    <button @click="login">ログイン</button>
+  <div class="login-container">
+    <div class="left"></div>
+    <div class="right">
+      <p class="title">Get Started!!</p>
+      <div class="button">
+        <button @click="login" class="common-button -login">
+          Sign In with Google
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -15,7 +23,7 @@ export default defineComponent({
           store.commit('setIsLogined', true)
           store.commit('setCurrentUser', user)
         } else {
-          console.log('ログインしてないよ')
+          ;('ログインしてないよ')
         }
       })
     })

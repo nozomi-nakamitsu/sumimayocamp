@@ -5,13 +5,10 @@
   display: block;
   height: auto;
   padding: 10px;
-  font-weight: bold;
-  color: $white;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
-  background-color: $blue-rain;
-  border-radius: 3px;
+  border-radius: 8px;
   transition: all 0.3s;
 
   &:disabled {
@@ -19,11 +16,19 @@
   }
 
   &:hover {
-    color: $white;
-    background-color: $blue-Livid;
+    // color: $white;
+    // background-color: $blue-Livid;
+    opacity: 0.6;
   }
 
   &:disabled:hover {
-    background-color: $gray-lightpowdered;
+    // background-color: $gray-lightpowdered;
+    opacity: 0.6;
+  }
+  &.-login {
+    background-color: $gray-pearl;
+    width: 560px;
+    height: 60px;
+    font-size: 18px;
   }
 }
