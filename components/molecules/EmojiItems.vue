@@ -55,7 +55,6 @@ import {
   computed,
   ref,
   SetupContext,
-  watch,
 } from '@nuxtjs/composition-api'
 
 import { Emoji } from 'emoji-mart-vue'
@@ -93,7 +92,6 @@ export default defineComponent({
       const target = JSON.parse(JSON.stringify(props.post.emojiItems))
       return target.filter((v: any) => v.users.length !== 0)
     })
-
 
     // 自分の絵文字かどうかを判定する
     const isMyEmoji = computed(() => (users: EmojiUser[]): boolean => {
@@ -142,27 +140,18 @@ export default defineComponent({
       context.emit('delete-select-emoji-item', emojiItem)
     }
     const onClick = (emojiItem: any) => {
-      //NOTE:ログインユーザーがすでに押している絵文字であれば、絵文字を削除する
+      // NOTE:ログインユーザーがすでに押している絵文字であれば、絵文字を削除する
       const userIds = emojiItem.users.map((user: EmojiUser) => user.uid)
       if (userIds.includes(currentUser.uid)) {
-        console.log('delete!!!!!')
         DeleteEmojiItem(emojiItem, userIds)
       } else {
-        //NOTE:ログインユーザーが押していない絵文字であれば、絵文字を追加する
-        console.log('addd!!!!!!!!!!')
+        // NOTE:ログインユーザーが押していない絵文字であれば、絵文字を追加する
         AddEmoji(emojiItem)
       }
     }
 
+    // // NOTE: 絵文字のユーザーデータをサブサブコレクションとしてfirestoreに追加
     const AddEmoji = async (emojiItem: any) => {
-      // NOTE: 絵文字データをサブコレクションとしてfirestoreに追加
-      // await firestore
-      //   .collection('posts')
-      //   .doc(props.post.id)
-      //   .collection('emojiItems')
-      //   .doc(item.id)
-      //   .set({ ...item })
-      // // NOTE: 絵文字のユーザーデータをサブサブコレクションとしてfirestoreに追加
       await firestore
         .collection('posts')
         .doc(props.post.id)
