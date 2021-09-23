@@ -16,12 +16,7 @@
             { '-pr': isHoverd === emojiItem.id },
           ]"
           @mouseover="mouseOverAction(emojiItem.id)"
-          @click="
-            DeleteEmojiItem(
-              emojiItem,
-              emojiItem.users.map((user) => user.uid)
-            )
-          "
+          @click="onClick(emojiItem)"
         >
           <Emoji :emoji="emojiItem" :size="20" class="emoji-image" />
           <p class="count">{{ emojiItem.users.length }}</p>
@@ -60,6 +55,7 @@ import {
   computed,
   ref,
   SetupContext,
+  watch,
 } from '@nuxtjs/composition-api'
 
 import { Emoji } from 'emoji-mart-vue'
@@ -98,6 +94,7 @@ export default defineComponent({
       return target.filter((v: any) => v.users.length !== 0)
     })
 
+
     // 自分の絵文字かどうかを判定する
     const isMyEmoji = computed(() => (users: EmojiUser[]): boolean => {
       if (users.length === 0) {
@@ -115,24 +112,22 @@ export default defineComponent({
     }
     // 自分が押した絵文字(selectedItem以外の絵文字)をクリックすると、絵文字を削除する
     const DeleteEmojiItem = async (emojiItem: any, userIds: string[]) => {
-      if (userIds.includes(currentUser.uid)) {
-        if (userIds.length === 1) {
-          await firestore
-            .collection('posts')
-            .doc(props.post.id)
-            .collection('emojiItems')
-            .doc(emojiItem.id)
-            .delete()
-        }
+      if (userIds.length === 1) {
         await firestore
           .collection('posts')
           .doc(props.post.id)
           .collection('emojiItems')
           .doc(emojiItem.id)
-          .collection('users')
-          .doc(currentUser.uid)
           .delete()
       }
+      await firestore
+        .collection('posts')
+        .doc(props.post.id)
+        .collection('emojiItems')
+        .doc(emojiItem.id)
+        .collection('users')
+        .doc(currentUser.uid)
+        .delete()
     }
     // selectedItemの絵文字をクリックすると、絵文字を削除する
     const DeleteSelectEmojiItem = async (emojiItem: any) => {
@@ -146,6 +141,37 @@ export default defineComponent({
         .delete()
       context.emit('delete-select-emoji-item', emojiItem)
     }
+    const onClick = (emojiItem: any) => {
+      //NOTE:ログインユーザーがすでに押している絵文字であれば、絵文字を削除する
+      const userIds = emojiItem.users.map((user: EmojiUser) => user.uid)
+      if (userIds.includes(currentUser.uid)) {
+        console.log('delete!!!!!')
+        DeleteEmojiItem(emojiItem, userIds)
+      } else {
+        //NOTE:ログインユーザーが押していない絵文字であれば、絵文字を追加する
+        console.log('addd!!!!!!!!!!')
+        AddEmoji(emojiItem)
+      }
+    }
+
+    const AddEmoji = async (emojiItem: any) => {
+      // NOTE: 絵文字データをサブコレクションとしてfirestoreに追加
+      // await firestore
+      //   .collection('posts')
+      //   .doc(props.post.id)
+      //   .collection('emojiItems')
+      //   .doc(item.id)
+      //   .set({ ...item })
+      // // NOTE: 絵文字のユーザーデータをサブサブコレクションとしてfirestoreに追加
+      await firestore
+        .collection('posts')
+        .doc(props.post.id)
+        .collection('emojiItems')
+        .doc(emojiItem.id)
+        .collection('users')
+        .doc(currentUser.uid)
+        .set({ ...currentUser, item_id: emojiItem.id, post_id: props.post.id })
+    }
 
     return {
       // 認証系
@@ -156,6 +182,8 @@ export default defineComponent({
       // 絵文字
       emojiItems,
       isMyEmoji,
+      onClick,
+      AddEmoji,
       // ref
       isHoverd,
       // だしわけ系メソッド
