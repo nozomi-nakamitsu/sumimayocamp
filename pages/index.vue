@@ -12,13 +12,15 @@
         </div>
       </div>
       <div class="container -start">
-        <p class="title">今週のキャンプ</p>
-        <div>
-          <TheDeclaration />
-        </div>
-        <p class="title">カレンダー</p>
-        <div class="calendar">
-          <BaseCalendar :posts="posts" />
+        <div class="wrapper">
+          <p class="title">今週のキャンプ</p>
+          <div>
+            <TheDeclaration />
+          </div>
+          <p class="title">カレンダー</p>
+          <div class="calendar">
+            <BaseCalendar :posts="posts" />
+          </div>
         </div>
       </div>
     </div>

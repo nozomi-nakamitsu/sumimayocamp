@@ -8,20 +8,29 @@
     padding: 0;
     &.-start {
       justify-content: flex-start;
-
     }
   }
-  > .container > .flex {
+  > .container > .wrapper {
+    position: sticky;
+    top: 0;
+  }
+  > .container > .wrapper > .flex {
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  > .container > .calendar {
+  > .container > .wrapper > .calendar {
     margin-top: 20px;
     background-color: $blue;
     border-radius: 8px;
     padding: 8px;
     height: 340px;
+  }
+  > .container > .wrapper > .title {
+    font-weight: bold;
+    margin-right: auto;
+    font-size: 24px;
+    margin-top: 40px;
   }
   > .container > .title {
     font-weight: bold;
