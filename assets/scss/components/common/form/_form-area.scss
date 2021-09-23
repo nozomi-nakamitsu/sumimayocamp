@@ -1,6 +1,9 @@
 .form-area {
   position: relative;
   z-index: 1;
+  &.-mt36 {
+    margin-top: 36px;
+  }
   > .provider > .label {
     font-size: 16px;
     font-weight: bold;
@@ -14,5 +17,20 @@
     margin-top: 36px;
     display: flex;
     justify-content: flex-end;
+  }
+  > .label {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .v-input__slot {
+    box-shadow: none !important;
+    border-radius: 8px;
+    border: 1px solid $green;
+  }
+  .v-sheet.v-list:not(.v-sheet--outlined) {
+    box-shadow: none !important;
+  }
+  .theme--light.v-icon {
+    color: $green;
   }
 }
