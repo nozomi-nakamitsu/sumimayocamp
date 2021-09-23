@@ -1,0 +1,29 @@
+.login-container {
+  width: 100vh;
+  display: flex;
+  padding: 0;
+  height: 100vh;
+  margin: 0;
+  width: 100%;
+
+  > .left {
+    background-color: $gray-pearl;
+    width: 40%;
+  }
+  > .right {
+    padding: 80px;
+    width: 100%;
+  }
+  > .right > .title {
+    color: $black-dugong;
+    font-size: 48px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 330px;
+  }
+  > .right > .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
