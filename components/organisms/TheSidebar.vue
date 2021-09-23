@@ -22,7 +22,7 @@
           @click="Router.push('/')"
         >
           <div class="container" :class="whereUrl('/')">
-            <div class="circle -purple" :class="whereUrl('/')"></div>
+            <div class="circle -white" :class="whereUrl('/')"></div>
             <p class="title">My DashBoard</p>
             <div class="button"><BaseSquareButton /></div>
           </div>
