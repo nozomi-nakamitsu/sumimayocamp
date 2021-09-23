@@ -7,7 +7,6 @@
 @import 'elements/main';
 //common
 @import 'components/common/loading-container';
-@import 'components/common/header-container';
 @import 'components/common/emoji-balloon-box';
 // form
 @import 'components/common/form/app-input';
@@ -31,11 +30,17 @@
 // button
 @import 'components/common/button/common-button';
 @import 'components/common/button/common-chip';
+@import 'components/common/button/square-button';
+
 // calendar
 @import 'components/common/calendar/calendar-sidebar';
 @import 'components/common/calendar/calender-container';
 
 //pages
+@import 'components/pages/default/root-container';
+@import 'components/pages/default/sidebar-container';
+@import 'components/pages/default/sidebar-item';
+
 @import 'components/pages/users/user-edit-container';
 @import 'components/pages/posts/form-container';
 @import 'components/pages/posts/index-container';

@@ -2,9 +2,6 @@
   font-size: 20px;
   margin: 10px 0;
   cursor: pointer;
-  &:hover {
-    color: pink;
-  }
   &.-red {
     color: red;
     &:hover {
@@ -56,5 +53,11 @@
   }
   &.-calendar {
     margin: 5px 0;
+  }
+  &.-button {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }

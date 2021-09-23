@@ -45,6 +45,10 @@ export default defineComponent({
       nickName: currentUser.nickName,
     })
     const submit = async () => {
+      form.value.token = currentUser.token
+      form.value.uid = currentUser.uid
+      form.value.photoURL = currentUser.photoURL
+      form.value.displayName = currentUser.displayName
       try {
         await store.dispatch('editNickName', form.value)
         Router.push('/')
