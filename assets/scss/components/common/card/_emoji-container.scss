@@ -4,11 +4,10 @@
   > .items {
     display: flex;
     flex-wrap: wrap;
-    height: 20px;
-    width: 500px;
-    margin-bottom: 40px;
+    width: 270px;
   }
   > .items > .wrapper {
+    position: relative;
     width: 45px;
     height: 20px;
     margin: 5px;
@@ -20,6 +19,10 @@
       background-color: $blue-Niagara;
       border: 1px solid $blue-Weather;
       color: $blue-Weather;
+    }
+
+    &.-ml0 {
+      margin-left: 0;
     }
   }
   > .items > .wrapper > .box {

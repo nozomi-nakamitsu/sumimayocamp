@@ -1,8 +1,13 @@
 <template>
   <div class="common-container">
+    <div class="title">
+      <p class="text">My DashBoard</p>
+      <div class="line"></div>
+    </div>
     <div class="index-container">
       <div class="container">
-        <div v-for="post in posts" :key="post.id" style="margin: 20px">
+        <p class="title">ポスト</p>
+        <div v-for="post in posts" :key="post.id" class="items">
           <Card :post="post" />
         </div>
       </div>

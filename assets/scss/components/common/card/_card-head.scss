@@ -1,0 +1,21 @@
+.card-head {
+  display: flex;
+align-items: center;
+  > .left > .image {
+    width: 50px;
+    height: 50px;
+    margin-right: 8px;
+  }
+  > .left > .image > .img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  > .right > .name {
+    font-size: 18px;
+  }
+  > .right > .date {
+    font-size: 12px;
+  }
+}
