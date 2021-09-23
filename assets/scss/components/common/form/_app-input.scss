@@ -1,8 +1,9 @@
 .app-input {
-  border: 1px solid $gray-lightpowdered;
-  width: 90%;
+  border: 1px solid $purple;
+  width: 100%;
   padding: 8px;
   height: 40px;
+  border-radius: 8px;
   &.-error {
     color: $red-orko;
     background-color: $red-coy;

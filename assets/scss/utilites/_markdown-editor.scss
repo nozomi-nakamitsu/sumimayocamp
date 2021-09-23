@@ -1,0 +1,26 @@
+.markdown-editor {
+  > .markdown-body {
+    box-shadow: none !important;
+    border: 1px solid $purple !important;
+    border-radius: 8px !important ;
+  }
+  .v-note-wrapper .v-note-op {
+    border-bottom: 1px solid $purple !important;
+    border-top-right-radius: 8px !important;
+    border-top-left-radius: 8px !important;
+  }
+}
+.op-icon-divider {
+  border-left: 1px solid $purple !important;
+}
+.v-note-wrapper .v-note-panel .v-note-show .v-show-content {
+  background-color: $gray-pearl !important;
+}
+.v-note-wrapper
+  .v-note-panel
+  .v-note-edit.divarea-wrapper.scroll-style::-webkit-scrollbar {
+  background-color: $purple !important;
+}
+.v-show-content {
+  border-bottom-right-radius: 8px;
+}

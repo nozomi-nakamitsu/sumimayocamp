@@ -5,7 +5,7 @@
     <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
       <form class="form-area" @submit.prevent="handleSubmit(onSubmit)">
         <ValidationInput
-          label="タイトル"
+          label="Title"
           input-name="title"
           rules="required"
           class="nameinput"
@@ -15,10 +15,11 @@
         <template>
           <ValidationProvider
             tag="div"
-            class="provider"
+            class="provider -mt36"
             rules="required"
             name="内容"
           >
+            <label class="label">Content </label>
             <div class="drop_area" @dragover.prevent>
               <div class="markdown-editor">
                 <no-ssr>
@@ -33,13 +34,14 @@
             </div>
           </ValidationProvider>
         </template>
-        <div>
+        <div class="submit">
           <input
             type="submit"
-            class="common-button"
+            class="common-button -submit"
             title="投稿する"
             :disabled="invalid"
             :class="invalid"
+            value="Submit!"
           />
         </div>
       </form>
@@ -48,13 +50,25 @@
       v-if="isLoading"
       indeterminate
       color="amber"
-      style="position: absolute; top: 40%; left: 25%; z-index: 5"
+      style="
+        position: absolute;
+        top: 55%;
+        left: 45%;
+        z-index: 5;
+        color: #e3e3ff;
+      "
     ></v-progress-circular>
     <v-progress-circular
       v-if="isLoading"
       indeterminate
       color="amber"
-      style="position: absolute; top: 40%; left: 75%; z-index: 5"
+      style="
+        position: absolute;
+        top: 55%;
+        left: 78%;
+        z-index: 5;
+        color: #e3e3ff;
+      "
     ></v-progress-circular>
   </div>
 </template>

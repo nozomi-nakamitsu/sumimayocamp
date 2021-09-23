@@ -1,4 +1,18 @@
 .form-area {
   position: relative;
   z-index: 1;
+  > .provider > .label {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  > .provider {
+    &.-mt36 {
+      margin-top: 36px;
+    }
+  }
+  > .submit {
+    margin-top: 36px;
+    display: flex;
+    justify-content: flex-end;
+  }
 }
