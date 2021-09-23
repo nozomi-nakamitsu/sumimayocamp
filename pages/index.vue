@@ -1,16 +1,18 @@
 <template>
-  <div class="index-container">
-    <div class="container">
-      <div v-for="post in posts" :key="post.id" style="margin: 20px">
-        <Card :post="post" />
+  <div class="common-container">
+    <div class="index-container">
+      <div class="container">
+        <div v-for="post in posts" :key="post.id" style="margin: 20px">
+          <Card :post="post" />
+        </div>
       </div>
-    </div>
-    <div class="container -start">
-      <div>
-        <TheDeclaration />
-      </div>
-      <div class="calendar">
-        <BaseCalendar :posts="posts" />
+      <div class="container -start">
+        <div>
+          <TheDeclaration />
+        </div>
+        <div class="calendar">
+          <BaseCalendar :posts="posts" />
+        </div>
       </div>
     </div>
   </div>

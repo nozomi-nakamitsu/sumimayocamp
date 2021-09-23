@@ -1,5 +1,6 @@
 .sidebar-container {
   > .container {
+    position: fixed;
     background-color: $purple-boysenberry;
     height: 100vh;
     width: 300px;
