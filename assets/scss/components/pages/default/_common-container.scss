@@ -1,0 +1,14 @@
+.common-container {
+  width: 100%;
+  padding: 40px 80px;
+  > .title > .text {
+    font-weight: bold;
+    font-size: 32px;
+  }
+  > .title > .line {
+    background-color: $black-dugong;
+    height: 3px;
+    width: 30px;
+    margin-top: 12px;
+  }
+}

@@ -1,20 +1,24 @@
 <template>
-  <ThePostForm
-    :propsform="form"
-    :title="'編集'"
-    :prop-loading="isLoading"
-    @on-submit="onSubmit"
-    @img-add="fileChanged"
-  />
+  <div class="common-container">
+    <div class="title">
+      <p class="text">Edit Posts</p>
+      <div class="line"></div>
+    </div>
+    <ThePostForm
+      :propsform="form"
+      :title="'編集'"
+      :prop-loading="isLoading"
+      @on-submit="onSubmit"
+      @img-add="fileChanged"
+    />
+  </div>
 </template>
 
 <script lang="ts">
 import {
   defineComponent,
   useStore,
-
   useRouter,
-
   useRoute,
   onBeforeMount,
 } from '@nuxtjs/composition-api'
@@ -50,13 +54,8 @@ export default defineComponent({
       }
     })
 
-    const {
-      fileChanged,
-      deleteUnNecessaryFiles,
-      isLoading,
-      files,
-      form,
-    } = useUploadFile(currentUser)
+    const { fileChanged, deleteUnNecessaryFiles, isLoading, files, form } =
+      useUploadFile(currentUser)
     /**
      * NOTE:更新処理
      *

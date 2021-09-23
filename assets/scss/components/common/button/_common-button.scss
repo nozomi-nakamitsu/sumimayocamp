@@ -12,7 +12,7 @@
   transition: all 0.3s;
 
   &:disabled {
-    background-color: $gray-lightpowdered;
+    background-color: $black-dugong;
   }
 
   &:hover {
@@ -30,5 +30,19 @@
     width: 560px;
     height: 60px;
     font-size: 18px;
+  }
+  &.-submit {
+    background-color: $purple;
+    width: 360px;
+    height: 60px;
+    font-size: 18px;
+    &:disabled {
+      opacity: 1;
+      background-color: $gray-pearl;
+    }
+    &:hover {
+      color: $white;
+      background-color: $black-dugong;
+    }
   }
 }

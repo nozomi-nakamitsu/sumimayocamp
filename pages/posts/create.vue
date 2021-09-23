@@ -1,11 +1,17 @@
 <template>
-  <ThePostForm
-    :propsform="form"
-    :title="'新規作成'"
-    :prop-loading="isLoading"
-    @on-submit="onSubmit"
-    @img-add="fileChanged"
-  />
+  <div class="common-container">
+    <div class="title">
+      <p class="text">New Posts</p>
+      <div class="line"></div>
+    </div>
+    <ThePostForm
+      :propsform="form"
+      :title="'新規作成'"
+      :prop-loading="isLoading"
+      @on-submit="onSubmit"
+      @img-add="fileChanged"
+    />
+  </div>
 </template>
 
 <script lang="ts">
