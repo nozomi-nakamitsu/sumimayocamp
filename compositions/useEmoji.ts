@@ -31,7 +31,6 @@ export const useEmoji = (props: any, currentUser: any) => {
         if (uids.includes(currentUser.uid)) {
           return v.id
         }
-        
       })
       if (!selectedItem.value) {
         selectedItem.value = item.unified
@@ -109,6 +108,9 @@ export const useEmoji = (props: any, currentUser: any) => {
       switchVisible()
     }
   }
+  const DeleteSelectEmojiItem = (item: any) => {
+    selectedItem.value = selectedItem.value.filter((v) => v.item.id !== item.id)
+  }
   return {
     selectedItem,
     isFormVisible,
@@ -116,5 +118,6 @@ export const useEmoji = (props: any, currentUser: any) => {
     onRemoveFocus,
     selectEmoji,
     switchVisible,
+    DeleteSelectEmojiItem,
   }
 }

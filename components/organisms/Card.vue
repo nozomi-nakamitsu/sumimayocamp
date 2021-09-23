@@ -47,6 +47,7 @@
         :post="post"
         @on-focus="onFocus"
         @on-clicked="switchVisible"
+        @delete-select-emoji-item="DeleteSelectEmojiItem"
       />
     </v-card>
     <div v-if="isFormVisible" class="form" @mouseleave="onRemoveFocus">
@@ -96,6 +97,7 @@ export default defineComponent({
       onRemoveFocus,
       selectEmoji,
       switchVisible,
+      DeleteSelectEmojiItem,
     } = useEmoji(props, currentUser)
     // 投稿削除
     const { DeletePost } = usePost()
@@ -116,6 +118,8 @@ export default defineComponent({
       onRemoveFocus,
       switchVisible,
       isFormVisible,
+      // 絵文字削除
+      DeleteSelectEmojiItem,
     }
   },
 })

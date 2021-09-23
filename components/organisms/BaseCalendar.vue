@@ -7,7 +7,7 @@
       </div> -->
     </v-calendar>
     <div class="calendar-sidebar">
-      <div class="items" v-for="(user, index) in allUsers" :key="index">
+      <div v-for="(user, index) in allUsers" :key="index" class="items">
         <div class="item">
           <Icon :icon="faCircle" types="calendar" :color="user.color" />
           <div class="image">
@@ -29,11 +29,11 @@ import {
   watch,
   onBeforeMount,
 } from '@nuxtjs/composition-api'
+import { faCircle } from '@fortawesome/free-solid-svg-icons'
+import _ from 'lodash'
 import { Post, CalendarData, UserWithColor } from '@/types/props-types'
 import { firestore } from '@/plugins/firebase.js'
-import { faCircle } from '@fortawesome/free-solid-svg-icons'
 import Icon from '@/components/molecules/Icon.vue'
-import _ from 'lodash'
 export default defineComponent({
   components: {
     Icon,
@@ -52,7 +52,7 @@ export default defineComponent({
     const currentUser = store.getters.getCurrentUser
     const calenderDatas = ref<CalendarData[]>([])
     const allUsers = ref<UserWithColor[]>([])
-    var colors = [
+    let colors = [
       'blue',
       'yellow',
       'green',
@@ -117,7 +117,7 @@ export default defineComponent({
           ) as UserWithColor
 
           return {
-            post: post,
+            post,
             color: postUser.color,
             user: post.user,
           }

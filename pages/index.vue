@@ -90,7 +90,12 @@ export default defineComponent({
                                   postData as Post
                                 )
                               } else {
-                                return emojiUser.push(user.data())
+                                emojiUser.push(user.data())
+                                return addEmojiMember(
+                                  item,
+                                  emojiUser,
+                                  postData as Post
+                                )
                               }
                             })
                           } else if (changeUser.type === 'removed') {
