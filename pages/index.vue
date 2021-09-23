@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="container -start">
-        <div class="wraper">
+        <div class="wrapper">
           <p class="title">今週のキャンプ</p>
           <div>
             <TheDeclaration />
