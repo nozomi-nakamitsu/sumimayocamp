@@ -18,6 +18,17 @@
       <div class="middle">
         <div
           class="sidebar-item"
+          :class="whereUrl('/')"
+          @click="Router.push('/')"
+        >
+          <div class="container" :class="whereUrl('/')">
+            <div class="circle -purple" :class="whereUrl('/')"></div>
+            <p class="title">My DashBoard</p>
+            <div class="button"><BaseSquareButton /></div>
+          </div>
+        </div>
+        <div
+          class="sidebar-item"
           :class="whereUrl('/posts/create')"
           @click="Router.push('/posts/create')"
         >

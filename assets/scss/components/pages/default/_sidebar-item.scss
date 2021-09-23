@@ -32,6 +32,12 @@
     height: 40px;
     border-radius: 50%;
     margin-right: 16px;
+    &.-purple {
+      background-color: $purple;
+    }
+    &.active {
+      background-color: $white;
+    }
     &.-red {
       background-color: $red;
     }
