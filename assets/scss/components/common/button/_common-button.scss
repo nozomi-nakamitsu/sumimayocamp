@@ -45,4 +45,30 @@
       background-color: $black-dugong;
     }
   }
+  &.-declaration-submit {
+    background-color: $green;
+    width: 360px;
+    height: 60px;
+    font-size: 18px;
+    &:disabled {
+      opacity: 1;
+      background-color: $gray-pearl;
+    }
+    &:hover {
+      color: $white;
+      background-color: $black-dugong;
+    }
+  }
+
+  &.-declaration {
+    background-color: $white;
+    color: $green;
+    width: 300px;
+    height: 40px;
+    font-size: 16px;
+    &:hover {
+      opacity: 1;
+      background-color: $gray-pearl;
+    }
+  }
 }

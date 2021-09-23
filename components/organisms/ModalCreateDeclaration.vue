@@ -13,15 +13,15 @@
             @input="change"
           ></ValidationTextArea>
 
-          <p></p>
           <BaseSelectBox @on-selected="onSelected" />
-          <div>
+          <div class="submit">
             <input
               type="submit"
-              class="common-button"
+              class="common-button -declaration-submit"
               title="投稿する"
               :disabled="invalid"
               :class="invalid"
+              value="Submit!"
             />
           </div>
         </form>
@@ -31,11 +31,7 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  useStore,
-  ref,
-} from '@nuxtjs/composition-api'
+import { defineComponent, useStore, ref } from '@nuxtjs/composition-api'
 import BaseSelectBox from '../molecules/form/BaseSelectBox.vue'
 import ValidationTextArea from '../molecules/form/ValidationTextArea.vue'
 import { Mission } from '@/types/props-types'

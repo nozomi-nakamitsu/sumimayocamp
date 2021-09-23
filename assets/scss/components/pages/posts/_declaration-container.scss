@@ -1,5 +1,21 @@
 .declaration-container {
-  background-color: beige;
+  background-color: $green;
+  border-radius: 8px;
   padding: 20px;
-  text-align: center;
+  margin-top: 20px;
+  > .container {
+    border: 2px dotted $white;
+    border-radius: 8px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    font-size: 18px;
+  }
+  > .container > .text {
+    margin-bottom: 8px;
+  }
 }

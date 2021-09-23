@@ -1,5 +1,47 @@
 <template>
-  <div class="card-container">
+  <div>
+    <div class="card-container">
+      <div class="container">
+        <div class="card-head" @click.stop="Router.push(`/posts/${post.id}`)">
+          <div class="left">
+            <div class="image">
+              <img class="img" alt="" :src="post.user.photoURL" />
+            </div>
+          </div>
+          <div class="right">
+            <p class="name">
+              {{
+                post.user.nickName ? post.user.nickName : post.user.displayName
+              }}
+            </p>
+            <p class="date">{{ formatDateToSlashWithTime(post.updated_at) }}</p>
+          </div>
+        </div>
+        <div class="body" @click.stop="Router.push(`/posts/${post.id}`)">
+          <p>{{ post.title }}</p>
+        </div>
+        <div class="footer">
+          <div class="emoji">
+            <Emojifrom
+              :selected-item="selectedItem"
+              :post="post"
+              @on-focus="onFocus"
+              @on-clicked="switchVisible"
+              @delete-select-emoji-item="DeleteSelectEmojiItem"
+            />
+          </div>
+          <div class="button">
+            <BaseSquareButton />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-if="isFormVisible" class="form" @mouseleave="onRemoveFocus">
+      <Picker @select="selectEmoji" />
+    </div>
+  </div>
+
+  <!-- <div class="card-container">
     <v-card class="mx-auto" width="500">
       <v-card-title>
         <span class="text-h6 font-weight-light">
@@ -53,7 +95,7 @@
     <div v-if="isFormVisible" class="form" @mouseleave="onRemoveFocus">
       <Picker @select="selectEmoji" />
     </div>
-  </div>
+  </div> -->
 </template>
 <script lang="ts">
 import {
@@ -64,6 +106,8 @@ import {
 } from '@nuxtjs/composition-api'
 import { Picker } from 'emoji-mart-vue'
 import Emojifrom from '../molecules/EmojiItems.vue'
+import BaseSquareButton from '@/components/atoms/BaseSquareButton.vue'
+
 import { Post } from '@/types/props-types'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 import { useEmoji } from '@/compositions/useEmoji'
@@ -74,6 +118,7 @@ export default defineComponent({
   components: {
     Emojifrom,
     Picker,
+    BaseSquareButton,
   },
   props: {
     post: {
