@@ -1,28 +1,4 @@
 <template>
-  <!-- <v-toolbar v-if="currentUser" dense class="header-container">
-    <div class="image">
-      <img :src="currentUser.photoURL" alt="" class="img" />
-    </div>
-    <v-toolbar-title @click="Router.push('/')"
-      >{{
-        currentUser.nickName ? currentUser.nickName : currentUser.displayName
-      }}さんようこそ</v-toolbar-title
-    >
-    <v-spacer></v-spacer>
-    <v-toolbar-title>
-      <button @click="logout">ログアウト</button></v-toolbar-title
-    >
-    <v-toolbar-title>
-      <p @click="Router.push('/missions')">ミッション一覧</p>
-    </v-toolbar-title>
-    <v-toolbar-title>
-      <p @click="Router.push('/users/edit')">ニックネーム変更</p>
-    </v-toolbar-title>
-
-    <v-toolbar-title>
-      <p @click="Router.push('/posts/create')">新規作成</p>
-    </v-toolbar-title>
-  </v-toolbar> -->
   <div class="sidebar-container">
     <div class="container">
       <div class="top">
@@ -40,22 +16,34 @@
         <p class="date">Last Logined : 2021/08/31 23:00(仮)</p>
       </div>
       <div class="middle">
-        <div class="sidebar-item -active">
-          <div class="container -active">
+        <div
+          class="sidebar-item"
+          @click="Router.push('/posts/create')"
+          :class="whereUrl('/posts/create')"
+        >
+          <div class="container" :class="whereUrl('/posts/create')">
             <div class="circle -red"></div>
             <p class="title">New Post</p>
             <div class="button"><BaseSquareButton /></div>
           </div>
         </div>
-        <div class="sidebar-item">
-          <div class="container">
+        <div
+          class="sidebar-item"
+          @click="Router.push('/missions')"
+          :class="whereUrl('/missions')"
+        >
+          <div class="container" :class="whereUrl('/missions')">
             <div class="circle -yellow"></div>
             <p class="title">Missions</p>
             <div class="button"><BaseSquareButton /></div>
           </div>
         </div>
-        <div class="sidebar-item" @click="Router.push('/users/edit')">
-          <div class="container">
+        <div
+          class="sidebar-item"
+          @click="Router.push('/users/edit')"
+          :class="whereUrl('/users/edit')"
+        >
+          <div class="container" :class="whereUrl('/users/edit')">
             <div class="circle -green"></div>
             <p class="title">Mypage</p>
             <div class="button">
@@ -63,7 +51,7 @@
             </div>
           </div>
         </div>
-        <div class="sidebar-item">
+        <div class="sidebar-item" @click="logout">
           <div class="container">
             <div class="circle -blue"></div>
             <p class="title">Logout</p>
@@ -81,6 +69,9 @@ import {
   useStore,
   ref,
   useRouter,
+  computed,
+  useRoute,
+  watchEffect,
 } from '@nuxtjs/composition-api'
 import BaseSquareButton from '@/components/atoms/BaseSquareButton.vue'
 export default defineComponent({
@@ -91,6 +82,7 @@ export default defineComponent({
     // compositionAPI
     const store = useStore()
     const Router = useRouter()
+    const Route = useRoute()
 
     // ref
     const currentUser = store.getters.getCurrentUser
@@ -104,19 +96,37 @@ export default defineComponent({
         store.dispatch('onRejectted', error)
       }
     }
-    // ヘッダー開け閉め
-    const switchDrawer = () => {
-      drawer.value = !drawer.value
-    }
+    watchEffect(() => {
+      console.log(Route.value.path)
+    })
+
+    const whereUrl = computed(() => (routeName: string) => {
+      const pathName = Route.value.path
+      return {
+        active: pathName === routeName,
+      }
+    })
+    // switch (pathName) {
+    //   case '/posts/create':
+    //     return '/posts/create'
+
+    //   case '/missions':
+    //     return '/missions'
+
+    //   case '/users/edit':
+    //     return '/users/edit'
+
+    //   default:
+    //     return '/'
+    // }
+    // active: window.location.pathname.match(/workspaces/),
 
     return {
       // compositionAPI
       store,
       Router,
+      whereUrl,
       // ref系
-      drawer,
-      // ヘッダー開け閉め
-      switchDrawer,
       // 認証
       logout,
       currentUser,
