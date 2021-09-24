@@ -1,6 +1,6 @@
 .card-head {
   display: flex;
-align-items: center;
+  align-items: center;
   > .left > .image {
     width: 50px;
     height: 50px;
@@ -14,6 +14,9 @@ align-items: center;
   }
   > .right > .name {
     font-size: 18px;
+  }
+  > .right > .name > .text {
+    font-size: 12px;
   }
   > .right > .date {
     font-size: 12px;
