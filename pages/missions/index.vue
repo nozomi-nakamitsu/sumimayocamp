@@ -20,13 +20,8 @@
             </button>
           </div>
           <p class="title">My Missions</p>
-          <div>
-            <div v-for="mission in myMissions" :key="mission.id">
-              <BaseMissionCard
-                :prop-mission="mission"
-                @update="updateMission"
-              />
-            </div>
+          <div v-for="mission in myMissions" :key="mission.id" class="items">
+            <BaseMissionCard :prop-mission="mission" @update="updateMission" />
           </div>
         </div>
       </div>

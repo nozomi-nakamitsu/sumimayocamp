@@ -14,7 +14,7 @@
                 ? mission.sendUser.nickName
                 : mission.sendUser.displayName
             }}
-            <span>からの挑戦状</span>
+            <span class="text">からの挑戦状</span>
           </p>
 
           <p class="date">
