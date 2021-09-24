@@ -57,7 +57,7 @@
             > -->
           </div>
         </div>
-        <div class="button">
+        <div class="button" v-if="isSendUser(mission)">
           <BaseSquareButton />
         </div>
       </div>
@@ -162,11 +162,14 @@ import {
 import _ from 'lodash'
 import { FileArray, Mission, MissionStatus } from '@/types/props-types'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
-
+import BaseSquareButton from '@/components/atoms/BaseSquareButton.vue'
 import { firestore } from '@/plugins/firebase.js'
 import { isCurrentUser } from '@/compositions/useAuth'
+
 export default defineComponent({
-  components: {},
+  components: {
+    BaseSquareButton,
+  },
   props: {
     propMission: {
       type: Object as PropType<Mission>,
@@ -275,6 +278,13 @@ export default defineComponent({
         }
       }
     }
+    // ログインユーザーが作成したミッションかを判断する
+    const isSendUser = computed(
+      () =>
+        (mission: Mission): boolean =>
+          mission.sendUser.uid === currentUser.uid
+    )
+
     return {
       DeleteMission,
       UpdateMission,
@@ -291,6 +301,7 @@ export default defineComponent({
       missionLabelColor,
       changeStatus,
       missionLabelText,
+      isSendUser,
     }
   },
 })

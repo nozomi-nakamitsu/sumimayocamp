@@ -150,7 +150,7 @@ export default defineComponent({
       }
     }
     const updateMyMissions = (changeData: Mission) => {
-      myMissions.value = [...myMissions.value, changeData]
+      myMissions.value = [changeData, ...myMissions.value]
     }
     return {
       // 全投稿データ
