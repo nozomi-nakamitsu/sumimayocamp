@@ -26,7 +26,37 @@
         <p>{{ mission.title }}</p>
       </div>
       <div class="footer">
-        <div class="emoji">ふったー</div>
+        <div class="emoji">
+          <v-btn
+            v-if="!isMyMission(mission)"
+            elevation="2"
+            @click="joinMission(mission)"
+            >私がやる！</v-btn
+          >
+          <v-btn v-if="isMyMission(mission)" elevation="2" disabled
+            >挑戦中！！</v-btn
+          >
+
+          <v-chip
+            v-if="isMyMission(mission)"
+            class="ma-2 common-chip"
+            :class="missionLabelColor(mission, currentUser.uid)"
+            @click="changeStatus(mission)"
+            >{{ missionLabelText(mission, currentUser.uid) }}</v-chip
+          >
+          <div v-for="(status, index) in mission.status" :key="index">
+            <v-chip
+              class="ma-2 common-chip"
+              :class="missionLabelColor(mission, status.uid)"
+              >{{ status.nickName }}</v-chip
+            >
+            <!-- <v-list-item-title
+              style="cursor: pointer"
+              @click="DeleteMission(mission.id, mission.files)"
+              >削除</v-list-item-title
+            > -->
+          </div>
+        </div>
         <div class="button">
           <BaseSquareButton />
         </div>
@@ -60,10 +90,10 @@
           タイトル: {{ mission.title }}</span
         >
       </v-card-title>
-      <!-- <v-card-text class="text-h5 font-weight-bold">
+      <v-card-text class="text-h5 font-weight-bold">
         {{ mission.content }}
-      </v-card-text> -->
-  <!-- <v-card-text class="text-h5 font-weight-bold">
+      </v-card-text>
+      <v-card-text class="text-h5 font-weight-bold">
         <v-btn
           v-if="!isMyMission(mission)"
           elevation="2"

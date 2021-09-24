@@ -21,7 +21,7 @@
           </div>
           <p class="title">My Missions</p>
           <div>
-            <div v-for="mission in missions" :key="mission.id">
+            <div v-for="mission in myMissions" :key="mission.id">
               <BaseMissionCard
                 :prop-mission="mission"
                 @update="updateMission"
@@ -48,9 +48,10 @@ import {
   onMounted,
   ref,
   onBeforeMount,
+  useStore,
 } from '@nuxtjs/composition-api'
 import _ from 'lodash'
-import { Mission, CurrentUser } from '@/types/props-types'
+import { Mission, CurrentUser, MissionStatus } from '@/types/props-types'
 import BaseMissionCard from '@/components/organisms/BaseMissionCard.vue'
 import ModalCreateMission from '@/components/organisms/ModalCreateMission.vue'
 import { useModal } from '@/compositions/useModal'
@@ -62,9 +63,15 @@ export default defineComponent({
   },
   setup() {
     // compositionAPI
+    const store = useStore()
+    // ref系
     const missions = ref<Mission[]>([])
     let unsubscribe = null as any
     const allUsers = ref<CurrentUser[]>([])
+    const currentUser = store.getters.getCurrentUser
+    // ログインユーザーが挑戦しているミッションかを判断する
+    const myMissions = ref<Mission[]>([])
+
     // ユーザー一覧データを取得する
     onBeforeMount(() => {
       firestore
@@ -97,8 +104,12 @@ export default defineComponent({
                   missionData.sendUser = { ...targetUser }
                 }
                 missions.value = [...missions.value, missionData]
+                addMyMission(missionData)
               } else if (change.type === 'removed') {
                 missions.value = missions.value.filter(
+                  (v: Mission) => v.id !== change.doc.data().id
+                )
+                myMissions.value = myMissions.value.filter(
                   (v: Mission) => v.id !== change.doc.data().id
                 )
               } else if (change.type === 'modified') {
@@ -109,6 +120,7 @@ export default defineComponent({
                 data[targetIndex] = change.doc.data() as Mission
 
                 missions.value = [...data]
+                updateMyMissions(change.doc.data() as Mission)
               }
             },
             (error: any) => {
@@ -133,9 +145,24 @@ export default defineComponent({
     }
     const { isOpened, openModal, closeModal } = useModal()
 
+    const addMyMission = (missionData: Mission) => {
+      if (
+        _.some(missionData.status, function (item: MissionStatus) {
+          return item.uid === currentUser.uid
+        })
+      ) {
+        return (myMissions.value = [...myMissions.value, missionData])
+      }
+    }
+    const updateMyMissions = (changeData: Mission) => {
+      myMissions.value = [...myMissions.value, changeData]
+    }
     return {
       // 全投稿データ
       missions,
+      myMissions,
+      addMyMission,
+      updateMyMissions,
       // モーダル開閉
       isOpened,
       openModal,
