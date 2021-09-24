@@ -31,7 +31,10 @@
             />
           </div>
           <div class="button">
-            <BaseSquareButton />
+            <BaseSquareMenu
+              :postId="post.id"
+              @delete-post="DeletePost(post.id, post.files)"
+            />
           </div>
         </div>
       </div>
@@ -107,6 +110,7 @@ import {
 import { Picker } from 'emoji-mart-vue'
 import Emojifrom from '../molecules/EmojiItems.vue'
 import BaseSquareButton from '@/components/atoms/BaseSquareButton.vue'
+import BaseSquareMenu from '@/components/atoms/BaseSquareMenu.vue'
 
 import { Post } from '@/types/props-types'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
@@ -119,6 +123,7 @@ export default defineComponent({
     Emojifrom,
     Picker,
     BaseSquareButton,
+    BaseSquareMenu,
   },
   props: {
     post: {

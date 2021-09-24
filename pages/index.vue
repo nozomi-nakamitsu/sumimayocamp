@@ -5,7 +5,7 @@
       <div class="line"></div>
     </div>
     <div class="index-container">
-      <div class="container">
+      <div class="container -start">
         <p class="title">ポスト</p>
         <div v-for="post in posts" :key="post.id" class="items">
           <Card :post="post" />

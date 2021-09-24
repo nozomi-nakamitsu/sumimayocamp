@@ -5,6 +5,7 @@
     :class="[
       { '-calendar': types === 'calendar' },
       { '-button': types === 'button' },
+      { '-menu': types === 'menu' },
       labelColor,
     ]"
   />
