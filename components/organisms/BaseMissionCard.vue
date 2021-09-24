@@ -57,7 +57,7 @@
             > -->
           </div>
         </div>
-        <div class="button" v-if="isSendUser(mission)">
+        <div v-if="isSendUser(mission)" class="button">
           <BaseSquareButton />
         </div>
       </div>

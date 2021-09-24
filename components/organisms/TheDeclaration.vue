@@ -5,7 +5,7 @@
         <p class="text">
           {{ declaration ? declaration.declaration : '宣言しよう！' }}
         </p>
-        <button depressed @click="openModal" class="common-button -declaration">
+        <button depressed class="common-button -declaration" @click="openModal">
           宣言する
         </button>
       </div>

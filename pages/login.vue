@@ -23,7 +23,7 @@ export default defineComponent({
           store.commit('setIsLogined', true)
           store.commit('setCurrentUser', user)
         } else {
-          ;('ログインしてないよ')
+          console.log('ログインしてないよ')
         }
       })
     })
