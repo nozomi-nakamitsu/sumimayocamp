@@ -60,4 +60,13 @@
     justify-content: center;
     align-items: center;
   }
+  &.-menu {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $black-dugong;
+    width: 18px;
+    height: 18px;
+  }
 }

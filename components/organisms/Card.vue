@@ -30,8 +30,11 @@
               @delete-select-emoji-item="DeleteSelectEmojiItem"
             />
           </div>
-          <div class="button">
-            <BaseSquareButton />
+          <div v-if="isMyPost(post.user_id)" class="button">
+            <BaseSquareMenu
+              :edit-path="`/posts/${post.id}`"
+              @delete="DeletePost(post.id, post.files)"
+            />
           </div>
         </div>
       </div>
@@ -106,7 +109,7 @@ import {
 } from '@nuxtjs/composition-api'
 import { Picker } from 'emoji-mart-vue'
 import Emojifrom from '../molecules/EmojiItems.vue'
-import BaseSquareButton from '@/components/atoms/BaseSquareButton.vue'
+import BaseSquareMenu from '@/components/atoms/BaseSquareMenu.vue'
 
 import { Post } from '@/types/props-types'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
@@ -118,7 +121,7 @@ export default defineComponent({
   components: {
     Emojifrom,
     Picker,
-    BaseSquareButton,
+    BaseSquareMenu,
   },
   props: {
     post: {
@@ -145,11 +148,12 @@ export default defineComponent({
       DeleteSelectEmojiItem,
     } = useEmoji(props, currentUser)
     // 投稿削除
-    const { DeletePost } = usePost()
+    const { DeletePost, isMyPost } = usePost()
     return {
       DeletePost,
       isCurrentUser,
       currentUser,
+      isMyPost,
       useEmoji,
       // フォーマット
       formatDateToSlashWithTime,

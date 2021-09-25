@@ -1,5 +1,9 @@
 .form-container {
   margin-top: 48px;
+  &.-modal {
+    margin-top: 0;
+    padding: 20px;
+  }
   > .box > .input {
     border: 1px solid gray;
   }
