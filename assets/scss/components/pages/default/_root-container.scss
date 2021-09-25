@@ -1,4 +1,7 @@
 .root-container {
   display: flex;
   height: 100vh;
+  >.main{
+    position: relative;
+  }
 }

@@ -1,5 +1,6 @@
 <template>
   <div class="root-container">
+    <Loading />
     <Sidebar v-if="showSidebar" />
     <Nuxt />
   </div>
@@ -12,10 +13,12 @@ import {
   useRoute,
   computed,
 } from '@nuxtjs/composition-api'
+import Loading from '~/components/loadings/Loading.vue'
 import Sidebar from '../components/organisms/TheSidebar.vue'
 export default defineComponent({
   components: {
     Sidebar,
+    Loading,
   },
   setup() {
     // vuex
