@@ -49,6 +49,7 @@ export default {
   plugins: [
     { src: '@/plugins/vue-mavon-editor', ssr: false },
     { src: '~plugins/v-calendar.ts', ssr: false },
+    { src: '@/plugins/routerOption.ts', ssr: false },
     '@/plugins/vee-validate',
     '@/plugins/i18n.ts',
     '@/plugins/nuxt-quill-plugin.ts',

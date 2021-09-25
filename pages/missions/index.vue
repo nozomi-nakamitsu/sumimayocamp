@@ -1,5 +1,5 @@
 <template>
-  <div class="common-container">
+  <div class="common-container -load">
     <div class="title">
       <p class="text">Missions</p>
       <div class="line"></div>

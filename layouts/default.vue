@@ -1,6 +1,6 @@
 <template>
   <div class="root-container">
-    <Loading />
+    <Loading v-if="store.getters.getIsLoading && showSidebar" />
     <Sidebar v-if="showSidebar" />
     <Nuxt />
   </div>
@@ -12,6 +12,7 @@ import {
   ref,
   useRoute,
   computed,
+  onMounted,
 } from '@nuxtjs/composition-api'
 import Loading from '~/components/loadings/Loading.vue'
 import Sidebar from '../components/organisms/TheSidebar.vue'
@@ -26,7 +27,6 @@ export default defineComponent({
     const Route = useRoute()
 
     // ref
-    const isLoading = ref<boolean>(true)
     const currentUser = ref<any>({})
     /**
      *Sidebarを表示するか判断
@@ -35,12 +35,14 @@ export default defineComponent({
       (): Boolean =>
         Route.value.path !== '/login' && Route.value.path !== '/login/'
     )
+    onMounted(() => {
+      // document.querySelector('common-container')?.classList.add('-load')
+    })
 
     return {
       // vuex
       store,
-      // loarding
-      isLoading,
+
       // 認証
       currentUser,
       // Sidebarを表示するか判断
