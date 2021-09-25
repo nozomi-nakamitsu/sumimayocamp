@@ -1,5 +1,5 @@
 <template>
-  <div class="form-container">
+  <div class="form-container -modal">
     <!-- TODO: style実装時にフォームのコンポーネントに分ける -->
     <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
       <form class="form-area" @submit.prevent="handleSubmit(onSubmit)">

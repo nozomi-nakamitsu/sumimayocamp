@@ -9,6 +9,11 @@
     border-top-right-radius: 8px !important;
     border-top-left-radius: 8px !important;
   }
+  img {
+    width: 50% !important;
+    height: 50% !important;
+    object-fit: cover !important;
+  }
 }
 .op-icon-divider {
   border-left: 1px solid $purple !important;
