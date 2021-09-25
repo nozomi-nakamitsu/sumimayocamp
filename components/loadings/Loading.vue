@@ -49,7 +49,7 @@ export default defineComponent({
         })
         gsap.to('.fv_slide_bottom', 0.4, {
           opacity: 0,
-          delay: 1.8,
+          delay: 1.6,
           onLeave: () => finishLoading(),
         })
       }
