@@ -1,15 +1,16 @@
 <template>
   <div>
     <div id="fv_wap" class="fv_wap">
-      <vue-wavify
+      <!-- <vue-wavify
         fill="#e3e3ff"
         class="fv_slide fv_slide_bottom"
         :points="6"
         :speed="0.3"
         :amplitude="40"
         :height="0"
-      />
-      <div></div>
+        styles="height:0"
+      /> -->
+      <div class="fv_slide fv_slide_bottom"></div>
     </div>
   </div>
 </template>
@@ -87,8 +88,7 @@ export default defineComponent({
   bottom: 50%; */
   bottom: 0;
   left: 300px;
-
-  background: transparent;
+  background:#e3e3ff;
   z-index: 3;
 }
 </style>
