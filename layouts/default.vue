@@ -1,6 +1,7 @@
 <template>
   <div class="root-container">
     <Loading v-if="store.getters.getIsLoading && showSidebar" />
+    
     <Sidebar v-if="showSidebar" />
     <Nuxt />
   </div>

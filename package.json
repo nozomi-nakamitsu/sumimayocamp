@@ -40,6 +40,7 @@
     "vee-validate": "^3.4.11",
     "vue-mention": "^1.0.0",
     "vue-quill-editor": "^3.0.6",
+    "vue-wavify": "^1.2.0",
     "vuetify": "^2.5.5"
   },
   "devDependencies": {
