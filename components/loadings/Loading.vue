@@ -44,14 +44,14 @@ export default defineComponent({
         onComplete: endstart,
       })
       function endstart() {
-        gsap.to('.fv_slide_bottom', 1.0, {
+        gsap.to('.fv_slide_bottom',0.8, {
           height: '100%',
           top: 0,
 
           ease: Power4.easeOut,
         })
 
-        gsap.to('.fv_slide_bottom', 1.0, {
+        gsap.to('.fv_slide_bottom', 0.8, {
           height: '100%',
           top: 0,
           ease: Power4.easeOut,
