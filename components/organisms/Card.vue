@@ -32,8 +32,8 @@
           </div>
           <div class="button" v-if="isMyPost(post.user_id)">
             <BaseSquareMenu
-              :postId="post.id"
-              @delete-post="DeletePost(post.id, post.files)"
+              :editPath="`/posts/${post.id}`"
+              @delete="DeletePost(post.id, post.files)"
             />
           </div>
         </div>

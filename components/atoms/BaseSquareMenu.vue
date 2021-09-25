@@ -1,7 +1,7 @@
 <template>
   <div class="square-menu-container">
     <v-menu
-      :close-on-content-click="false"
+      :close-on-content-click="true"
       :nudge-width="200"
       offset-x
       style="display: block"
@@ -13,11 +13,11 @@
       </template>
 
       <v-card class="card">
-        <div class="menu-item" @click="Router.push(`/posts/edit/${postId}`)">
+        <div class="menu-item" @click="onUpdate">
           <Icon :icon="faCode" types="menu" />
           <p class="text">Edit</p>
         </div>
-        <div class="menu-item" @click="$emit('delete-post')">
+        <div class="menu-item" @click="$emit('delete')">
           <Icon :icon="faTrash" types="menu" />
           <p class="text">Delete</p>
         </div>
@@ -26,7 +26,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, useRouter } from '@nuxtjs/composition-api'
+import { defineComponent, useRouter, ref } from '@nuxtjs/composition-api'
 import BaseSquareButton from '@/components/atoms/BaseSquareButton.vue'
 import Icon from '@/components/molecules/Icon.vue'
 import { faTrash, faCode } from '@fortawesome/free-solid-svg-icons'
@@ -39,18 +39,26 @@ export default defineComponent({
     Icon,
   },
   props: {
-    postId: {
-      type: String,
-      required: true,
+    editPath: {
+      type: String as () => string | null,
+      default: null,
     },
   },
-  emits: ['delete-post'],
-  setup() {
+  emits: ['delete', 'update-mission'],
+  setup(props, ctx) {
     const Router = useRouter()
+    const onUpdate = () => {
+      if (props.editPath === null) {
+        ctx.emit('update-mission')
+      } else {
+        Router.push(props.editPath)
+      }
+    }
     return {
       faTrash,
       faCode,
       Router,
+      onUpdate,
     }
   },
 })

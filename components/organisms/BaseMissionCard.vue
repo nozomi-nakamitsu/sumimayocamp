@@ -58,7 +58,10 @@
           </div>
         </div>
         <div v-if="isSendUser(mission)" class="button">
-          <BaseSquareButton />
+          <BaseSquareMenu
+            @delete="DeleteMission(mission.id, mission.files)"
+            @update-mission="UpdateMission(mission)"
+          />
         </div>
       </div>
     </div>
@@ -162,13 +165,13 @@ import {
 import _ from 'lodash'
 import { FileArray, Mission, MissionStatus } from '@/types/props-types'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
-import BaseSquareButton from '@/components/atoms/BaseSquareButton.vue'
+import BaseSquareMenu from '@/components/atoms/BaseSquareMenu.vue'
 import { firestore } from '@/plugins/firebase.js'
 import { isCurrentUser } from '@/compositions/useAuth'
 
 export default defineComponent({
   components: {
-    BaseSquareButton,
+    BaseSquareMenu,
   },
   props: {
     propMission: {
