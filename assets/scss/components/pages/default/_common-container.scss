@@ -1,6 +1,11 @@
 .common-container {
   width: 100%;
   padding: 40px 80px 40px 380px;
+  opacity: 1;
+  transition: all 0.4s ease 0s;
+  &.-load {
+    opacity: 0;
+  }
   > .title > .text {
     font-weight: bold;
     font-size: 32px;
