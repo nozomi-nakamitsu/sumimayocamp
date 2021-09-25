@@ -1,12 +1,14 @@
-import { useRouter, useStore } from '@nuxtjs/composition-api'
+import { useRouter, useStore, computed } from '@nuxtjs/composition-api'
 
-import { FileArray } from '@/types/props-types'
+import { FileArray, Post } from '@/types/props-types'
 
 import { firestore } from '@/plugins/firebase.js'
 
 export const usePost = () => {
   const store = useStore()
   const Router = useRouter()
+  const currentUser = store.getters.getCurrentUser
+
   const DeletePost = async (id: string, files: FileArray[]) => {
     try {
       // NOTE:ファイルがあれば削除
@@ -25,7 +27,7 @@ export const usePost = () => {
         .collection('emojiItems')
         .get()
         .then(function (querySnapshot) {
-          querySnapshot.forEach( (doc) => {
+          querySnapshot.forEach((doc) => {
             doc.ref
               .collection('users')
               .get()
@@ -65,7 +67,14 @@ export const usePost = () => {
       console.error(error)
     }
   }
+  // ログインユーザーが作成した投稿かを判断する
+  const isMyPost = computed(
+    () =>
+      (uid: string): boolean =>
+        uid === currentUser.uid
+  )
   return {
     DeletePost,
+    isMyPost,
   }
 }

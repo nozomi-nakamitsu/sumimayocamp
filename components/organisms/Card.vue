@@ -30,7 +30,7 @@
               @delete-select-emoji-item="DeleteSelectEmojiItem"
             />
           </div>
-          <div class="button">
+          <div class="button" v-if="isMyPost(post.user_id)">
             <BaseSquareMenu
               :postId="post.id"
               @delete-post="DeletePost(post.id, post.files)"
@@ -150,11 +150,12 @@ export default defineComponent({
       DeleteSelectEmojiItem,
     } = useEmoji(props, currentUser)
     // 投稿削除
-    const { DeletePost } = usePost()
+    const { DeletePost, isMyPost } = usePost()
     return {
       DeletePost,
       isCurrentUser,
       currentUser,
+      isMyPost,
       useEmoji,
       // フォーマット
       formatDateToSlashWithTime,
