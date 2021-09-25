@@ -1,6 +1,6 @@
 import { useRouter, useStore, computed } from '@nuxtjs/composition-api'
 
-import { FileArray, Post } from '@/types/props-types'
+import { FileArray } from '@/types/props-types'
 
 import { firestore } from '@/plugins/firebase.js'
 

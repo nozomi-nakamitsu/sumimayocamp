@@ -30,9 +30,9 @@
               @delete-select-emoji-item="DeleteSelectEmojiItem"
             />
           </div>
-          <div class="button" v-if="isMyPost(post.user_id)">
+          <div v-if="isMyPost(post.user_id)" class="button">
             <BaseSquareMenu
-              :editPath="`/posts/${post.id}`"
+              :edit-path="`/posts/${post.id}`"
               @delete="DeletePost(post.id, post.files)"
             />
           </div>
@@ -109,7 +109,6 @@ import {
 } from '@nuxtjs/composition-api'
 import { Picker } from 'emoji-mart-vue'
 import Emojifrom from '../molecules/EmojiItems.vue'
-import BaseSquareButton from '@/components/atoms/BaseSquareButton.vue'
 import BaseSquareMenu from '@/components/atoms/BaseSquareMenu.vue'
 
 import { Post } from '@/types/props-types'
@@ -122,7 +121,6 @@ export default defineComponent({
   components: {
     Emojifrom,
     Picker,
-    BaseSquareButton,
     BaseSquareMenu,
   },
   props: {

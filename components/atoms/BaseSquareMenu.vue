@@ -6,7 +6,7 @@
       offset-x
       style="display: block"
     >
-      <template v-slot:activator="{ on, attrs }">
+      <template #activator="{ on, attrs }">
         <div v-bind="attrs" v-on="on">
           <BaseSquareButton />
         </div>
@@ -26,10 +26,10 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, useRouter, ref } from '@nuxtjs/composition-api'
+import { defineComponent, useRouter } from '@nuxtjs/composition-api'
+import { faTrash, faCode } from '@fortawesome/free-solid-svg-icons'
 import BaseSquareButton from '@/components/atoms/BaseSquareButton.vue'
 import Icon from '@/components/molecules/Icon.vue'
-import { faTrash, faCode } from '@fortawesome/free-solid-svg-icons'
 
 // バリデーション周り
 
