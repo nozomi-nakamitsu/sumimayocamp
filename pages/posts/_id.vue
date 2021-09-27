@@ -1,5 +1,5 @@
 <template>
-  <div v-if="post.user" class="common-container -load">
+  <div v-if="post.user" class="common-container">
     <v-card class="mx-auto" width="100%">
       <v-card-title>
         <span class="text-h6 font-weight-light">

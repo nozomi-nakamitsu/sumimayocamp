@@ -7,6 +7,8 @@
 @import 'elements/main';
 //utilites
 @import 'utilites/markdown-editor';
+@import 'utilites/vuetify';
+
 //common
 @import 'components/common/loading-container';
 @import 'components/common/emoji-balloon-box';
@@ -41,7 +43,6 @@
 
 // calendar
 @import 'components/common/calendar/calendar-card';
-@import 'components/common/calendar/calender-container';
 
 //pages
 @import 'components/pages/default/root-container';

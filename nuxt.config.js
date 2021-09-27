@@ -133,4 +133,9 @@ export default {
   router: {
     middleware: ['auth'],
   },
+
+  layoutTransition: {
+    name: 'layout',
+    mode: 'out-in',
+  },
 }

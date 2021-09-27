@@ -1,5 +1,5 @@
 <template>
-  <div class="common-container -load">
+  <div class="common-container">
     <p>ニックネーム変更する</p>
     <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
       <form @submit.prevent="handleSubmit(submit)">

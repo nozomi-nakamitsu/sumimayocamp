@@ -1,9 +1,11 @@
 <template>
   <div class="root-container">
     <Loading v-if="store.getters.getIsLoading && showSidebar" />
-    
+
     <Sidebar v-if="showSidebar" />
-    <Nuxt />
+    <transition name="page">
+      <Nuxt />
+    </transition>
   </div>
 </template>
 <script lang="ts">
@@ -36,9 +38,6 @@ export default defineComponent({
       (): Boolean =>
         Route.value.path !== '/login' && Route.value.path !== '/login/'
     )
-    onMounted(() => {
-      // document.querySelector('common-container')?.classList.add('-load')
-    })
 
     return {
       // vuex

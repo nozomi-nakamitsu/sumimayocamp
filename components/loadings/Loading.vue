@@ -1,7 +1,6 @@
 <template>
-  <div>
-    <div id="fv_wap" class="fv_wap">
-      <!-- <vue-wavify
+  <div id="fv_wap" class="fv_wap">
+    <!-- <vue-wavify
         fill="#e3e3ff"
         class="fv_slide fv_slide_bottom"
         :points="6"
@@ -10,8 +9,7 @@
         :height="0"
         styles="height:0"
       /> -->
-      <div class="fv_slide fv_slide_bottom"></div>
-    </div>
+    <div class="fv_slide fv_slide_bottom"></div>
   </div>
 </template>
 
@@ -44,7 +42,7 @@ export default defineComponent({
         onComplete: endstart,
       })
       function endstart() {
-        gsap.to('.fv_slide_bottom',0.8, {
+        gsap.to('.fv_slide_bottom', 0.8, {
           height: '100%',
           top: 0,
 
@@ -64,7 +62,6 @@ export default defineComponent({
       }
     }
     const finishLoading = () => {
-      document.querySelector('.common-container')?.classList.remove('-load')
       store.commit('setIsLoading', false)
     }
   },
@@ -81,14 +78,14 @@ export default defineComponent({
   margin: 0 auto; */
 }
 .fv_slide {
-  position: absolute;
+  position: fixed;
   width: calc(100% - 300px);
   /* height: 0.1vw; */
   /* top: 50%;
   bottom: 50%; */
   bottom: 0;
   left: 300px;
-  background:#e3e3ff;
+  background: #e3e3ff;
   z-index: 3;
 }
 </style>

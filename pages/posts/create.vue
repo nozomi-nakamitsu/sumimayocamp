@@ -1,5 +1,5 @@
 <template>
-  <div class="common-container -load">
+  <div class="common-container">
     <div class="title">
       <p class="text">New Posts</p>
       <div class="line"></div>

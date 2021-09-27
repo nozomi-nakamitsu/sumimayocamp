@@ -1,5 +1,5 @@
 <template>
-  <div class="common-container -load">
+  <div class="common-container">
     <div class="title">
       <p class="text">Missions</p>
       <div class="line"></div>
@@ -51,6 +51,7 @@ import BaseMissionCard from '@/components/organisms/BaseMissionCard.vue'
 import ModalCreateMission from '@/components/organisms/ModalCreateMission.vue'
 import { useModal } from '@/compositions/useModal'
 import { firestore } from '@/plugins/firebase'
+
 export default defineComponent({
   components: {
     BaseMissionCard,
