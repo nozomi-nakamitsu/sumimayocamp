@@ -12,7 +12,7 @@
     class="ma-2 user-select-box-container"
     @change="$emit('on-selected', selectedUser)"
   >
-    <template v-slot:prepend-item>
+    <template #prepend-item>
       <v-list-item @click="onReset">
         <v-list-item-content>
           <v-list-item-title> Select All </v-list-item-title>

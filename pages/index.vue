@@ -19,7 +19,7 @@
           </div>
           <p class="title">カレンダー</p>
           <div class="calendar">
-            <BaseCalendar :posts="posts" :currentUser="currentUser" />
+            <BaseCalendar :posts="posts" :current-user="currentUser" />
           </div>
         </div>
       </div>

@@ -38,11 +38,11 @@
               <div class="header"></div>
             </div>
             <v-card
+              v-if="selectedEvent.user"
               color="grey lighten-4"
               min-width="350px"
               flat
               class="calendar-card"
-              v-if="selectedEvent.user"
             >
               <div :color="selectedEvent.color" class="toolbar">
                 <div v-if="selectedEvent.user" class="image">
@@ -62,10 +62,10 @@
   </v-app>
 </template>
 <script>
-import MarkdownViewCard from '@/components/organisms/MarkdownViewCard.vue'
-import BaseUserSelectBox from '@/components/molecules/BaseUserSelectBox.vue'
 import dayjs from 'dayjs'
 import _ from 'lodash'
+import MarkdownViewCard from '@/components/organisms/MarkdownViewCard.vue'
+import BaseUserSelectBox from '@/components/molecules/BaseUserSelectBox.vue'
 
 export default {
   components: {
@@ -100,8 +100,12 @@ export default {
     moreEvents: [],
     moreClick: false,
   }),
-  mounted() {
-    this.$refs.calendar.checkChange()
+  computed: {
+    path () {
+      return function (postId) {
+        return `posts/${postId}`
+      }
+    },
   },
   watch: {
     posts(newPosts) {
@@ -114,6 +118,9 @@ export default {
         timed: false,
       }))
     },
+  },
+  mounted() {
+    this.$refs.calendar.checkChange()
   },
   methods: {
     viewDay({ date }) {
@@ -181,13 +188,6 @@ export default {
 
       this.moreEvents = _.tail(this.moreEvents)
 
-    },
-  },
-  computed: {
-    path: function () {
-      return function (postId) {
-        return `posts/${postId}`
-      }
     },
   },
 }
