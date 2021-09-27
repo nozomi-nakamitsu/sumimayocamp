@@ -1,29 +1,31 @@
 <template>
-  <div class="square-menu-container">
-    <v-menu
-      :close-on-content-click="true"
-      :nudge-width="200"
-      offset-x
-      style="display: block"
-    >
-      <template #activator="{ on, attrs }">
-        <div v-bind="attrs" v-on="on">
-          <BaseSquareButton />
-        </div>
-      </template>
+  <v-app>
+    <div class="square-menu-container">
+      <v-menu
+        :close-on-content-click="true"
+        :nudge-width="200"
+        offset-x
+        style="display: block"
+      >
+        <template #activator="{ on, attrs }">
+          <div v-bind="attrs" v-on="on">
+            <BaseSquareButton />
+          </div>
+        </template>
 
-      <v-card class="card">
-        <div class="menu-item" @click="onUpdate">
-          <Icon :icon="faCode" types="menu" />
-          <p class="text">Edit</p>
-        </div>
-        <div class="menu-item" @click="$emit('delete')">
-          <Icon :icon="faTrash" types="menu" />
-          <p class="text">Delete</p>
-        </div>
-      </v-card>
-    </v-menu>
-  </div>
+        <v-card class="card">
+          <div class="menu-item" @click="onUpdate">
+            <Icon :icon="faCode" types="menu" />
+            <p class="text">Edit</p>
+          </div>
+          <div class="menu-item" @click="$emit('delete')">
+            <Icon :icon="faTrash" types="menu" />
+            <p class="text">Delete</p>
+          </div>
+        </v-card>
+      </v-menu>
+    </div>
+  </v-app>
 </template>
 <script lang="ts">
 import { defineComponent, useRouter } from '@nuxtjs/composition-api'

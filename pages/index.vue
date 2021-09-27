@@ -13,13 +13,13 @@
       </div>
       <div class="container -start">
         <div class="wrapper">
-          <p class="title">今週のキャンプ</p>
+          <div class="title">今週のキャンプ</div>
           <div>
             <TheDeclaration />
           </div>
           <p class="title">カレンダー</p>
           <div class="calendar">
-            <BaseCalendar :posts="posts" />
+            <BaseCalendar :posts="posts" :current-user="currentUser" />
           </div>
         </div>
       </div>
@@ -213,6 +213,7 @@ export default defineComponent({
     return {
       // 全投稿データ
       posts,
+      currentUser,
     }
   },
 })

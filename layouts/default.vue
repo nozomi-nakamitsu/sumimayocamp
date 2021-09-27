@@ -15,8 +15,8 @@ import {
   computed,
   onMounted,
 } from '@nuxtjs/composition-api'
-import Loading from '~/components/loadings/Loading.vue'
 import Sidebar from '../components/organisms/TheSidebar.vue'
+import Loading from '~/components/loadings/Loading.vue'
 export default defineComponent({
   components: {
     Sidebar,
