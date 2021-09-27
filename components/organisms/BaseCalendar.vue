@@ -40,6 +40,7 @@
               min-width="350px"
               flat
               class="calendar-card"
+              v-if="selectedEvent.user"
             >
               <div :color="selectedEvent.color" class="toolbar">
                 <div v-if="selectedEvent.user" class="image">
@@ -47,9 +48,10 @@
                 </div>
                 <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
               </div>
-              <div >
+
+              <NuxtLink :to="path(selectedEvent.id)">
                 <MarkdownViewCard :content="selectedEvent.content" />
-              </div>
+              </NuxtLink>
             </v-card>
           </v-menu>
         </v-sheet>
@@ -72,13 +74,6 @@ export default {
   },
   data: () => ({
     focus: '',
-    type: 'month',
-    typeToLabel: {
-      month: 'Month',
-      week: 'Week',
-      day: 'Day',
-      '4day': '4 Days',
-    },
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
@@ -91,16 +86,6 @@ export default {
       'green',
       'orange',
       'grey darken-1',
-    ],
-    names: [
-      'Meeting',
-      'Holiday',
-      'PTO',
-      'Travel',
-      'Event',
-      'Birthday',
-      'Conference',
-      'Party',
     ],
   }),
   mounted() {
@@ -153,6 +138,13 @@ export default {
       }
 
       nativeEvent.stopPropagation()
+    },
+  },
+  computed: {
+    path: function () {
+      return function (postId) {
+        return `posts/${postId}`
+      }
     },
   },
 }
