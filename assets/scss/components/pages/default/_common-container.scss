@@ -1,4 +1,6 @@
 .common-container {
+  position: absolute;
+  z-index: 2;
   width: 100%;
   padding: 40px 80px 40px 380px;
   opacity: 1;
