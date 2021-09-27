@@ -62,7 +62,6 @@ export default defineComponent({
       }
     }
     const finishLoading = () => {
-      document.querySelector('.common-container')?.classList.remove('-load')
       store.commit('setIsLoading', false)
     }
   },

@@ -70,7 +70,6 @@ export default defineComponent({
 
     // ユーザー一覧データを取得する
     onBeforeMount(() => {
-      document.querySelector('.common-container')?.classList.add('-load')
       firestore
         .collection('users')
         .get()
@@ -79,7 +78,6 @@ export default defineComponent({
             allUsers.value = [...allUsers.value, doc.data()] as CurrentUser[]
           })
         })
-      document.querySelector('.common-container')?.classList.remove('-load')
     })
     // 投稿一覧データを取得する
     onMounted(() => {
