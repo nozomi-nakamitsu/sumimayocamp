@@ -1,25 +1,28 @@
 <template>
-  <div class="common-container">
-    <div class="title">
-      <p class="text">My DashBoard</p>
-      <div class="line"></div>
-    </div>
-    <div class="index-container">
-      <div class="container -start">
-        <p class="title">ポスト</p>
-        <div v-for="post in posts" :key="post.id" class="items">
-          <Card :post="post" />
-        </div>
+  <div class="wrapper-container">
+    <BaseBackground />
+    <div class="common-container">
+      <div class="title">
+        <p class="text">My DashBoard</p>
+        <div class="line"></div>
       </div>
-      <div class="container -start">
-        <div class="wrapper">
-          <div class="title">今週のキャンプ</div>
-          <div>
-            <TheDeclaration />
+      <div class="index-container">
+        <div class="container -start">
+          <p class="title">ポスト</p>
+          <div v-for="post in posts" :key="post.id" class="items">
+            <Card :post="post" />
           </div>
-          <p class="title">カレンダー</p>
-          <div class="calendar">
-            <BaseCalendar :posts="posts" :current-user="currentUser" />
+        </div>
+        <div class="container -start">
+          <div class="wrapper">
+            <div class="title">今週のキャンプ</div>
+            <div>
+              <TheDeclaration />
+            </div>
+            <p class="title">カレンダー</p>
+            <div class="calendar">
+              <BaseCalendar :posts="posts" :current-user="currentUser" />
+            </div>
           </div>
         </div>
       </div>
@@ -42,12 +45,14 @@ import Card from '@/components/organisms/Card.vue'
 import { firestore } from '@/plugins/firebase'
 import TheDeclaration from '~/components/organisms/TheDeclaration.vue'
 import BaseCalendar from '~/components/organisms/BaseCalendar.vue'
+import BaseBackground from '~/components/atoms/BaseBackground.vue'
 
 export default defineComponent({
   components: {
     Card,
     TheDeclaration,
     BaseCalendar,
+    BaseBackground,
   },
   setup() {
     // compositionAPI
