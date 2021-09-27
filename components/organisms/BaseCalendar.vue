@@ -2,8 +2,8 @@
   <v-app class="calendar-container">
     <v-row class="fill-height">
       <v-col>
-        <v-sheet height="64">
-          <v-toolbar flat>
+        <v-sheet height="64" class="calendar-top">
+          <v-toolbar flat class="toolbar">
             <v-btn fab text small color="grey darken-2" @click="prev">
               <v-icon small> mdi-chevron-left </v-icon>
             </v-btn>
@@ -13,6 +13,8 @@
             <v-toolbar-title v-if="$refs.calendar">
               {{ $refs.calendar.title }}
             </v-toolbar-title>
+
+            <BaseUserSelectBox @on-selected="onSelected" @on-reset="onReset" />
           </v-toolbar>
         </v-sheet>
         <v-sheet height="500">
@@ -24,8 +26,8 @@
             :event-color="getEventColor"
             type="month"
             @click:event="showEvent"
+            @click:more="clickMore"
           ></v-calendar>
-
           <v-menu
             v-model="selectedOpen"
             :close-on-content-click="false"
@@ -61,9 +63,14 @@
 </template>
 <script>
 import MarkdownViewCard from '@/components/organisms/MarkdownViewCard.vue'
+import BaseUserSelectBox from '@/components/molecules/BaseUserSelectBox.vue'
+import dayjs from 'dayjs'
+import _ from 'lodash'
+
 export default {
   components: {
     MarkdownViewCard,
+    BaseUserSelectBox,
   },
   props: {
     posts: {
@@ -90,6 +97,8 @@ export default {
       'orange',
       'grey darken-1',
     ],
+    moreEvents: [],
+    moreClick: false,
   }),
   mounted() {
     this.$refs.calendar.checkChange()
@@ -140,6 +149,38 @@ export default {
       }
 
       nativeEvent.stopPropagation()
+    },
+    onSelected(uid) {
+      const targetPosts = this.posts.filter((post) => post.user_id === uid)
+      this.events = targetPosts.map((post) => ({
+        ...post,
+        name: post.title,
+        start: post.updated_at.toDate().getTime(),
+        color: post.user_id === this.currentUser.uid ? '#ff9a8f' : '#99d3ff',
+        timed: false,
+      }))
+    },
+    onReset() {
+      this.events = this.posts.map((post) => ({
+        ...post,
+        name: post.title,
+        start: post.updated_at.toDate().getTime(),
+        color: post.user_id === this.currentUser.uid ? '#ff9a8f' : '#99d3ff',
+        timed: false,
+      }))
+    },
+    clickMore(event) {
+      this.moreClick = true
+      this.moreEvents = this.events.filter((v) => {
+        const date = v.updated_at.toDate()
+        const formatDate = dayjs(date).format('YYYY-MM-DD')
+        return formatDate === event.date
+      })
+
+      this.moreEvents = _.sortBy(this.moreEvents, 'updated_at')
+
+      this.moreEvents = _.tail(this.moreEvents)
+
     },
   },
   computed: {
