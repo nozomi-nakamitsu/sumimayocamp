@@ -1,0 +1,29 @@
+.theme--light.v-application {
+  color: $black-dugong !important;
+  border-radius: 8px;
+}
+
+// カレンダー系
+.v-application--wrap {
+  min-height: auto !important;
+}
+
+.v-application {
+  position: static !important;
+}
+.v-list-item__title {
+  color: $black-dugong !important;
+  font-weight: normal !important;
+}
+
+.v-list-item {
+  cursor: pointer;
+  &:hover {
+    background-color: $purple !important;
+  }
+}
+.v-application .primary--text {
+  color: $blue !important;
+  caret-color: $blue !important;
+}
+

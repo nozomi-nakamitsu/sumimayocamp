@@ -1,21 +1,6 @@
 .user-select-box-container {
-}
-.v-list-item__title {
-  color: $black-dugong !important;
-  font-weight: normal !important;
-}
-
-.v-list-item {
-  cursor: pointer;
-  &:hover {
-    background-color: $purple !important;
+  > .v-input__control > .v-input__slot {
+    width: 200px !important;
+    margin-left: auto !important;
   }
-}
-.v-application .primary--text {
-  color: $blue !important;
-  caret-color: $blue !important;
-}
-.v-input__slot {
-  width: 200px !important;
-  margin-left: auto !important;
 }
