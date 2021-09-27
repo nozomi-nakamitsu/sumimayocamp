@@ -19,7 +19,7 @@
           </div>
           <p class="title">カレンダー</p>
           <div class="calendar">
-          <BaseCalendar :posts="posts" />
+            <BaseCalendar :posts="posts" :currentUser="currentUser" />
           </div>
         </div>
       </div>
@@ -213,6 +213,7 @@ export default defineComponent({
     return {
       // 全投稿データ
       posts,
+      currentUser,
     }
   },
 })

@@ -15,11 +15,11 @@
             </v-toolbar-title>
           </v-toolbar>
         </v-sheet>
-        <v-sheet height="600">
+        <v-sheet height="500">
           <v-calendar
             ref="calendar"
             v-model="focus"
-            color="primary"
+            color="#E3E3FF"
             :events="events"
             :event-color="getEventColor"
             type="month"
@@ -60,7 +60,6 @@
   </v-app>
 </template>
 <script>
-import { Post } from '@/types/props-types'
 import MarkdownViewCard from '@/components/organisms/MarkdownViewCard.vue'
 export default {
   components: {
@@ -69,6 +68,10 @@ export default {
   props: {
     posts: {
       type: Array,
+      required: true,
+    },
+    currentUser: {
+      type: Object | undefined,
       required: true,
     },
   },
@@ -98,10 +101,9 @@ export default {
         ...post,
         name: post.title,
         start: post.updated_at.toDate().getTime(),
-        color: 'green',
+        color: post.user_id === this.currentUser.uid ? '#ff9a8f' : '#99d3ff',
         timed: false,
       }))
-      console.log('this.events', this.events)
     },
   },
   methods: {
