@@ -1,161 +1,159 @@
 <template>
-  <div class="calendar-container">
-    <v-calendar :attributes="attributes">
-      <!-- TODO: v-slotで投稿詳細に飛ぶようにしたい -->
-      <!-- <div slot="todo-row" slot-scope="{ customData }" class="todo-row">
-        <a @click="addTodo(customData)"> + Add Todo </a>
-      </div> -->
-    </v-calendar>
-    <div class="calendar-sidebar">
-      <div v-for="(user, index) in allUsers" :key="index" class="items">
-        <div class="item">
-          <Icon :icon="faCircle" types="calendar" :color="user.color" />
-          <div class="image">
-            <img class="img" alt="" :src="user.photoURL" />
-          </div>
-          <p class="text">{{ user.nickName }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
+  <v-app class="calendar-container">
+    <v-row class="fill-height">
+      <v-col>
+        <v-sheet height="64">
+          <v-toolbar flat>
+            <v-btn fab text small color="grey darken-2" @click="prev">
+              <v-icon small> mdi-chevron-left </v-icon>
+            </v-btn>
+            <v-btn fab text small color="grey darken-2" @click="next">
+              <v-icon small> mdi-chevron-right </v-icon>
+            </v-btn>
+            <v-toolbar-title v-if="$refs.calendar">
+              {{ $refs.calendar.title }}
+            </v-toolbar-title>
+          </v-toolbar>
+        </v-sheet>
+        <v-sheet height="600">
+          <v-calendar
+            ref="calendar"
+            v-model="focus"
+            color="primary"
+            :events="events"
+            :event-color="getEventColor"
+            type="month"
+            @click:event="showEvent"
+          ></v-calendar>
+
+          <v-menu
+            v-model="selectedOpen"
+            :close-on-content-click="false"
+            :activator="selectedElement"
+            offset-x
+          >
+            <div>
+              <div class="header"></div>
+            </div>
+            <v-card
+              color="grey lighten-4"
+              min-width="350px"
+              flat
+              class="calendar-card"
+            >
+              <div :color="selectedEvent.color" class="toolbar">
+                <div v-if="selectedEvent.user" class="image">
+                  <img :src="selectedEvent.user.photoURL" alt="" class="img" />
+                </div>
+                <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+              </div>
+              <div >
+                <MarkdownViewCard :content="selectedEvent.content" />
+              </div>
+            </v-card>
+          </v-menu>
+        </v-sheet>
+      </v-col>
+    </v-row>
+  </v-app>
 </template>
-<script lang="ts">
-import {
-  computed,
-  defineComponent,
-  useRouter,
-  useStore,
-  ref,
-  watch,
-  onBeforeMount,
-} from '@nuxtjs/composition-api'
-import { faCircle } from '@fortawesome/free-solid-svg-icons'
-import _ from 'lodash'
-import { Post, CalendarData, UserWithColor } from '@/types/props-types'
-import { firestore } from '@/plugins/firebase.js'
-import Icon from '@/components/molecules/Icon.vue'
-export default defineComponent({
+<script>
+import { Post } from '@/types/props-types'
+import MarkdownViewCard from '@/components/organisms/MarkdownViewCard.vue'
+export default {
   components: {
-    Icon,
+    MarkdownViewCard,
   },
   props: {
     posts: {
-      type: Array as () => Array<Post>,
+      type: Array,
       required: true,
     },
   },
-
-  setup(props) {
-    // compositionAPI
-    const store = useStore()
-    // ref系
-    const currentUser = store.getters.getCurrentUser
-    const calenderDatas = ref<CalendarData[]>([])
-    const allUsers = ref<UserWithColor[]>([])
-    let colors = [
+  data: () => ({
+    focus: '',
+    type: 'month',
+    typeToLabel: {
+      month: 'Month',
+      week: 'Week',
+      day: 'Day',
+      '4day': '4 Days',
+    },
+    selectedEvent: {},
+    selectedElement: null,
+    selectedOpen: false,
+    events: [],
+    colors: [
       'blue',
-      'yellow',
+      'indigo',
+      'deep-purple',
+      'cyan',
       'green',
       'orange',
-      'purple',
-      'indigo',
-      'brown',
-    ]
-    // ユーザー一覧データを取得する
-    onBeforeMount(() => {
-      firestore
-        .collection('users')
-        .get()
-        .then(function (querySnapshot) {
-          querySnapshot.forEach(function (doc) {
-            // ログインユーザーであれば赤、それ以外であればランダムで重複しないように色を決めている
-            // WARNING:利用ユーザーが9人以上になれば、このメソッドやと動かなくなる
-            const targetUser = doc.data()
-            if (targetUser.uid === currentUser.uid) {
-              targetUser.color = 'red'
-            } else if (allUsers.value.length > 9) {
-              colors = [
-                'blue',
-                'yellow',
-                'green',
-                'orange',
-                'purple',
-                'indigo',
-                'brown',
-              ]
-              var rand = Math.floor(Math.random() * colors.length)
-              targetUser.color = colors[rand]
-              colors.splice(rand, 1)
-            } else {
-              var rand = Math.floor(Math.random() * colors.length)
-              targetUser.color = colors[rand]
-              colors.splice(rand, 1)
-            }
-            if (targetUser.uid === currentUser.uid) {
-              allUsers.value = [
-                targetUser,
-                ...allUsers.value,
-              ] as UserWithColor[]
-            } else {
-              allUsers.value = [
-                ...allUsers.value,
-                targetUser,
-              ] as UserWithColor[]
-            }
-          })
-        })
-    })
-    watch(
-      () => props.posts,
-      () => {
-        const target = props.posts.map((post: Post) => {
-          const postUser = _.find(
-            allUsers.value,
-            function (user: UserWithColor) {
-              return user.uid === post.user_id
-            }
-          ) as UserWithColor
-
-          return {
-            post,
-            color: postUser.color,
-            user: post.user,
-          }
-        })
-        calenderDatas.value = [...target]
-      }
-    )
-
-    const attributes = computed(() => {
-      return [
-        // Attributes for calenderDatas
-        {
-          key: 'today',
-          highlight: true,
-          dates: new Date(),
-        },
-        ...calenderDatas.value.map((calenderData) => ({
-          dates: calenderData.post.updated_at.toDate(),
-          dot: {
-            color: calenderData.color,
-          },
-          customData: calenderData,
-          popover: {
-            label: calenderData.post.title,
-            visibility: 'click',
-            slot: 'todo-row',
-          },
-        })),
-      ]
-    })
-
-    return {
-      calenderDatas,
-      attributes,
-      allUsers,
-      // icon
-      faCircle,
-    }
+      'grey darken-1',
+    ],
+    names: [
+      'Meeting',
+      'Holiday',
+      'PTO',
+      'Travel',
+      'Event',
+      'Birthday',
+      'Conference',
+      'Party',
+    ],
+  }),
+  mounted() {
+    this.$refs.calendar.checkChange()
   },
-})
+  watch: {
+    posts(newPosts) {
+      this.posts = newPosts
+      this.events = this.posts.map((post) => ({
+        ...post,
+        name: post.title,
+        start: post.updated_at.toDate().getTime(),
+        color: 'green',
+        timed: false,
+      }))
+      console.log('this.events', this.events)
+    },
+  },
+  methods: {
+    viewDay({ date }) {
+      this.focus = date
+      this.type = 'day'
+    },
+    getEventColor(event) {
+      return event.color
+    },
+    setToday() {
+      this.focus = ''
+    },
+    prev() {
+      this.$refs.calendar.prev()
+    },
+    next() {
+      this.$refs.calendar.next()
+    },
+    showEvent({ nativeEvent, event }) {
+      const open = () => {
+        this.selectedEvent = event
+        this.selectedElement = nativeEvent.target
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => (this.selectedOpen = true))
+        )
+      }
+
+      if (this.selectedOpen) {
+        this.selectedOpen = false
+        requestAnimationFrame(() => requestAnimationFrame(() => open()))
+      } else {
+        open()
+      }
+
+      nativeEvent.stopPropagation()
+    },
+  },
+}
 </script>

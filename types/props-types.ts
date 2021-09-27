@@ -140,3 +140,15 @@ export interface UserWithColor {
   nickName: string
   fcmToken: string
 }
+
+/**
+ * NOTE:
+ * カレンダー表示するイベントの型
+ */
+
+export interface CalendarEvent {
+  title: String
+  details: String
+  date: String
+  open: Boolean
+}

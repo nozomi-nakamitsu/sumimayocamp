@@ -13,13 +13,13 @@
       </div>
       <div class="container -start">
         <div class="wrapper">
-          <p class="title">今週のキャンプ</p>
+          <div class="title">今週のキャンプ</div>
           <div>
             <TheDeclaration />
           </div>
           <p class="title">カレンダー</p>
           <div class="calendar">
-            <BaseCalendar :posts="posts" />
+          <BaseCalendar :posts="posts" />
           </div>
         </div>
       </div>
