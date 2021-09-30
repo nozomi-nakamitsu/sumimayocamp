@@ -114,7 +114,13 @@ export default defineComponent({
                   return o.id === change.doc.data().id
                 })
                 data[targetIndex] = change.doc.data() as Mission
-
+                if (
+                  _.some(myMissions.value, function (mission) {
+                    return mission.id === change.doc.data().id
+                  })
+                ) {
+                  return
+                }
                 missions.value = [...data]
                 updateMyMissions(change.doc.data() as Mission)
               }
