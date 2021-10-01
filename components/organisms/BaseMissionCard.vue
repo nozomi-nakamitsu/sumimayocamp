@@ -1,5 +1,5 @@
 <template>
-  <div class="card-container -blue">
+  <div class="card-container -blue -mx8">
     <div class="container">
       <div class="card-head">
         <div class="left">
@@ -25,39 +25,29 @@
       <div class="body">
         <p>{{ mission.title }}</p>
       </div>
-      <div class="footer">
-        <div class="emoji">
-          <v-btn
-            v-if="!isMyMission(mission)"
-            elevation="2"
-            @click="joinMission(mission)"
-            >私がやる！</v-btn
-          >
-          <v-btn v-if="isMyMission(mission)" elevation="2" disabled
-            >挑戦中！！</v-btn
-          >
-
-          <v-chip
+      <div class="footer -start">
+        <div class="card-footer-items">
+          <!-- <v-chip
             v-if="isMyMission(mission)"
             class="ma-2 common-chip"
             :class="missionLabelColor(mission, currentUser.uid)"
             @click="changeStatus(mission)"
             >{{ missionLabelText(mission, currentUser.uid) }}</v-chip
-          >
-          <div v-for="(status, index) in mission.status" :key="index">
-            <v-chip
-              class="ma-2 common-chip"
-              :class="missionLabelColor(mission, status.uid)"
-              >{{ status.nickName }}</v-chip
+          > -->
+          <p class="text">Challengers</p>
+          <div class="challengers">
+            <div
+              v-for="(status, index) in mission.status"
+              :key="index"
+              class="items"
             >
-            <!-- <v-list-item-title
-              style="cursor: pointer"
-              @click="DeleteMission(mission.id, mission.files)"
-              >削除</v-list-item-title
-            > -->
+              <div class="image">
+                <img :src="status.photoURL" alt="" class="img" />
+              </div>
+            </div>
           </div>
         </div>
-        <div v-if="isSendUser(mission)" class="button">
+        <div v-if="isSendUser(mission)" class="button -right">
           <BaseSquareMenu
             @delete="DeleteMission(mission.id, mission.files)"
             @update-mission="UpdateMission(mission)"
@@ -213,23 +203,23 @@ export default defineComponent({
     const UpdateMission = (data: Mission) => {
       ctx.emit('update', data)
     }
-    // ログインユーザーを挑戦者として登録する
-    const joinMission = async (mission: Mission) => {
-      const data = { ...mission }
-      data.status = [
-        ...data.status,
-        {
-          uid: currentUser.uid,
-          nickName: currentUser.nickName,
-          status: false,
-        },
-      ]
-      try {
-        await firestore.collection('missions').doc(mission.id).update(data)
-      } catch (error) {
-        console.error(error)
-      }
-    }
+    // // ログインユーザーを挑戦者として登録する
+    // const joinMission = async (mission: Mission) => {
+    //   const data = { ...mission }
+    //   data.status = [
+    //     ...data.status,
+    //     {
+    //       uid: currentUser.uid,
+    //       nickName: currentUser.nickName,
+    //       status: false,
+    //     },
+    //   ]
+    //   try {
+    //     await firestore.collection('missions').doc(mission.id).update(data)
+    //   } catch (error) {
+    //     console.error(error)
+    //   }
+    // }
     // ログインユーザーが挑戦しているミッションかを判断する
     const isMyMission = computed(() => (mission: Mission): boolean => {
       if (mission.status.length === 0) {
@@ -299,7 +289,7 @@ export default defineComponent({
       // compositionAPI
       Router,
       // ステータス変更
-      joinMission,
+      // joinMission,
       isMyMission,
       missionLabelColor,
       changeStatus,

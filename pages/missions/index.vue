@@ -4,6 +4,77 @@
       <p class="text">Missions</p>
       <div class="line"></div>
     </div>
+    <div class="index-container -mt">
+      <div class="container -start -mission">
+        <p class="title -ml">Missions Lists</p>
+        <button class="common-button -mission" @click="openModal">
+          New Missions
+        </button>
+        <draggable
+          :list="missions"
+          group="list"
+          @change="onChangeMissions($event)"
+          @start="dragging = true"
+          @end="dragging = false"
+          ghost-class="ghost"
+          class="draggable"
+        >
+          <div v-for="mission in missions" :key="mission.id" class="items">
+            <BaseMissionCard :prop-mission="mission" @update="updateMission" />
+          </div>
+        </draggable>
+      </div>
+      <div class="container -start -mission -ml40">
+        <p class="title -ml">Progress</p>
+        <draggable
+          :list="ProgressMissions"
+          group="list"
+          @change="onChangeProgressMissions($event)"
+          @start="dragging = true"
+          @end="dragging = false"
+          ghost-class="ghost"
+          class="draggable"
+        >
+          <div
+            v-for="mission in ProgressMissions"
+            :key="mission.id"
+            class="items"
+          >
+            <BaseMissionCard :prop-mission="mission" @update="updateMission" />
+          </div>
+        </draggable>
+      </div>
+      <div class="container -start -mission -ml40">
+        <p class="title -ml">DONE</p>
+        <draggable
+          :list="DoneMissions"
+          group="list"
+          @change="onChangeDoneMissions($event)"
+          @start="dragging = true"
+          @end="dragging = false"
+          ghost-class="ghost"
+          class="draggable"
+        >
+          <div v-for="mission in DoneMissions" :key="mission.id" class="items">
+            <BaseMissionCard :prop-mission="mission" @update="updateMission" />
+          </div>
+        </draggable>
+      </div>
+    </div>
+    <ModalCreateMission
+      :control-flag="isOpened"
+      title="挑戦状を作成しよう!"
+      :default-data="defaultData"
+      :types="defaultData !== null ? 'edit' : 'new'"
+      @click="closeFunc"
+    />
+  </div>
+
+  <!-- <div class="common-container">
+    <div class="title">
+      <p class="text">Missions</p>
+      <div class="line"></div>
+    </div>
     <div class="index-container">
       <div class="container -start">
         <p class="title">Missions Lists</p>
@@ -20,7 +91,7 @@
             </button>
           </div>
           <p class="title">My Missions</p>
-          <div v-for="mission in myMissions" :key="mission.id" class="items">
+          <div v-for="mission in ProgressMissions" :key="mission.id" class="items">
             <BaseMissionCard :prop-mission="mission" @update="updateMission" />
           </div>
         </div>
@@ -33,7 +104,7 @@
       :types="defaultData !== null ? 'edit' : 'new'"
       @click="closeFunc"
     />
-  </div>
+  </div> -->
 </template>
 
 <script lang="ts">
@@ -45,19 +116,27 @@ import {
   onBeforeMount,
   useStore,
 } from '@nuxtjs/composition-api'
+import Draggable from 'vuedraggable'
+
 import _ from 'lodash'
 import { Mission, CurrentUser, MissionStatus } from '@/types/props-types'
 import BaseMissionCard from '@/components/organisms/BaseMissionCard.vue'
 import ModalCreateMission from '@/components/organisms/ModalCreateMission.vue'
 import { useModal } from '@/compositions/useModal'
+import { useMissions } from '@/compositions/useMissions'
+
 import { firestore } from '@/plugins/firebase'
 
 export default defineComponent({
   components: {
     BaseMissionCard,
     ModalCreateMission,
+    Draggable,
   },
-  setup() {
+  props: {},
+  setup(props) {
+    const { joinMissionAsProgress, joinMissionAsDone, leaveMission } =
+      useMissions(props)
     // compositionAPI
     const store = useStore()
     // ref系
@@ -66,7 +145,49 @@ export default defineComponent({
     const allUsers = ref<CurrentUser[]>([])
     const currentUser = store.getters.getCurrentUser
     // ログインユーザーが挑戦しているミッションかを判断する
-    const myMissions = ref<Mission[]>([])
+    const ProgressMissions = ref<Mission[]>([])
+    const DoneMissions = ref<Mission[]>([])
+
+    // DD
+    const onChangeProgressMissions = ({
+      added,
+      moved,
+    }: {
+      added: any
+      moved: any
+    }) => {
+      if (added) {
+        console.log('add1', added)
+        joinMissionAsProgress(added.element)
+      }
+      if (moved) {
+        console.log('moved', moved)
+      }
+    }
+    const onChangeDoneMissions = ({
+      added,
+      moved,
+    }: {
+      added: any
+      moved: any
+    }) => {
+      if (added) {
+        console.log('add2', added)
+        joinMissionAsDone(added.element)
+      }
+      if (moved) {
+        console.log('moved', moved)
+      }
+    }
+    const onChangeMissions = ({ added, moved }: { added: any; moved: any }) => {
+      if (added) {
+        console.log('add3', added)
+        leaveMission(added.element)
+      }
+      if (moved) {
+        console.log('moved', moved)
+      }
+    }
 
     // ユーザー一覧データを取得する
     onBeforeMount(() => {
@@ -99,13 +220,13 @@ export default defineComponent({
                 if (targetUser) {
                   missionData.sendUser = { ...targetUser }
                 }
-                missions.value = [...missions.value, missionData]
+                // missions.value = [...missions.value, missionData]
                 addMyMission(missionData)
               } else if (change.type === 'removed') {
                 missions.value = missions.value.filter(
                   (v: Mission) => v.id !== change.doc.data().id
                 )
-                myMissions.value = myMissions.value.filter(
+                ProgressMissions.value = ProgressMissions.value.filter(
                   (v: Mission) => v.id !== change.doc.data().id
                 )
               } else if (change.type === 'modified') {
@@ -114,15 +235,15 @@ export default defineComponent({
                   return o.id === change.doc.data().id
                 })
                 data[targetIndex] = change.doc.data() as Mission
-                if (
-                  _.some(myMissions.value, function (mission) {
-                    return mission.id === change.doc.data().id
-                  })
-                ) {
-                  return
-                }
-                missions.value = [...data]
-                updateMyMissions(change.doc.data() as Mission)
+                // if (
+                //   _.some(ProgressMissions.value, function (mission) {
+                //     return mission.id === change.doc.data().id
+                //   })
+                // ) {
+                //   return
+                // }
+                // missions.value = [...data]
+                // updateProgressMissions(change.doc.data() as Mission)
               }
             },
             (error: any) => {
@@ -150,21 +271,33 @@ export default defineComponent({
     const addMyMission = (missionData: Mission) => {
       if (
         _.some(missionData.status, function (item: MissionStatus) {
-          return item.uid === currentUser.uid
+          return item.uid === currentUser.uid && item.status === false
         })
       ) {
-        return (myMissions.value = [...myMissions.value, missionData])
+        return (ProgressMissions.value = [
+          ...ProgressMissions.value,
+          missionData,
+        ])
+      } else if (
+        _.some(missionData.status, function (item: MissionStatus) {
+          return item.uid === currentUser.uid && item.status === true
+        })
+      ) {
+        return (DoneMissions.value = [...DoneMissions.value, missionData])
+      } else {
+        return (missions.value = [...missions.value, missionData])
       }
     }
-    const updateMyMissions = (changeData: Mission) => {
-      myMissions.value = [changeData, ...myMissions.value]
+    const updateProgressMissions = (changeData: Mission) => {
+      ProgressMissions.value = [changeData, ...ProgressMissions.value]
     }
     return {
       // 全投稿データ
       missions,
-      myMissions,
+      ProgressMissions,
+      DoneMissions,
       addMyMission,
-      updateMyMissions,
+      updateProgressMissions,
       // モーダル開閉
       isOpened,
       openModal,
@@ -173,6 +306,10 @@ export default defineComponent({
       // 挑戦状編集
       defaultData,
       updateMission,
+      // DD
+      onChangeMissions,
+      onChangeProgressMissions,
+      onChangeDoneMissions,
     }
   },
 })

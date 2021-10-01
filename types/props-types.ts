@@ -22,6 +22,7 @@ export interface MissionStatus {
   uid: string
   nickName: string
   status: boolean
+  photoURL: string
 }
 /**
  * NOTE:

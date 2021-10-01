@@ -1,6 +1,14 @@
 import { ref, useStore, watch } from '@nuxtjs/composition-api'
 import { v4 as uuidv4 } from 'uuid'
-import { FileArray, MissionPost } from '@/types/props-types'
+import _ from 'lodash'
+import {
+  FileArray,
+  MissionPost,
+  Mission,
+  MissionStatus,
+} from '@/types/props-types'
+import { firestore } from '@/plugins/firebase.js'
+
 export const useMissions = (props: any) => {
   const store = useStore()
   const isLoading = ref<boolean>(false)
@@ -77,6 +85,67 @@ export const useMissions = (props: any) => {
       })
     })
   }
+
+  // ログインユーザーを挑戦者として未処理のステータスで登録する
+  const joinMissionAsProgress = async (mission: Mission) => {
+    const data = { ...mission }
+
+    data.status = _.filter(data.status, function (status: MissionStatus) {
+      return status.uid !== currentUser.uid
+    })
+
+    data.status = [
+      ...data.status,
+      {
+        uid: currentUser.uid,
+        nickName: currentUser.nickName,
+        photoURL: currentUser.photoURL,
+        status: false,
+      },
+    ]
+    try {
+      await firestore.collection('missions').doc(mission.id).update(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  // ログインユーザーを挑戦者として完了ののステータスで登録する
+  const joinMissionAsDone = async (mission: Mission) => {
+    const data = { ...mission }
+
+    data.status = _.filter(data.status, function (status: MissionStatus) {
+      return status.uid !== currentUser.uid
+    })
+    data.status = [
+      ...data.status,
+      {
+        uid: currentUser.uid,
+        nickName: currentUser.nickName,
+        photoURL: currentUser.photoURL,
+        status: true,
+      },
+    ]
+
+    try {
+      await firestore.collection('missions').doc(mission.id).update(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  // ログインユーザーを挑戦者として登録を解除する
+  const leaveMission = async (mission: Mission) => {
+    const data = { ...mission }
+    data.status = _.filter(data.status, function (status) {
+      return status.uid !== currentUser.uid
+    })
+
+    try {
+      await firestore.collection('missions').doc(mission.id).update(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return {
     isLoading,
     fileChanged,
@@ -84,5 +153,8 @@ export const useMissions = (props: any) => {
     missionForm,
     currentUser,
     deleteUnNecessaryFiles,
+    joinMissionAsProgress,
+    joinMissionAsDone,
+    leaveMission,
   }
 }

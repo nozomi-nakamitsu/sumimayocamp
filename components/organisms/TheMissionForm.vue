@@ -81,11 +81,11 @@ export default defineComponent({
       required: true,
     },
     title: {
-      types: String,
+      type: String,
       default: '',
     },
     propLoading: {
-      types: Boolean,
+      type: Boolean,
       default: false,
     },
   },
