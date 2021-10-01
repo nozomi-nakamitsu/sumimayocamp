@@ -22,8 +22,8 @@
           @click="Router.push('/')"
         >
           <div class="container" :class="whereUrl('/')">
-            <div class="circle -white" :class="whereUrl('/')"></div>
-            <p class="title">My DashBoard</p>
+            <div class="circle -red" :class="whereUrl('/')"></div>
+            <p class="title">DashBoard</p>
             <div class="button"><BaseSquareButton /></div>
           </div>
         </div>
@@ -33,7 +33,7 @@
           @click="Router.push('/posts/create')"
         >
           <div class="container" :class="whereUrl('/posts/create')">
-            <div class="circle -red"></div>
+            <div class="circle -yellow"></div>
             <p class="title">New Post</p>
             <div class="button"><BaseSquareButton /></div>
           </div>
@@ -44,7 +44,7 @@
           @click="Router.push('/missions')"
         >
           <div class="container" :class="whereUrl('/missions')">
-            <div class="circle -yellow"></div>
+            <div class="circle -green"></div>
             <p class="title">Missions</p>
             <div class="button"><BaseSquareButton /></div>
           </div>
@@ -55,20 +55,16 @@
           @click="Router.push('/users/edit')"
         >
           <div class="container" :class="whereUrl('/users/edit')">
-            <div class="circle -green"></div>
+            <div class="circle -blue"></div>
             <p class="title">Mypage</p>
             <div class="button">
               <BaseSquareButton />
             </div>
           </div>
         </div>
-        <div class="sidebar-item" @click="logout">
-          <div class="container">
-            <div class="circle -blue"></div>
-            <p class="title">Logout</p>
-            <div class="button"><BaseSquareButton /></div>
-          </div>
-        </div>
+      </div>
+      <div class="btn">
+        <button class="common-button -logout" @click="logout">Sigin Out</button>
       </div>
     </div>
   </div>
