@@ -26,10 +26,11 @@
     opacity: 0.6;
   }
   &.-login {
-    background-color: $gray-pearl;
+    background-color: $purple;
     width: 560px;
     height: 60px;
     font-size: 18px;
+    font-weight: bold;
   }
   &.-logout {
     width: 100%;
