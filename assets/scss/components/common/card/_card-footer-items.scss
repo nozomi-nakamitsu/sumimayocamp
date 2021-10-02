@@ -2,19 +2,5 @@
   .text {
     font-size: 14px;
   }
-  .challengers > .items > .image {
-    width: 30px;
-    height: 30px;
-    margin-right: 8px;
-  }
-  .challengers > .items > .image > .img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  .challengers {
-    display: flex;
-    align-items: center;
-  }
+
 }
