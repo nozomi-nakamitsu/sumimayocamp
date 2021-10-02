@@ -34,9 +34,10 @@
           </ValidationProvider>
         </template>
         <div class="submit">
+          <button type="submit" class="common-button -cancel ">Cancel</button>
           <input
             type="submit"
-            class="common-button -submit"
+            class="common-button -modal -ml40"
             title="投稿する"
             :disabled="invalid"
             :class="invalid"

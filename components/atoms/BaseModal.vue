@@ -5,7 +5,7 @@
         <div class="header">
           <p class="text">{{ title }}</p>
           <div class="icon" @click="$emit('click')">
-            <Icon :icon="faTimes" />
+            <Icon :icon="faTimes" types="modal" />
           </div>
         </div>
         <div class="main">
@@ -35,8 +35,8 @@ export default defineComponent({
       required: true,
     },
     title: {
-      type: String,
-      required: true,
+      type: String as () => string | null,
+      default: null,
     },
   },
   emits: ['click'],

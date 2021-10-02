@@ -1,25 +1,25 @@
 .base-modal {
   background-color: #fff;
   width: 80%;
-  max-height: 600px;
+  max-height: 700px;
   overflow-y: scroll;
-  border-radius: 8px;
+  border-radius: 30px;
   > .inner > .header {
-    padding: 20px;
+    padding: 60px 60px 30px 60px;
     position: fixed;
     z-index: 3;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 48px;
+    height: 40px;
     width: calc(80% - 240px);
     background-color: $white;
-    border-bottom: 1px solid $purple;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
   }
   > .inner > .header > .text {
-    font-size: 24px;
+    font-size: 32px;
     font-weight: bold;
   }
   > .inner > .header > .icon {
@@ -28,6 +28,6 @@
   > .inner > .main {
     z-index: 1;
     height: 100%;
-    padding-top: 48px; //   ヘッダー固定のため
+    padding-top: 100px; //   ヘッダー固定のため
   }
 }
