@@ -34,6 +34,7 @@
             @click="changeStatus(mission)"
             >{{ missionLabelText(mission, currentUser.uid) }}</v-chip
           > -->
+          <p>{{ mission.position }}</p>
           <p class="text">Challengers</p>
           <div class="challengers">
             <div

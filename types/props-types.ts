@@ -106,6 +106,7 @@ export interface Mission {
   receiveUser: CurrentUser[] | null
   files: FileArray[]
   status: MissionStatus[]
+  position: number | null
 }
 /**
  * NOTE:

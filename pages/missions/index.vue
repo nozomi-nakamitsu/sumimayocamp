@@ -135,8 +135,13 @@ export default defineComponent({
   },
   props: {},
   setup(props) {
-    const { joinMissionAsProgress, joinMissionAsDone, leaveMission } =
-      useMissions(props)
+    const {
+      joinMissionAsProgress,
+      joinMissionAsDone,
+      leaveMission,
+      changePosition,
+      sortMissions,
+    } = useMissions(props)
     // compositionAPI
     const store = useStore()
     // ref系
@@ -159,9 +164,11 @@ export default defineComponent({
       if (added) {
         console.log('add1', added)
         joinMissionAsProgress(added.element)
+        changePosition(added.newIndex, ProgressMissions.value)
       }
       if (moved) {
         console.log('moved', moved)
+        changePosition(moved.newIndex, ProgressMissions.value)
       }
     }
     const onChangeDoneMissions = ({
@@ -174,18 +181,22 @@ export default defineComponent({
       if (added) {
         console.log('add2', added)
         joinMissionAsDone(added.element)
+        changePosition(added.newIndex, DoneMissions.value)
       }
       if (moved) {
         console.log('moved', moved)
+        changePosition(moved.newIndex, DoneMissions.value)
       }
     }
     const onChangeMissions = ({ added, moved }: { added: any; moved: any }) => {
       if (added) {
         console.log('add3', added)
         leaveMission(added.element)
+        changePosition(added.newIndex, missions.value)
       }
       if (moved) {
         console.log('moved', moved)
+        changePosition(moved.newIndex, missions.value)
       }
     }
 
@@ -207,7 +218,7 @@ export default defineComponent({
         .orderBy('updated_at', 'desc')
         .onSnapshot((snapshot) => {
           snapshot.docChanges().forEach(
-            (change) => {
+            async (change) => {
               // 変更後のデータが取得できる
               if (change.type === 'added') {
                 const missionData = change.doc.data() as Mission
@@ -220,7 +231,20 @@ export default defineComponent({
                 if (targetUser) {
                   missionData.sendUser = { ...targetUser }
                 }
-                // missions.value = [...missions.value, missionData]
+                await firestore
+                  .collection('missions')
+                  .doc(missionData.id)
+                  .collection('positions')
+                  .doc(currentUser.uid)
+                  .get()
+                  .then((doc) => {
+                    // success
+                    if (doc) {
+                      missionData.position = doc.data()?.position
+                    } else {
+                      missionData.position = null
+                    }
+                  })
                 addMyMission(missionData)
               } else if (change.type === 'removed') {
                 missions.value = missions.value.filter(
@@ -274,22 +298,61 @@ export default defineComponent({
           return item.uid === currentUser.uid && item.status === false
         })
       ) {
-        return (ProgressMissions.value = [
-          ...ProgressMissions.value,
-          missionData,
-        ])
+        _.some(missionData.status, function (item: MissionStatus) {
+          return item.uid === currentUser.uid && item.status === false
+        })
+        ProgressMissions.value = [...ProgressMissions.value, missionData]
+        ProgressMissions.value = sortMissions(ProgressMissions.value)
       } else if (
         _.some(missionData.status, function (item: MissionStatus) {
           return item.uid === currentUser.uid && item.status === true
         })
       ) {
-        return (DoneMissions.value = [...DoneMissions.value, missionData])
+        DoneMissions.value = [...DoneMissions.value, missionData]
+        DoneMissions.value = sortMissions(DoneMissions.value)
       } else {
-        return (missions.value = [...missions.value, missionData])
+        missions.value = [...missions.value, missionData]
+        missions.value = sortMissions(missions.value)
       }
     }
+    // いらん説
     const updateProgressMissions = (changeData: Mission) => {
-      ProgressMissions.value = [changeData, ...ProgressMissions.value]
+      if (
+        _.some(ProgressMissions.value, function (mission: Mission) {
+          return mission.id === changeData.id
+        })
+      ) {
+        ProgressMissions.value = _.filter(
+          ProgressMissions.value,
+          function (mission: Mission) {
+            return mission.id === changeData.id
+          }
+        )
+        ProgressMissions.value = [changeData, ...ProgressMissions.value]
+      }
+      if (
+        _.some(DoneMissions.value, function (mission: Mission) {
+          return mission.id === changeData.id
+        })
+      ) {
+        DoneMissions.value = _.filter(
+          DoneMissions.value,
+          function (mission: Mission) {
+            return mission.id === changeData.id
+          }
+        )
+        DoneMissions.value = [changeData, ...DoneMissions.value]
+      }
+      if (
+        _.some(missions.value, function (mission: Mission) {
+          return mission.id === changeData.id
+        })
+      ) {
+        missions.value = _.filter(missions.value, function (mission: Mission) {
+          return mission.id === changeData.id
+        })
+        missions.value = [changeData, ...missions.value]
+      }
     }
     return {
       // 全投稿データ
