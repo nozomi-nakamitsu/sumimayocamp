@@ -69,42 +69,6 @@
       @click="closeFunc"
     />
   </div>
-
-  <!-- <div class="common-container">
-    <div class="title">
-      <p class="text">Missions</p>
-      <div class="line"></div>
-    </div>
-    <div class="index-container">
-      <div class="container -start">
-        <p class="title">Missions Lists</p>
-        <div v-for="mission in missions" :key="mission.id" class="items">
-          <BaseMissionCard :prop-mission="mission" @update="updateMission" />
-        </div>
-      </div>
-      <div class="container -start">
-        <div class="wrapper">
-          <p class="title">New Missions</p>
-          <div>
-            <button class="common-button -mission" @click="openModal">
-              New Missions
-            </button>
-          </div>
-          <p class="title">My Missions</p>
-          <div v-for="mission in ProgressMissions" :key="mission.id" class="items">
-            <BaseMissionCard :prop-mission="mission" @update="updateMission" />
-          </div>
-        </div>
-      </div>
-    </div>
-    <ModalCreateMission
-      :control-flag="isOpened"
-      title="挑戦状を作成しよう!"
-      :default-data="defaultData"
-      :types="defaultData !== null ? 'edit' : 'new'"
-      @click="closeFunc"
-    />
-  </div> -->
 </template>
 
 <script lang="ts">
@@ -162,12 +126,10 @@ export default defineComponent({
       moved: any
     }) => {
       if (added) {
-        console.log('add1', added)
         joinMissionAsProgress(added.element)
         changePosition(added.newIndex, ProgressMissions.value)
       }
       if (moved) {
-        console.log('moved', moved)
         changePosition(moved.newIndex, ProgressMissions.value)
       }
     }
@@ -179,23 +141,19 @@ export default defineComponent({
       moved: any
     }) => {
       if (added) {
-        console.log('add2', added)
         joinMissionAsDone(added.element)
         changePosition(added.newIndex, DoneMissions.value)
       }
       if (moved) {
-        console.log('moved', moved)
         changePosition(moved.newIndex, DoneMissions.value)
       }
     }
     const onChangeMissions = ({ added, moved }: { added: any; moved: any }) => {
       if (added) {
-        console.log('add3', added)
         leaveMission(added.element)
         changePosition(added.newIndex, missions.value)
       }
       if (moved) {
-        console.log('moved', moved)
         changePosition(moved.newIndex, missions.value)
       }
     }
@@ -254,20 +212,7 @@ export default defineComponent({
                   (v: Mission) => v.id !== change.doc.data().id
                 )
               } else if (change.type === 'modified') {
-                const data = [...missions.value]
-                const targetIndex = _.findIndex(data, function (o) {
-                  return o.id === change.doc.data().id
-                })
-                data[targetIndex] = change.doc.data() as Mission
-                // if (
-                //   _.some(ProgressMissions.value, function (mission) {
-                //     return mission.id === change.doc.data().id
-                //   })
-                // ) {
-                //   return
-                // }
-                // missions.value = [...data]
-                // updateProgressMissions(change.doc.data() as Mission)
+                updateProgressMissions(change.doc.data() as Mission)
               }
             },
             (error: any) => {
@@ -315,43 +260,63 @@ export default defineComponent({
         missions.value = sortMissions(missions.value)
       }
     }
-    // いらん説
-    const updateProgressMissions = (changeData: Mission) => {
+    // ページ遷移後にDDでのポジション変更にあわせ配列操作する
+    // positon順に並べ替えています。
+    const updateProgressMissions = async (changeData: Mission) => {
+      const data = { ...changeData }
+      await firestore
+        .collection('missions')
+        .doc(data.id)
+        .collection('positions')
+        .doc(currentUser.uid)
+        .get()
+        .then((doc) => {
+          // success
+          if (doc) {
+            data.position = doc.data()?.position
+          } else {
+            data.position = null
+          }
+        })
       if (
         _.some(ProgressMissions.value, function (mission: Mission) {
-          return mission.id === changeData.id
+          return mission.id === data.id
         })
       ) {
         ProgressMissions.value = _.filter(
           ProgressMissions.value,
           function (mission: Mission) {
-            return mission.id === changeData.id
+            return mission.id !== data.id
           }
         )
-        ProgressMissions.value = [changeData, ...ProgressMissions.value]
+        ProgressMissions.value = sortMissions([data, ...ProgressMissions.value])
+        return
       }
       if (
         _.some(DoneMissions.value, function (mission: Mission) {
-          return mission.id === changeData.id
+          return mission.id === data.id
         })
       ) {
         DoneMissions.value = _.filter(
           DoneMissions.value,
           function (mission: Mission) {
-            return mission.id === changeData.id
+            return mission.id !== data.id
           }
         )
-        DoneMissions.value = [changeData, ...DoneMissions.value]
+        return (DoneMissions.value = sortMissions([
+          data,
+          ...DoneMissions.value,
+        ]))
       }
       if (
         _.some(missions.value, function (mission: Mission) {
-          return mission.id === changeData.id
+          return mission.id === data.id
         })
       ) {
         missions.value = _.filter(missions.value, function (mission: Mission) {
-          return mission.id === changeData.id
+          return mission.id !== data.id
         })
-        missions.value = [changeData, ...missions.value]
+        return (missions.value = sortMissions([...missions.value, data]))
       }
     }
     return {

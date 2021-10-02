@@ -27,14 +27,6 @@
       </div>
       <div class="footer -start">
         <div class="card-footer-items">
-          <!-- <v-chip
-            v-if="isMyMission(mission)"
-            class="ma-2 common-chip"
-            :class="missionLabelColor(mission, currentUser.uid)"
-            @click="changeStatus(mission)"
-            >{{ missionLabelText(mission, currentUser.uid) }}</v-chip
-          > -->
-          <p>{{ mission.position }}</p>
           <p class="text">Challengers</p>
           <div class="challengers">
             <div
@@ -57,91 +49,6 @@
       </div>
     </div>
   </div>
-
-  <!-- <div class="card-container">
-    <v-card class="mx-auto" width="500">
-      <div style="display: flex">
-        <v-list-item-avatar color="grey darken-3">
-          <v-img
-            class="elevation-6"
-            alt=""
-            :src="mission.sendUser.photoURL"
-          ></v-img>
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title
-            >{{
-              mission.sendUser.nickName
-                ? mission.sendUser.nickName
-                : mission.sendUser.displayName
-            }}からの挑戦状</v-list-item-title
-          >
-        </v-list-item-content>
-      </div>
-
-      <v-card-title>
-        <span class="text-h6 font-weight-light">
-          タイトル: {{ mission.title }}</span
-        >
-      </v-card-title>
-      <v-card-text class="text-h5 font-weight-bold">
-        {{ mission.content }}
-      </v-card-text>
-      <v-card-text class="text-h5 font-weight-bold">
-        <v-btn
-          v-if="!isMyMission(mission)"
-          elevation="2"
-          @click="joinMission(mission)"
-          >私がやる！</v-btn
-        >
-        <v-btn v-if="isMyMission(mission)" elevation="2" disabled
-          >挑戦中！！</v-btn
-        >
-
-        <v-chip
-          v-if="isMyMission(mission)"
-          class="ma-2 common-chip"
-          :class="missionLabelColor(mission, currentUser.uid)"
-          @click="changeStatus(mission)"
-          >{{ missionLabelText(mission, currentUser.uid) }}</v-chip
-        >
-      </v-card-text>
-      <v-card-text class="text-h5 font-weight-bold" style="display: flex">
-        <div v-for="(status, index) in mission.status" :key="index">
-          <v-chip
-            class="ma-2 common-chip"
-            :class="missionLabelColor(mission, status.uid)"
-            >{{ status.nickName }}</v-chip
-          >
-        </div>
-      </v-card-text>
-      <v-card-text class="text-h5 font-weight-bold">
-        {{ formatDateToSlashWithTime(mission.updated_at) }}
-      </v-card-text>
-      <v-card-actions>
-        <v-list-item class="grow">
-          <v-list-item-content
-            v-if="isCurrentUser(mission.sendUser.uid, currentUser)"
-          >
-            <v-list-item-title
-              style="cursor: pointer"
-              @click="UpdateMission(mission)"
-              >編集</v-list-item-title
-            >
-          </v-list-item-content>
-          <v-list-item-content
-            v-if="isCurrentUser(mission.sendUser.uid, currentUser)"
-          >
-            <v-list-item-title
-              style="cursor: pointer"
-              @click="DeleteMission(mission.id, mission.files)"
-              >削除</v-list-item-title
-            >
-          </v-list-item-content>
-        </v-list-item>
-      </v-card-actions>
-    </v-card>
-  </div> -->
 </template>
 <script lang="ts">
 import {
@@ -204,23 +111,6 @@ export default defineComponent({
     const UpdateMission = (data: Mission) => {
       ctx.emit('update', data)
     }
-    // // ログインユーザーを挑戦者として登録する
-    // const joinMission = async (mission: Mission) => {
-    //   const data = { ...mission }
-    //   data.status = [
-    //     ...data.status,
-    //     {
-    //       uid: currentUser.uid,
-    //       nickName: currentUser.nickName,
-    //       status: false,
-    //     },
-    //   ]
-    //   try {
-    //     await firestore.collection('missions').doc(mission.id).update(data)
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-    // }
     // ログインユーザーが挑戦しているミッションかを判断する
     const isMyMission = computed(() => (mission: Mission): boolean => {
       if (mission.status.length === 0) {
@@ -230,26 +120,6 @@ export default defineComponent({
         return item.uid === currentUser.uid
       })
     })
-    // 挑戦しているユーザーごとのミッションのステータスに応じてラベルの色を変更する
-    const missionLabelColor = computed(
-      () =>
-        (mission: Mission, uid: string): string => {
-          const target = _.find(mission.status, function (item: MissionStatus) {
-            return item.uid === uid
-          }) as MissionStatus
-          return target.status ? '-blue' : '-white'
-        }
-    )
-    // 挑戦しているユーザーごとのミッションのステータスに応じてラベルの文字を変更する
-    const missionLabelText = computed(
-      () =>
-        (mission: Mission, uid: string): string => {
-          const target = _.find(mission.status, function (item: MissionStatus) {
-            return item.uid === uid
-          }) as MissionStatus
-          return target.status ? 'すみマヨ' : 'まだマヨ'
-        }
-    )
     // ミッションのステータスを変更する
     const changeStatus = async (mission: Mission) => {
       const data = mission as Mission
@@ -290,11 +160,8 @@ export default defineComponent({
       // compositionAPI
       Router,
       // ステータス変更
-      // joinMission,
       isMyMission,
-      missionLabelColor,
       changeStatus,
-      missionLabelText,
       isSendUser,
     }
   },
