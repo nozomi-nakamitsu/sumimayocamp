@@ -36,7 +36,7 @@ export const useMissions = (props: any) => {
   watch(
     () => props.defaultData,
     () => {
-      if (!props.defaultData) {
+      if (props.types === 'new') {
         missionForm.value = {
           id: '',
           title: '',
