@@ -60,11 +60,11 @@ export const actions = {
       .then(async function (result) {
         const user = result.user
         await messaging.requestPermission()
-        var currentToken = await messaging.getToken()
+        let currentToken = await messaging.getToken()
         messaging.onTokenRefresh(async () => {
           // トークンがリフレッシュされた場合
           await messaging.requestPermission()
-          var currentToken = await messaging.getToken()
+          currentToken = await messaging.getToken()
         })
         commit('setIsLogined', true)
         // 認証後のユーザー情報を取得してオブジェクト化
@@ -80,15 +80,15 @@ export const actions = {
         userObject.isNewUser = result.additionalUserInfo.isNewUser
         userObject.providerId = result.additionalUserInfo.providerId
         userObject.fcmToken = currentToken
-        // const docRef = firestore.collection('users').doc(user.id)
-        // //NOTE:一度ログインしたことあるユーザーであれば、元のニックネームデータを取得する。初ログインユーザーであれば、displayNameニックネームの初期値にする
-        // docRef.get().then((doc) => {
-        //   if (doc.exists) {
-        //     userObject.nickName = doc.data().nickName
-        //   } else {
-        //     userObject.nickName = user.displayName
-        //   }
-        // })
+        // NOTE:一度ログインしたことあるユーザーであれば、元のニックネームデータを取得する。初ログインユーザーであれば、displayNameニックネームの初期値にする
+        if (!result.additionalUserInfo.isNewUser) {
+          const docRef = firestore.collection('users').doc(user.uid)
+          await docRef.get().then((doc) => {
+            if (doc.exists) {
+              userObject.nickName = doc.data().nickName
+            }
+          })
+        }
 
         dispatch('createPhotoURL', userObject)
         dispatch('setPublicUserData', userObject)
