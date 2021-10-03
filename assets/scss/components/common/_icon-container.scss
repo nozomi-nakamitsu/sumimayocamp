@@ -69,4 +69,11 @@
     width: 18px;
     height: 18px;
   }
+  &.-modal {
+    font-size: 40px;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }

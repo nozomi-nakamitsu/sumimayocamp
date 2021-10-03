@@ -22,6 +22,7 @@ export interface MissionStatus {
   uid: string
   nickName: string
   status: boolean
+  photoURL: string
 }
 /**
  * NOTE:
@@ -105,6 +106,7 @@ export interface Mission {
   receiveUser: CurrentUser[] | null
   files: FileArray[]
   status: MissionStatus[]
+  position: number | null
 }
 /**
  * NOTE:

@@ -24,7 +24,7 @@
     "fibers": "^5.0.0",
     "firebase": "^8.7.1",
     "firebase-admin": "^9.11.1",
-    "firebase-tools": "^9.16.0",
+    "firebase-tools": "^9.19.0",
     "gsap": "^3.7.1",
     "lodash": "^4.17.21",
     "mavon-editor": "^2.9.1",
@@ -40,10 +40,10 @@
     "vue-mention": "^1.0.0",
     "vue-quill-editor": "^3.0.6",
     "vue-wavify": "^1.2.0",
+    "vuedraggable": "^2.24.3",
     "vuetify": "^2.5.5"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.14.7",
     "@nuxt/types": "^2.15.7",
     "@nuxt/typescript-build": "^2.1.0",
     "@nuxtjs/composition-api": "^0.24.7",

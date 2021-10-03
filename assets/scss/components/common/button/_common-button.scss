@@ -81,12 +81,50 @@
   &.-mission {
     background-color: $yellow;
     color: $white;
-    width: 360px;
+    width: 350px;
     height: 40px;
     font-size: 16px;
     &:hover {
       opacity: 1;
       background-color: $gray-pearl;
+      color: $yellow;
     }
+  }
+  &.-cancel {
+    background-color: $red;
+    color: $black-dugong;
+    width: 200px;
+    height: 40px;
+    font-size: 16px;
+    font-weight: bold;
+    &:disabled {
+      opacity: 1;
+      background-color: $gray-pearl;
+      color: $red;
+    }
+    &:hover {
+      color: $white;
+      background-color: $black-dugong;
+    }
+  }
+  &.-modal {
+    background-color: $blue;
+    color: $black-dugong;
+    width: 200px;
+    height: 40px;
+    font-size: 16px;
+    font-weight: bold;
+    &:disabled {
+      opacity: 1;
+      background-color: $gray-pearl;
+      color: $blue;
+    }
+    &:hover {
+      color: $white;
+      background-color: $black-dugong;
+    }
+  }
+  &.-ml40 {
+    margin-left: 40px;
   }
 }

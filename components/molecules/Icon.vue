@@ -6,6 +6,7 @@
       { '-calendar': types === 'calendar' },
       { '-button': types === 'button' },
       { '-menu': types === 'menu' },
+      { '-modal': types === 'modal' },
       labelColor,
     ]"
   />

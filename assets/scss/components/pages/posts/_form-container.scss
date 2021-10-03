@@ -2,7 +2,7 @@
   margin-top: 48px;
   &.-modal {
     margin-top: 0;
-    padding: 20px;
+    padding: 0 60px 20px 60px;
   }
   > .box > .input {
     border: 1px solid gray;
@@ -14,5 +14,40 @@
   > .form {
     position: relative;
     z-index: 1;
+  }
+  > .flex {
+    display: flex;
+    align-items: center;
+  }
+  > .flex > .image {
+    width: 50px;
+    height: 50px;
+  }
+  > .flex > .image > .img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  > .flex > .text > .bold {
+    font-weight: bold;
+  }
+  .title {
+    font-weight: bold;
+    font-size: 32px;
+    margin-left: 8px;
+  }
+  > .flex > .items {
+    margin: 8px;
+  }
+  > .flex > .items > .image {
+    width: 50px;
+    height: 50px;
+  }
+  > .flex > .items > .image > .img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
   }
 }
