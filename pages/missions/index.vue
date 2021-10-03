@@ -1,8 +1,11 @@
 <template>
-  <div class="common-container">
+  <div class="common-container -scrollx">
     <div class="title">
       <p class="text">Missions</p>
       <div class="line"></div>
+      <p class="comment">
+        優しい心を持って触ってください。カードの縦方向の順番がバグることもあるけど、そんな時はイラつかず、リロードだ〜。
+      </p>
     </div>
     <div class="index-container -mt">
       <div class="container -start -mission">
@@ -18,6 +21,10 @@
           @end="dragging = false"
           ghost-class="ghost"
           class="draggable"
+          :swap-threshold="0.4"
+          :animation="200"
+          :empty-insert-threshold="30"
+          direction="vertical"
         >
           <div v-for="mission in missions" :key="mission.id" class="items">
             <BaseMissionCard :prop-mission="mission" @update="updateMission" />
@@ -34,6 +41,10 @@
           @end="dragging = false"
           ghost-class="ghost"
           class="draggable"
+          :swap-threshold="0.4"
+          :animation="200"
+          :empty-insert-threshold="30"
+          direction="vertical"
         >
           <div
             v-for="mission in ProgressMissions"
@@ -45,7 +56,7 @@
         </draggable>
       </div>
       <div class="container -start -mission -ml40">
-        <p class="title -ml">DONE</p>
+        <p class="title -ml">Completed</p>
         <draggable
           :list="DoneMissions"
           group="list"
@@ -54,6 +65,10 @@
           @end="dragging = false"
           ghost-class="ghost"
           class="draggable"
+          :swap-threshold="0.4"
+          :animation="200"
+          :empty-insert-threshold="30"
+          direction="vertical"
         >
           <div v-for="mission in DoneMissions" :key="mission.id" class="items">
             <BaseMissionCard :prop-mission="mission" @update="updateMission" />
