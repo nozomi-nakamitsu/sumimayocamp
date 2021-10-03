@@ -1,44 +1,40 @@
 <template>
-  <v-app dark>
-    <h1 v-if="error.statusCode === 404">
-      {{ pageNotFound }}
-    </h1>
-    <h1 v-else>
-      {{ otherError }}
-    </h1>
-    <NuxtLink to="/">
-      Home page
-    </NuxtLink>
-  </v-app>
+  <div class="common-container">
+    <div class="flex">
+      <p
+        class="title"
+        v-if="[400, 403, 404, 500, 503, 504].includes(error.statusCode)"
+      >
+        {{ error.statusCode }}
+      </p>
+      <div class="image">
+        <img src="@/assets/images/404.png" alt="" class="img" />
+      </div>
+      <p v-if="[404].includes(error.statusCode)">
+        よくこのページまで辿り着けましたね！<br />すみまよキャンプアプリを使い倒してくれてるおかげかな?笑
+      </p>
+      <p v-if="[503, 504, 500].includes(error.statusCode)">
+        ごめんさいね！みっつ頑張って調査するから、今回は許して~~~
+      </p>
+      <p v-else>アクセスしようとしたページが表示できないよ〜</p>
+      <p>気を取り直して、とりあえずさっきのページ戻ろか。</p>
+      <button class="common-button -error" @click="$router.go(-1)">Back</button>
+    </div>
+  </div>
 </template>
 
-<script>
-export default {
-  layout: 'empty',
+<script lang="ts">
+import { defineComponent } from '@nuxtjs/composition-api'
+
+export default defineComponent({
   props: {
     error: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
-  data () {
-    return {
-      pageNotFound: '404 Not Found',
-      otherError: 'An error occurred'
-    }
+  setup() {
+    return {}
   },
-  head () {
-    const title =
-      this.error.statusCode === 404 ? this.pageNotFound : this.otherError
-    return {
-      title
-    }
-  }
-}
+})
 </script>
-
-<style scoped>
-h1 {
-  font-size: 20px;
-}
-</style>
