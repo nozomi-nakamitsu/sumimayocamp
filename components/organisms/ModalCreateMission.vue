@@ -13,7 +13,7 @@
 <script lang="ts">
 import { defineComponent, useStore, PropType } from '@nuxtjs/composition-api'
 import TheMissionForm from '@/components/organisms/TheMissionForm.vue'
-import { FileArray, MissionPost } from '@/types/props-types'
+import { FileArray, MissionPost, CurrentUser } from '@/types/props-types'
 import { firestore } from '@/plugins/firebase'
 import BaseModal from '@/components/atoms/BaseModal.vue'
 import { useMissions } from '~/compositions/useMissions'
@@ -85,10 +85,26 @@ export default defineComponent({
         missionForm.value.files = files.value.filter((file: FileArray) =>
           missionForm.value.content.includes(file.url)
         )
-        const id = firestore.collection('missions').doc().id
+        const id = await firestore.collection('missions').doc().id
         missionForm.value.id = id
-
-        firestore.collection('missions').doc(id).set(missionForm.value)
+        let allUsers = <any>[]
+        await firestore
+          .collection('users')
+          .get()
+          .then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+              allUsers = [...allUsers, doc.data()] as CurrentUser[]
+            })
+          })
+        await firestore.collection('missions').doc(id).set(missionForm.value)
+        allUsers.map(async (user: CurrentUser) => {
+          firestore
+            .collection('missions')
+            .doc(id)
+            .collection('positions')
+            .doc(user.uid)
+            .set({ position: null })
+        })
         ctx.emit('click')
       } catch (error) {
         console.error(error)
