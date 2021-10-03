@@ -8,6 +8,7 @@
 //utilites
 @import 'utilites/markdown-editor';
 @import 'utilites/vuetify';
+@import 'utilites/main';
 
 //common
 @import 'components/common/loading-container';
@@ -52,7 +53,6 @@
 @import 'components/pages/default/sidebar-item';
 @import 'components/pages/default/common-container';
 @import 'components/pages/default/wrapper-container';
-
 @import 'components/pages/users/user-edit-container';
 @import 'components/pages/posts/form-container';
 @import 'components/pages/posts/index-container';

@@ -2,7 +2,11 @@
   <div class="login-container">
     <div class="left"></div>
     <div class="right">
-      <p class="title">Get Started!!</p>
+      <p class="title -mb0">Welcome to #sumimayocamp</p>
+      <p class="title -mt0">Get Started!!</p>
+      <p class="text">
+        すみまよキャンプへようこそ！ GoogleアカウントでLoginしてねっ
+      </p>
       <div class="button">
         <button class="common-button -login" @click="login">
           Sign In with Google
