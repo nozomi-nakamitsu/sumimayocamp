@@ -24,7 +24,7 @@
     "fibers": "^5.0.0",
     "firebase": "^8.7.1",
     "firebase-admin": "^9.11.1",
-    "firebase-tools": "^9.16.0",
+    "firebase-tools": "^9.19.0",
     "gsap": "^3.7.1",
     "lodash": "^4.17.21",
     "mavon-editor": "^2.9.1",
