@@ -12,5 +12,4 @@ module.exports = {
   plugins: [],
   // add your custom rules here
   rules: { camelcase: 'off', 'no-console': [1, { allow: ['error'] }] },
-  parser: 'babel-eslint',
 }

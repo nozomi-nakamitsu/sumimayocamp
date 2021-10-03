@@ -34,7 +34,7 @@
           </ValidationProvider>
         </template>
         <div class="submit">
-          <button type="submit" class="common-button -cancel ">Cancel</button>
+          <button type="submit" class="common-button -cancel">Cancel</button>
           <input
             type="submit"
             class="common-button -modal -ml40"
@@ -96,32 +96,17 @@ export default defineComponent({
     const store = useStore()
     // ref系
     const currentUser = store.getters.getCurrentUser
-
-    const form = computed(() => {
-      if (props.title === '新規作成') {
-        return {
-          id: '',
-          title: '',
-          content: '',
-          created_at: new Date(),
-          updated_at: new Date(),
-          sendUser: { ...currentUser },
-          receiveUser: [],
-          status: [],
-        }
-      }
-      return {
-        id: props.propsform.id,
-        title: props.propsform.title,
-        content: props.propsform.content,
-        created_at:
-          props.title === '新規作成' ? new Date() : props.propsform.created_at,
-        updated_at: new Date(),
-        sendUser: props.propsform.sendUser,
-        receiveUser: props.propsform.receiveUser,
-        status: props.propsform.status,
-      }
-    })
+    const form = computed(() => ({
+      id: props.propsform.id,
+      title: props.propsform.title,
+      content: props.propsform.content,
+      created_at:
+        props.title === '新規作成' ? new Date() : props.propsform.created_at,
+      updated_at: new Date(),
+      sendUser: props.propsform.sendUser,
+      receiveUser: props.propsform.receiveUser,
+      status: props.propsform.status,
+    }))
 
     const fileUploadEvent = ref<any>(null)
 
