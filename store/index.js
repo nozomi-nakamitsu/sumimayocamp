@@ -22,6 +22,7 @@ export const state = () => ({
     created_at: '',
     updated_at: '',
   },
+  error: '',
 })
 
 export const mutations = {
@@ -47,6 +48,9 @@ export const mutations = {
     state.post.files = data.files
     state.post.created_at = data.created_at
     state.post.updated_at = data.updated_at
+  },
+  setError(state, error) {
+    state.error = error
   },
 }
 
@@ -101,8 +105,16 @@ export const actions = {
       })
   },
   // エラーの時
-  onRejectted(error) {
-    console.error('エラーです', error)
+  onRejected({ commit }, error) {
+    console.error('errorMessage : ' + error)
+    commit(
+      'setError',
+      '予期せぬエラーが発生しました！みっつが全力で調査するので今回は許して〜'
+    )
+  },
+  // エラーを初期化する
+  resetError({ commit }) {
+    commit('setError', '')
   },
   // ① 認証状態を明示的にセットする
   setPersistence() {
@@ -215,7 +227,7 @@ export const actions = {
       })
   },
   // ログインユーザーのニックネームを変更する
-  editNickName({ commit, state }, formData) {
+  editNickName({ commit, state, dispatch }, formData) {
     return new Promise((resolve) => {
       try {
         firestore
@@ -227,11 +239,11 @@ export const actions = {
             resolve(formData)
           })
       } catch (error) {
-        console.error(error)
+        dispatch('onRejected', error)
       }
     })
   },
-  uploadFile({ commit }, payload) {
+  uploadFile({ commit, dispatch }, payload) {
     return new Promise((resolve) => {
       try {
         const file = payload.file
@@ -249,23 +261,23 @@ export const actions = {
               })
           })
       } catch (error) {
-        console.error(error)
+        dispatch('onRejected', error)
       }
     })
   },
-  deleteFile({ commit }, payload) {
+  deleteFile({ commit, dispatch }, payload) {
     return new Promise((resolve) => {
       try {
         const ref = `public/${payload.id}`
         storage.ref(ref).delete()
         resolve()
       } catch (error) {
-        console.error(error)
+        dispatch('onRejected', error)
       }
     })
   },
   // NOTE:指定したIDの投稿情報を取得
-  getPostData({ commit }, payload) {
+  getPostData({ commit, dispatch }, payload) {
     return new Promise((resolve) => {
       try {
         firestore
@@ -280,7 +292,7 @@ export const actions = {
             }
           })
       } catch (error) {
-        console.error(error)
+        dispatch('onRejected', error)
       }
     })
   },
@@ -298,5 +310,8 @@ export const getters = {
   },
   getPost(state) {
     return state.post
+  },
+  getError(state) {
+    return state.error
   },
 }

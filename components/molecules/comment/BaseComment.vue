@@ -127,8 +127,8 @@ export default defineComponent({
           .collection('messages')
           .doc(msg.id)
           .delete()
-      } catch (e) {
-        console.error(e)
+      } catch (error) {
+        store.dispatch('onRejected', error)
       }
     }
 

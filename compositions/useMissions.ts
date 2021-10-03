@@ -69,7 +69,7 @@ export const useMissions = (props: any) => {
       document.querySelector('.v-note-show')?.classList.remove('-hidden')
       files.value = [...files.value, { id, url }]
     } catch (error) {
-      console.error('file upload', error)
+      store.dispatch('onRejected', error)
     } finally {
       isLoading.value = false
     }
@@ -106,7 +106,7 @@ export const useMissions = (props: any) => {
     try {
       await firestore.collection('missions').doc(mission.id).update(data)
     } catch (error) {
-      console.error(error)
+      store.dispatch('onRejected', error)
     }
   }
   // ログインユーザーを挑戦者として完了ののステータスで登録する
@@ -129,7 +129,7 @@ export const useMissions = (props: any) => {
     try {
       await firestore.collection('missions').doc(mission.id).update(data)
     } catch (error) {
-      console.error(error)
+      store.dispatch('onRejected', error)
     }
   }
   // ログインユーザーを挑戦者として登録を解除する
@@ -142,7 +142,7 @@ export const useMissions = (props: any) => {
     try {
       await firestore.collection('missions').doc(mission.id).update(data)
     } catch (error) {
-      console.error(error)
+      store.dispatch('onRejected', error)
     }
   }
 

@@ -50,7 +50,7 @@ export default defineComponent({
             form.value = { ...result }
           })
       } catch (error) {
-        console.error('投稿内容を取得できませんでした', error)
+        store.dispatch('onRejected', error)
       }
     })
 
@@ -88,7 +88,7 @@ export default defineComponent({
           .update(form.value)
         Router.push('/')
       } catch (error) {
-        console.error(error)
+        store.dispatch('onRejected', error)
       }
     }
 
