@@ -35,7 +35,6 @@ export default defineComponent({
     const alert = ref(true)
 
     const onClose = () => {
-      console.log('閉じました')
       store.dispatch('resetError')
     }
 
