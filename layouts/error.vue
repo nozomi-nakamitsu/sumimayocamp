@@ -13,7 +13,7 @@
       <p v-if="[404].includes(error.statusCode)">
         よくこのページまで辿り着けましたね！<br />すみまよキャンプアプリを使い倒してくれてるおかげかな?笑
       </p>
-      <p v-if="[503, 504, 500].includes(error.statusCode)">
+      <p v-else-if="[503, 504, 500].includes(error.statusCode)">
         ごめんさいね！みっつ頑張って調査するから、今回は許して~~~
       </p>
       <p v-else>アクセスしようとしたページが表示できないよ〜</p>
