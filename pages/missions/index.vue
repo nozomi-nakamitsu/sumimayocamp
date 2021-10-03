@@ -16,15 +16,15 @@
         <draggable
           :list="missions"
           group="list"
-          @change="onChangeMissions($event)"
-          @start="dragging = true"
-          @end="dragging = false"
           ghost-class="ghost"
           class="draggable"
           :swap-threshold="0.4"
           :animation="200"
           :empty-insert-threshold="30"
           direction="vertical"
+          @change="onChangeMissions($event)"
+          @start="dragging = true"
+          @end="dragging = false"
         >
           <div v-for="mission in missions" :key="mission.id" class="items">
             <BaseMissionCard :prop-mission="mission" @update="updateMission" />
@@ -36,15 +36,15 @@
         <draggable
           :list="ProgressMissions"
           group="list"
-          @change="onChangeProgressMissions($event)"
-          @start="dragging = true"
-          @end="dragging = false"
           ghost-class="ghost"
           class="draggable"
           :swap-threshold="0.4"
           :animation="200"
           :empty-insert-threshold="30"
           direction="vertical"
+          @change="onChangeProgressMissions($event)"
+          @start="dragging = true"
+          @end="dragging = false"
         >
           <div
             v-for="mission in ProgressMissions"
@@ -60,15 +60,15 @@
         <draggable
           :list="DoneMissions"
           group="list"
-          @change="onChangeDoneMissions($event)"
-          @start="dragging = true"
-          @end="dragging = false"
           ghost-class="ghost"
           class="draggable"
           :swap-threshold="0.4"
           :animation="200"
           :empty-insert-threshold="30"
           direction="vertical"
+          @change="onChangeDoneMissions($event)"
+          @start="dragging = true"
+          @end="dragging = false"
         >
           <div v-for="mission in DoneMissions" :key="mission.id" class="items">
             <BaseMissionCard :prop-mission="mission" @update="updateMission" />
