@@ -127,4 +127,12 @@
   &.-ml40 {
     margin-left: 40px;
   }
+  &.-error {
+    background-color: $gray-pearl;
+    margin-top: 20px;
+    &:hover {
+      color: $white;
+      background-color: $black-dugong;
+    }
+  }
 }
