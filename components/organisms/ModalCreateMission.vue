@@ -107,7 +107,7 @@ export default defineComponent({
         })
         ctx.emit('click')
       } catch (error) {
-        console.error(error)
+        store.dispatch('onRejected', error)
       }
     }
     /**
@@ -143,7 +143,7 @@ export default defineComponent({
           .update(missionForm.value)
         ctx.emit('click')
       } catch (error) {
-        console.error(error)
+        store.dispatch('onRejected', error)
       }
     }
     return {

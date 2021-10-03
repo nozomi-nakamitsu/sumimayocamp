@@ -66,7 +66,7 @@ export default defineComponent({
         firestore.collection('posts').doc(id).set(form.value)
         Router.push('/')
       } catch (error) {
-        console.error(error)
+        store.dispatch('onRejected', error)
       }
     }
 

@@ -99,7 +99,7 @@ export default defineComponent({
         }
         await firestore.collection('missions').doc(id).delete()
       } catch (error) {
-        console.error(error)
+        store.dispatch('onRejected', error)
       }
     }
 
@@ -133,7 +133,7 @@ export default defineComponent({
         try {
           await firestore.collection('missions').doc(mission.id).update(data)
         } catch (error) {
-          console.error(error)
+          store.dispatch('onRejected', error)
         }
       }
     }

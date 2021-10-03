@@ -6,6 +6,7 @@
     <transition name="page">
       <Nuxt />
     </transition>
+    <TheErrorAlert />
   </div>
 </template>
 <script lang="ts">
@@ -15,14 +16,16 @@ import {
   ref,
   useRoute,
   computed,
-  onMounted,
 } from '@nuxtjs/composition-api'
 import Sidebar from '../components/organisms/TheSidebar.vue'
 import Loading from '~/components/loadings/Loading.vue'
+import TheErrorAlert from '@/components/organisms/TheErrorAlert.vue'
+
 export default defineComponent({
   components: {
     Sidebar,
     Loading,
+    TheErrorAlert,
   },
   setup() {
     // vuex
@@ -31,6 +34,7 @@ export default defineComponent({
 
     // ref
     const currentUser = ref<any>({})
+
     /**
      *Sidebarを表示するか判断
      */
@@ -40,12 +44,8 @@ export default defineComponent({
     )
 
     return {
-      // vuex
       store,
-
-      // 認証
       currentUser,
-      // Sidebarを表示するか判断
       showSidebar,
     }
   },

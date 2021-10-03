@@ -64,7 +64,7 @@ export const usePost = () => {
       await firestore.collection('posts').doc(id).delete()
       Router.push('/')
     } catch (error) {
-      console.error(error)
+      store.dispatch('onRejected', error)
     }
   }
   // ログインユーザーが作成した投稿かを判断する

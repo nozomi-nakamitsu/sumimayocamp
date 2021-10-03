@@ -1,7 +1,7 @@
-import { ref, useStore, watch,  } from '@nuxtjs/composition-api'
+import { ref, useStore, watch } from '@nuxtjs/composition-api'
 import { v4 as uuidv4 } from 'uuid'
 import { CurrentUser, FileArray, PostForm } from '@/types/props-types'
-export const useUploadFile = (currentUser :CurrentUser) => {
+export const useUploadFile = (currentUser: CurrentUser) => {
   const store = useStore()
   const isLoading = ref<boolean>(false)
 
@@ -38,7 +38,7 @@ export const useUploadFile = (currentUser :CurrentUser) => {
       document.querySelector('.v-note-show')?.classList.remove('-hidden')
       files.value = [...files.value, { id, url }]
     } catch (error) {
-      console.error('file upload', error)
+      store.dispatch('onRejected', error)
     } finally {
       isLoading.value = false
     }

@@ -78,7 +78,7 @@ export default defineComponent({
           .doc(currentUser.uid)
           .set(data.formData)
       } catch (error) {
-        console.error(error)
+        store.dispatch('onRejected', error)
       }
     }
 

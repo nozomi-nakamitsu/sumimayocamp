@@ -109,7 +109,7 @@ export default defineComponent({
             post.value = { ...result }
           })
       } catch (error) {
-        console.error('投稿内容を取得できませんでした', error)
+        store.dispatch('onRejected', error)
       }
     })
     // 日付をフォーマットに変換する

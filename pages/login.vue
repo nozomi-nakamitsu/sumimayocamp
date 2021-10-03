@@ -38,7 +38,7 @@ export default defineComponent({
         await store.dispatch('setPersistence')
         await store.dispatch('auth')
       } catch (error) {
-        store.dispatch('onRejectted', error)
+        store.dispatch('onRejected', error)
       }
     }
     return {

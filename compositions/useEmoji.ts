@@ -1,7 +1,8 @@
-import { ref } from '@nuxtjs/composition-api'
+import { ref, useStore } from '@nuxtjs/composition-api'
 import { CurrentUser } from '@/types/props-types'
 import { firestore } from '@/plugins/firebase'
 export const useEmoji = (props: any, currentUser: any) => {
+  const store = useStore()
   const selectedItem = ref<any[]>([])
   const isFormVisible = ref<Boolean>(false)
   const onFocus = () => {
@@ -100,10 +101,10 @@ export const useEmoji = (props: any, currentUser: any) => {
           .doc(currentUser.uid)
           .set({ ...currentUser, item_id: item.id, post_id: props.post.id })
       }
-    } catch (e) {
+    } catch (error) {
       // エラー時は選択した絵文字を画面から削除する
       selectedItem.value = selectedItem.value.filter((v) => v.id !== item.id)
-      console.error(e)
+      store.dispatch('onRejected', error)
     } finally {
       switchVisible()
     }
