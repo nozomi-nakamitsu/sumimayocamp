@@ -278,6 +278,9 @@ export default defineComponent({
     const { isOpened, openModal, closeModal } = useModal()
 
     const addMyMission = (missionData: Mission) => {
+      if (missionData.position === undefined) {
+        missionData.position = null
+      }
       if (
         _.some(missionData.status, function (item: MissionStatus) {
           return item.uid === currentUser.uid && item.status === false

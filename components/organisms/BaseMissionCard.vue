@@ -24,6 +24,7 @@
       </div>
       <div class="body" @click.stop="openModal">
         <p>{{ mission.title }}</p>
+        <p>{{ mission.position }}</p>
       </div>
       <div class="footer -start">
         <div v-if="isSendUser(mission)" class="button -right">

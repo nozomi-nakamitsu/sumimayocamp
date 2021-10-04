@@ -8,6 +8,7 @@ import {
   MissionStatus,
 } from '@/types/props-types'
 import { firestore } from '@/plugins/firebase.js'
+import draggable from 'vuedraggable'
 
 export const useMissions = (props: any) => {
   const store = useStore()
@@ -99,7 +100,6 @@ export const useMissions = (props: any) => {
   // ログインユーザーを挑戦者として完了ののステータスで登録する
   const joinMissionAsDone = async (mission: Mission) => {
     const data = { ...mission }
-
     data.status = _.filter(data.status, function (status: MissionStatus) {
       return status.uid !== currentUser.uid
     })
@@ -112,7 +112,6 @@ export const useMissions = (props: any) => {
         status: true,
       },
     ]
-
     try {
       await firestore.collection('missions').doc(mission.id).update(data)
     } catch (error) {
@@ -146,7 +145,7 @@ export const useMissions = (props: any) => {
           .doc(currentUser.uid)
           .set({ position: index + 1 })
       } catch (error) {
-        console.error(error)
+        store.dispatch('onRejected', error)
       }
     })
   }
