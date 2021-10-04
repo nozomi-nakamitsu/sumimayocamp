@@ -26,4 +26,13 @@
   color: $blue !important;
   caret-color: $blue !important;
 }
+.v-show-content {
+  color: $black-dugong;
+  font-family: $font-family;
+  font-size: 16px;
+}
+.v-menu__content {
+  border-radius: 8px;
+}
+
 

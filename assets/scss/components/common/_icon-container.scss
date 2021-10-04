@@ -76,4 +76,11 @@
     justify-content: center;
     align-items: center;
   }
+  &.-calendar-item {
+    font-size: 20px;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
