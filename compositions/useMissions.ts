@@ -36,20 +36,6 @@ export const useMissions = (props: any) => {
   watch(
     () => props.defaultData,
     () => {
-      if (!props.defaultData) {
-        missionForm.value = {
-          id: '',
-          title: '',
-          content: '',
-          created_at: new Date(),
-          updated_at: new Date(),
-          sendUser: { ...currentUser },
-          receiveUser: [],
-          files: [],
-          status: [],
-        }
-        return
-      }
       missionForm.value = { ...props.defaultData }
     }
   )
@@ -63,6 +49,7 @@ export const useMissions = (props: any) => {
       })
       const reg = new RegExp('\\([.\\d]+?\\)', 'g')
       missionForm.value.content = file.content.replace(reg, `(${url}})`)
+      missionForm.value.title = file.title
       document
         .querySelector('.auto-textarea-input')
         ?.classList.remove('-hidden')

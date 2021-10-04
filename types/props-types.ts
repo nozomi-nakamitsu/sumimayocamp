@@ -110,6 +110,21 @@ export interface Mission {
 }
 /**
  * NOTE:
+ * ミッションのフォーム表示用の型
+ */
+export interface MissionForm {
+  id: string
+  title: string
+  content: string
+  created_at: Date
+  updated_at: Date
+  sendUser: CurrentUser
+  receiveUser: CurrentUser[] | null
+  files: FileArray[]
+  status: MissionStatus[]
+}
+/**
+ * NOTE:
  * 宣言の表示用の型
  */
 export interface Declaration {
