@@ -143,6 +143,7 @@ export default defineComponent({
         file: imgfile,
         fileName: imgfile.name,
         content: form.value.content,
+        title: form.value.title,
       })
     }
 

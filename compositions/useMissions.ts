@@ -37,7 +37,6 @@ export const useMissions = (props: any) => {
     () => props.defaultData,
     () => {
       missionForm.value = { ...props.defaultData }
-      console.log('初期化', missionForm.value)
     }
   )
   const fileChanged = async (file: any) => {
@@ -50,6 +49,7 @@ export const useMissions = (props: any) => {
       })
       const reg = new RegExp('\\([.\\d]+?\\)', 'g')
       missionForm.value.content = file.content.replace(reg, `(${url}})`)
+      missionForm.value.title = file.title
       document
         .querySelector('.auto-textarea-input')
         ?.classList.remove('-hidden')
