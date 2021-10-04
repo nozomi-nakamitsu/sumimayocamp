@@ -80,7 +80,7 @@
       :control-flag="isOpened"
       title="挑戦状を作成しよう!"
       :default-data="defaultData"
-      :types="defaultData !== null ? 'edit' : 'new'"
+      :types="defaultData.title === '' ? 'new' : 'edit'"
       @click="closeFunc"
     />
   </div>
@@ -98,7 +98,12 @@ import {
 import Draggable from 'vuedraggable'
 
 import _ from 'lodash'
-import { Mission, CurrentUser, MissionStatus } from '@/types/props-types'
+import {
+  Mission,
+  CurrentUser,
+  MissionStatus,
+  MissionForm,
+} from '@/types/props-types'
 import BaseMissionCard from '@/components/organisms/BaseMissionCard.vue'
 import ModalCreateMission from '@/components/organisms/ModalCreateMission.vue'
 import { useModal } from '@/compositions/useModal'
@@ -241,14 +246,34 @@ export default defineComponent({
       unsubscribe()
     })
 
-    const defaultData = ref<Mission | null>(null)
+    const defaultData = ref<MissionForm>({
+      id: '',
+      title: '',
+      content: '',
+      created_at: new Date(),
+      updated_at: new Date(),
+      sendUser: { ...currentUser },
+      receiveUser: [],
+      files: [],
+      status: [],
+    })
     const updateMission = (data: Mission) => {
       openModal()
       defaultData.value = data
     }
     const closeFunc = () => {
       closeModal()
-      defaultData.value = null
+      defaultData.value = {
+        id: '',
+        title: '',
+        content: '',
+        created_at: new Date(),
+        updated_at: new Date(),
+        sendUser: { ...currentUser },
+        receiveUser: [],
+        files: [],
+        status: [],
+      }
     }
     const { isOpened, openModal, closeModal } = useModal()
 

@@ -36,21 +36,8 @@ export const useMissions = (props: any) => {
   watch(
     () => props.defaultData,
     () => {
-      if (!props.defaultData) {
-        missionForm.value = {
-          id: '',
-          title: '',
-          content: '',
-          created_at: new Date(),
-          updated_at: new Date(),
-          sendUser: { ...currentUser },
-          receiveUser: [],
-          files: [],
-          status: [],
-        }
-        return
-      }
       missionForm.value = { ...props.defaultData }
+      console.log('初期化', missionForm.value)
     }
   )
   const fileChanged = async (file: any) => {
