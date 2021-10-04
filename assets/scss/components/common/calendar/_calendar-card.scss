@@ -1,14 +1,21 @@
 .calendar-card {
   width: 100%;
+  border-radius: 8px;
   > .toolbar {
     display: flex;
     align-items: center;
     padding: 15px;
     height: 64px;
+    color: $black-dugong;
+    font-family: $font-family;
+    font-size: 16px;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
   }
   > .toolbar > .image {
     width: 50px;
     height: 50px;
+    margin-right: 8px;
   }
   > .toolbar > .image > .img {
     width: 100%;

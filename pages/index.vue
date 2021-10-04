@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper-container">
     <BaseBackground />
-    <div class="common-container">
+    <div class="common-container -scrollx">
       <div class="title">
         <p class="text">My DashBoard</p>
         <div class="line"></div>

@@ -2,8 +2,8 @@
   <div class="common-container">
     <div class="flex">
       <p
-        class="title"
         v-if="[400, 403, 404, 500, 503, 504].includes(error.statusCode)"
+        class="title"
       >
         {{ error.statusCode }}
       </p>
@@ -14,7 +14,7 @@
         よくこのページまで辿り着けましたね！<br />すみまよキャンプアプリを使い倒してくれてるおかげかな?笑
       </p>
       <p v-else-if="[503, 504, 500].includes(error.statusCode)">
-        ごめんさいね！みっつ頑張って調査するから、今回は許して~~~
+        ごめんなさいね！みっつ頑張って調査するから、今回は許して~~~
       </p>
       <p v-else>アクセスしようとしたページが表示できないよ〜</p>
       <p>気を取り直して、とりあえずさっきのページ戻ろか。</p>
