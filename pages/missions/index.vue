@@ -326,41 +326,63 @@ export default defineComponent({
           return mission.id === data.id
         })
       ) {
-        ProgressMissions.value = _.filter(
-          ProgressMissions.value,
-          function (mission: Mission) {
-            return mission.id !== data.id
-          }
-        )
-        ProgressMissions.value = sortMissions([data, ...ProgressMissions.value])
-        return
+        await getNewData(ProgressMissions.value, 'ProgressMissions')
       }
       if (
         _.some(DoneMissions.value, function (mission: Mission) {
           return mission.id === data.id
         })
       ) {
-        DoneMissions.value = _.filter(
-          DoneMissions.value,
-          function (mission: Mission) {
-            return mission.id !== data.id
-          }
-        )
-        return (DoneMissions.value = sortMissions([
-          data,
-          ...DoneMissions.value,
-        ]))
+        await getNewData(DoneMissions.value, 'DoneMissions')
       }
       if (
         _.some(missions.value, function (mission: Mission) {
           return mission.id === data.id
         })
       ) {
-        missions.value = _.filter(missions.value, function (mission: Mission) {
-          return mission.id !== data.id
-        })
-        return (missions.value = sortMissions([...missions.value, data]))
+        await getNewData(missions.value, 'mission')
       }
+    }
+
+    const getNewData = async (arg: Mission[], key: string) => {
+      await firestore
+        .collection('missions')
+        .get()
+        .then((snapshots) => {
+          snapshots.docChanges().forEach((snapshot) => {
+            let newArray = [] as Mission[]
+            const aaa = arg.map((mission) => {
+              if (mission.id === snapshot.doc.data().id) {
+                firestore
+                  .collection('missions')
+                  .doc(mission.id)
+                  .collection('positions')
+                  .doc(currentUser.uid)
+                  .get()
+                  .then((doc) => {
+                    // success
+                    if (doc) {
+                      mission.position = doc.data()?.position
+                    } else {
+                      mission.position = null
+                    }
+                    return mission
+                  })
+              }
+              return mission
+            })
+            newArray = [...newArray, ...aaa]
+            if (key === 'mission') {
+              missions.value = newArray
+            }
+            if (key === 'DoneMissions') {
+              DoneMissions.value = newArray
+            }
+            if (key === 'ProgressMissions') {
+              ProgressMissions.value = newArray
+            }
+          })
+        })
     }
     return {
       // 全投稿データ
