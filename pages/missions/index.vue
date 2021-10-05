@@ -344,6 +344,7 @@ export default defineComponent({
       }
     }
 
+    // NOTE:ポジションのみが変更された時(縦方向のみの移動時)に全てのデータのポジションをサーバーのデータを取得して更新している
     const getNewData = async (arg: Mission[], key: string) => {
       await firestore
         .collection('missions')
@@ -351,7 +352,7 @@ export default defineComponent({
         .then((snapshots) => {
           snapshots.docChanges().forEach((snapshot) => {
             let newArray = [] as Mission[]
-            const aaa = arg.map((mission) => {
+            const target = arg.map((mission) => {
               if (mission.id === snapshot.doc.data().id) {
                 firestore
                   .collection('missions')
@@ -360,7 +361,6 @@ export default defineComponent({
                   .doc(currentUser.uid)
                   .get()
                   .then((doc) => {
-                    // success
                     if (doc) {
                       mission.position = doc.data()?.position
                     } else {
@@ -371,7 +371,7 @@ export default defineComponent({
               }
               return mission
             })
-            newArray = [...newArray, ...aaa]
+            newArray = [...newArray, ...target]
             if (key === 'mission') {
               missions.value = newArray
             }

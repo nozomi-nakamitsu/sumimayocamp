@@ -1,6 +1,7 @@
 import { ref, useStore, watch } from '@nuxtjs/composition-api'
 import { v4 as uuidv4 } from 'uuid'
 import _ from 'lodash'
+import draggable from 'vuedraggable'
 import {
   FileArray,
   MissionPost,
@@ -8,7 +9,6 @@ import {
   MissionStatus,
 } from '@/types/props-types'
 import { firestore } from '@/plugins/firebase.js'
-import draggable from 'vuedraggable'
 
 export const useMissions = (props: any) => {
   const store = useStore()
