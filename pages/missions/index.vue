@@ -278,6 +278,9 @@ export default defineComponent({
     const { isOpened, openModal, closeModal } = useModal()
 
     const addMyMission = (missionData: Mission) => {
+      if (missionData.position === undefined) {
+        missionData.position = null
+      }
       if (
         _.some(missionData.status, function (item: MissionStatus) {
           return item.uid === currentUser.uid && item.status === false
@@ -323,41 +326,63 @@ export default defineComponent({
           return mission.id === data.id
         })
       ) {
-        ProgressMissions.value = _.filter(
-          ProgressMissions.value,
-          function (mission: Mission) {
-            return mission.id !== data.id
-          }
-        )
-        ProgressMissions.value = sortMissions([data, ...ProgressMissions.value])
-        return
+        await getNewData(ProgressMissions.value, 'ProgressMissions')
       }
       if (
         _.some(DoneMissions.value, function (mission: Mission) {
           return mission.id === data.id
         })
       ) {
-        DoneMissions.value = _.filter(
-          DoneMissions.value,
-          function (mission: Mission) {
-            return mission.id !== data.id
-          }
-        )
-        return (DoneMissions.value = sortMissions([
-          data,
-          ...DoneMissions.value,
-        ]))
+        await getNewData(DoneMissions.value, 'DoneMissions')
       }
       if (
         _.some(missions.value, function (mission: Mission) {
           return mission.id === data.id
         })
       ) {
-        missions.value = _.filter(missions.value, function (mission: Mission) {
-          return mission.id !== data.id
-        })
-        return (missions.value = sortMissions([...missions.value, data]))
+        await getNewData(missions.value, 'mission')
       }
+    }
+
+    // NOTE:ポジションのみが変更された時(縦方向のみの移動時)に全てのデータのポジションをサーバーのデータを取得して更新している
+    const getNewData = async (arg: Mission[], key: string) => {
+      await firestore
+        .collection('missions')
+        .get()
+        .then((snapshots) => {
+          snapshots.docChanges().forEach((snapshot) => {
+            let newArray = [] as Mission[]
+            const target = arg.map((mission) => {
+              if (mission.id === snapshot.doc.data().id) {
+                firestore
+                  .collection('missions')
+                  .doc(mission.id)
+                  .collection('positions')
+                  .doc(currentUser.uid)
+                  .get()
+                  .then((doc) => {
+                    if (doc) {
+                      mission.position = doc.data()?.position
+                    } else {
+                      mission.position = null
+                    }
+                    return mission
+                  })
+              }
+              return mission
+            })
+            newArray = [...newArray, ...target]
+            if (key === 'mission') {
+              missions.value = newArray
+            }
+            if (key === 'DoneMissions') {
+              DoneMissions.value = newArray
+            }
+            if (key === 'ProgressMissions') {
+              ProgressMissions.value = newArray
+            }
+          })
+        })
     }
     return {
       // 全投稿データ

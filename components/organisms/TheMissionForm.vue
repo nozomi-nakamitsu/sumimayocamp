@@ -103,7 +103,7 @@ export default defineComponent({
       created_at:
         props.title === '新規作成' ? new Date() : props.propsform.created_at,
       updated_at: new Date(),
-      sendUser: props.propsform.sendUser,
+      sendUser: store.getters.getCurrentUser,
       receiveUser: props.propsform.receiveUser,
       status: props.propsform.status,
     }))
