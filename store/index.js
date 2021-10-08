@@ -63,13 +63,7 @@ export const actions = {
       .signInWithPopup(provider)
       .then(async function (result) {
         const user = result.user
-        await messaging.requestPermission()
-        let currentToken = await messaging.getToken()
-        messaging.onTokenRefresh(async () => {
-          // トークンがリフレッシュされた場合
-          await messaging.requestPermission()
-          currentToken = await messaging.getToken()
-        })
+
         commit('setIsLogined', true)
         // 認証後のユーザー情報を取得してオブジェクト化
         const userObject = {}
@@ -83,7 +77,7 @@ export const actions = {
         userObject.email = user.email
         userObject.isNewUser = result.additionalUserInfo.isNewUser
         userObject.providerId = result.additionalUserInfo.providerId
-        userObject.fcmToken = currentToken
+        userObject.fcmToken = ''
         // NOTE:一度ログインしたことあるユーザーであれば、元のニックネームデータを取得する。初ログインユーザーであれば、displayNameニックネームの初期値にする
         if (!result.additionalUserInfo.isNewUser) {
           const docRef = firestore.collection('users').doc(user.uid)
@@ -169,27 +163,39 @@ export const actions = {
     })
   },
   // ⑥ ローカルストレージに保持するユーザー情報を設定
-  setLocalUserData({ commit }, userObject) {
-    return new Promise((resolve) => {
-      firestore
-        .collection('users')
-        .doc(userObject.uid)
-        .get()
-        .then((doc) => {
-          if (doc.exists) {
-            commit('setCurrentUser', doc.data())
-            console.log(`ログインに成功しました`)
-            // location.reload()
-            resolve(userObject)
-          }
-        })
-        .catch((error) => {
-          console.error(
-            'ログインに失敗しました。Error getting document:',
-            error
-          )
-        })
+  async setLocalUserData({ commit }, userObject) {
+    await messaging
+      .requestPermission()
+      .then(async () => {
+        userObject.fcmToken = await messaging.getToken()
+      })
+      .catch((error) => {
+        console.error(
+          'トークンを取得できませんでした。Error getting document:',
+          error
+        )
+      })
+
+    messaging.onTokenRefresh(async () => {
+      // トークンがリフレッシュされた場合
+      await messaging.requestPermission()
+      userObject.fcmToken = await messaging.getToken()
     })
+
+    await firestore.collection('users').doc(userObject.uid).update(userObject)
+    firestore
+      .collection('users')
+      .doc(userObject.uid)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          commit('setCurrentUser', doc.data())
+          console.log(`ログインに成功しました`)
+        }
+      })
+      .catch((error) => {
+        console.error('ログインに失敗しました。Error getting document:', error)
+      })
   },
   // ③ 取得したアイコンのURLをFirestorageに保存して、そのURLをFirestoreに登録する準備
   createPhotoURL({ commit }, userObject) {
