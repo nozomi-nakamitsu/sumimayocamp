@@ -1,46 +1,63 @@
 <template>
-  <div v-if="post.user" class="common-container">
-    <v-card class="mx-auto" width="100%">
-      <v-card-title>
-        <span class="text-h6 font-weight-light">
-          タイトル: {{ post.title }}</span
-        >
-      </v-card-title>
-      <MarkdownViewCard :content="post.content" />
-      <v-card-text class="text-h5 font-weight-bold">
-        {{ updated_at }}
-      </v-card-text>
-      <v-card-actions>
-        <v-list-item class="grow">
-          <v-list-item-avatar color="grey darken-3">
-            <v-img class="elevation-6" alt="" :src="post.user.photoURL"></v-img>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title>{{
-              post.user.nickName ? post.user.nickName : post.user.displayName
-            }}</v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-content v-if="isCurrentUser(post.user_id, currentUser)">
-            <v-list-item-title
-              style="cursor: pointer"
-              @click="Router.push(`/posts/edit/${post.id}`)"
-              >編集</v-list-item-title
+  <div v-if="post.user" class="common-container -flex">
+    <div class="title">
+      <p class="text">Post Detail</p>
+      <div class="line"></div>
+    </div>
+    <div class="index-container -mt">
+      <div class="container -start">
+        <v-card class="mx-auto" width="100%">
+          <v-card-title>
+            <span class="text-h6 font-weight-light">
+              タイトル: {{ post.title }}</span
             >
-          </v-list-item-content>
-          <v-list-item-content v-if="isCurrentUser(post.user_id, currentUser)">
-            <v-list-item-title
-              style="cursor: pointer"
-              @click="DeletePost(post.id, post.files)"
-              >削除</v-list-item-title
-            >
-          </v-list-item-content>
-        </v-list-item>
-      </v-card-actions>
-    </v-card>
-    <BaseComment :post-id="id" />
-    <p style="cursor: pointer; font-size: 12px" @click="Router.push('/')">
-      ホームに戻る
-    </p>
+          </v-card-title>
+          <MarkdownViewCard :content="post.content" />
+          <v-card-text class="text-h5 font-weight-bold">
+            {{ updated_at }}
+          </v-card-text>
+          <v-card-actions>
+            <v-list-item class="grow">
+              <v-list-item-avatar color="grey darken-3">
+                <v-img
+                  class="elevation-6"
+                  alt=""
+                  :src="post.user.photoURL"
+                ></v-img>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{
+                  post.user.nickName
+                    ? post.user.nickName
+                    : post.user.displayName
+                }}</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-content
+                v-if="isCurrentUser(post.user_id, currentUser)"
+              >
+                <v-list-item-title
+                  style="cursor: pointer"
+                  @click="Router.push(`/posts/edit/${post.id}`)"
+                  >編集</v-list-item-title
+                >
+              </v-list-item-content>
+              <v-list-item-content
+                v-if="isCurrentUser(post.user_id, currentUser)"
+              >
+                <v-list-item-title
+                  style="cursor: pointer"
+                  @click="DeletePost(post.id, post.files)"
+                  >削除</v-list-item-title
+                >
+              </v-list-item-content>
+            </v-list-item>
+          </v-card-actions>
+        </v-card>
+      </div>
+      <div class="container -start -right">
+        <BaseComment :post-id="id" />
+      </div>
+    </div>
   </div>
 </template>
 

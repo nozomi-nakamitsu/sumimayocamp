@@ -169,3 +169,19 @@ export interface CalendarEvent {
   date: String
   open: Boolean
 }
+
+/**
+ * NOTE:
+ * Commentの型
+ */
+
+export interface Comment {
+  photoURL: String
+  id: String
+  nickName: String
+  postId: String
+  createdAt: Date
+  text: String
+  uid: String
+  mentions: []
+}

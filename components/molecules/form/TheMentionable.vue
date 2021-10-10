@@ -1,26 +1,24 @@
 <template>
-  <div class="container">
-    <div>
-      <Mentionable
-        :keys="['@']"
-        :items="items"
-        offset="6"
-        insert-space
-        @open="onOpen"
-      >
-        <textarea v-model="text" @input="onSelected(text)" />
-        <template #no-result>
-          <div class="dim">No result</div>
-        </template>
+  <div class="mentionable-container">
+    <Mentionable
+      :keys="['@']"
+      :items="items"
+      offset="6"
+      insert-space
+      @open="onOpen"
+    >
+      <textarea v-model="text" @input="onSelected(text)" class="textarea" />
+      <template #no-result>
+        <div class="dim">No result</div>
+      </template>
 
-        <template #item-@="{ item }">
-          <div class="user">
-            {{ item.user.nickName }}
-            <!-- <span class="dim"> ({{ item.user.nickName }}) </span> -->
-          </div>
-        </template>
-      </Mentionable>
-    </div>
+      <template #item-@="{ item }">
+        <div class="user">
+          {{ item.user.nickName }}
+          <!-- <span class="dim"> ({{ item.user.nickName }}) </span> -->
+        </div>
+      </template>
+    </Mentionable>
   </div>
 </template>
 

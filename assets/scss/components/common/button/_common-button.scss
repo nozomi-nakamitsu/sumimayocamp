@@ -135,4 +135,24 @@
       background-color: $black-dugong;
     }
   }
+  &.-comment {
+    background-color: $purple;
+    color: $black-dugong;
+    width: 40px;
+    height: 40px;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+
+    &:disabled {
+      opacity: 1;
+      background-color: $gray-pearl;
+      color: $blue;
+    }
+    &:hover {
+      color: $white;
+      background-color: $black-dugong;
+    }
+  }
 }
