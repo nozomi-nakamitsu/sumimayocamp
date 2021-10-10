@@ -1,5 +1,5 @@
 <template>
-  <div class="markdown-editor">
+  <div class="markdown-editor" :class="{ '-white': types }">
     <no-ssr>
       <mavon-editor
         v-model="content"
@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, watchEffect } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   props: {
@@ -24,8 +24,19 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    types: {
+      type: String,
+      default: null,
+    },
   },
-  setup() {
+  setup(props) {
+    watchEffect(() => {
+      if (props.types) {
+        console.log(props.types)
+        document.querySelector('.markdown-body')?.classList.add('-white')
+      }
+    })
+
     return {}
   },
 })

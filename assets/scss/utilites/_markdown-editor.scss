@@ -1,4 +1,15 @@
 .markdown-editor {
+  &.-white {
+    > .markdown-body {
+      box-shadow: none !important;
+      border: none !important;
+      border-radius: 8px !important ;
+      z-index: 1;
+    }
+    .v-show-content {
+      padding: 8px 0 !important;
+    }
+  }
   > .markdown-body {
     box-shadow: none !important;
     border: 1px solid $purple !important;
@@ -19,7 +30,6 @@
   border-left: 1px solid $purple !important;
 }
 .v-note-wrapper .v-note-panel .v-note-show .v-show-content {
-  background-color: $gray-pearl !important;
 }
 .v-note-wrapper
   .v-note-panel
