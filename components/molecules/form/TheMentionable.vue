@@ -9,13 +9,15 @@
     >
       <textarea v-model="text" @input="onSelected(text)" class="textarea" />
       <template #no-result>
-        <div class="dim">No result</div>
+        <div class="user" style="display: none">該当するユーザーがいません</div>
       </template>
 
       <template #item-@="{ item }">
+        <div class="image">
+          <img :src="item.user.photoURL" alt="" class="img" />
+        </div>
         <div class="user">
           {{ item.user.nickName }}
-          <!-- <span class="dim"> ({{ item.user.nickName }}) </span> -->
         </div>
       </template>
     </Mentionable>
@@ -30,11 +32,15 @@ import {
   onBeforeUnmount,
   watch,
 } from '@nuxtjs/composition-api'
+import { Mentionable } from 'vue-mention'
 import _ from 'lodash'
 import { firestore } from '@/plugins/firebase'
 import { CurrentUser } from '@/types/props-types'
 
 export default defineComponent({
+  components: {
+    Mentionable,
+  },
   props: {
     setValue: {
       type: String,
@@ -80,6 +86,7 @@ export default defineComponent({
     }
     const selectedUser = ref<CurrentUser[]>([])
     const onSelected = (text: string) => {
+      console.log(usersNames.value)
       usersNames.value.map((name) => {
         if (
           text.includes(name) &&
@@ -87,11 +94,15 @@ export default defineComponent({
             return item.nickName !== name
           })
         ) {
+          console.log('users.value', users.value)
           const target = users.value.find((user) => user.user.nickName === name)
           selectedUser.value = [...selectedUser.value, target.user]
         }
+        return null
       })
+
       const data = { selectedUser: selectedUser.value, text }
+      console.log(selectedUser)
       ctx.emit('on-selected', data)
     }
 
@@ -106,14 +117,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style>
-mention-item {
-  padding: 4px 10px;
-  border-radius: 4px;
-}
-
-.mention-selected {
-  background: rgb(192, 250, 153);
-}
-</style>
