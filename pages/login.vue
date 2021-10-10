@@ -1,6 +1,10 @@
 <template>
   <div class="login-container">
-    <div class="left"></div>
+    <div class="left">
+      <div class="image">
+        <img src="@/assets/images/login.svg" alt="" class="img" />
+      </div>
+    </div>
     <div class="right">
       <p class="title -mb0">Welcome to #sumimayocamp</p>
       <p class="title -mt0">Get Started!!</p>
