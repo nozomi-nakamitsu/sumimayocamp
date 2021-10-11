@@ -32,7 +32,6 @@ export default defineComponent({
   setup(props) {
     watchEffect(() => {
       if (props.types) {
-        console.log(props.types)
         document.querySelector('.markdown-body')?.classList.add('-white')
       }
     })

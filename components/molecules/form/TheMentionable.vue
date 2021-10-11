@@ -86,7 +86,6 @@ export default defineComponent({
     }
     const selectedUser = ref<CurrentUser[]>([])
     const onSelected = (text: string) => {
-      console.log(usersNames.value)
       usersNames.value.map((name) => {
         if (
           text.includes(name) &&
@@ -94,7 +93,6 @@ export default defineComponent({
             return item.nickName !== name
           })
         ) {
-          console.log('users.value', users.value)
           const target = users.value.find((user) => user.user.nickName === name)
           selectedUser.value = [...selectedUser.value, target.user]
         }
@@ -102,7 +100,6 @@ export default defineComponent({
       })
 
       const data = { selectedUser: selectedUser.value, text }
-      console.log(selectedUser)
       ctx.emit('on-selected', data)
     }
 
