@@ -5,7 +5,7 @@
     <Sidebar v-if="showSidebar" />
     <transition name="page">
       <div class="wrapper-container">
-        <BaseBackground :path="path" v-if="!store.getters.getIsLoading" />
+        <BaseBackground v-if="!store.getters.getIsLoading" :path="path" />
         <Nuxt />
       </div>
     </transition>

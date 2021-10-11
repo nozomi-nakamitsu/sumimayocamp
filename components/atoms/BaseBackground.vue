@@ -1,5 +1,5 @@
 <template>
-  <div class="background-container" v-if="isVisible" :class="positionClass">
+  <div v-if="isVisible" class="background-container" :class="positionClass">
     <div class="wrapper">
       <svg
         xmlns="http://www.w3.org/2000/svg"

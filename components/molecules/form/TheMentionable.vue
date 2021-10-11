@@ -7,7 +7,7 @@
       insert-space
       @open="onOpen"
     >
-      <textarea v-model="text" @input="onSelected(text)" class="textarea" />
+      <textarea v-model="text" class="textarea" @input="onSelected(text)" />
       <template #no-result>
         <div class="user" style="display: none">該当するユーザーがいません</div>
       </template>

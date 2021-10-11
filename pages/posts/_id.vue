@@ -20,7 +20,7 @@
               style="display: block"
             >
               <template #activator="{ on, attrs }">
-                <div v-bind="attrs" v-on="on" class="button -ml8">
+                <div v-bind="attrs" class="button -ml8" v-on="on">
                   <Icon :icon="faEllipsisH" types="button" />
                 </div>
               </template>
