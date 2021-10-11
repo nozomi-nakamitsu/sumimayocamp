@@ -4,7 +4,10 @@
 
     <Sidebar v-if="showSidebar" />
     <transition name="page">
-      <Nuxt />
+      <div class="wrapper-container">
+        <BaseBackground :path="path" v-if="!store.getters.getIsLoading" />
+        <Nuxt />
+      </div>
     </transition>
     <TheErrorAlert />
   </div>
@@ -20,12 +23,14 @@ import {
 import Sidebar from '../components/organisms/TheSidebar.vue'
 import Loading from '~/components/loadings/Loading.vue'
 import TheErrorAlert from '@/components/organisms/TheErrorAlert.vue'
+import BaseBackground from '~/components/atoms/BaseBackground.vue'
 
 export default defineComponent({
   components: {
     Sidebar,
     Loading,
     TheErrorAlert,
+    BaseBackground,
   },
   setup() {
     // vuex
@@ -43,10 +48,13 @@ export default defineComponent({
         Route.value.path !== '/login' && Route.value.path !== '/login/'
     )
 
+    const path = computed((): string => Route.value.path)
+
     return {
       store,
       currentUser,
       showSidebar,
+      path,
     }
   },
 })
