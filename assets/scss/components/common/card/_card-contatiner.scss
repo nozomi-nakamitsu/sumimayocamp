@@ -8,8 +8,17 @@
   &.-blue {
     background-color: $blue;
   }
+  &.-red {
+    background-color: $red;
+  }
+  &.-green {
+    background-color: $green;
+  }
   &.-mx8 {
     margin: 8px 0;
+  }
+  &.-h150 {
+    height: 150px;
   }
   > .container {
     border: 1px dashed $white;

@@ -3,8 +3,9 @@
     <div class="title">
       <p class="text">Mypage</p>
       <div class="line"></div>
+      <p class="comment">準備中！！綺麗になるのをお楽しみに〜</p>
     </div>
-    <div class="container">
+    <div class="main">
       <p>ニックネーム変更する</p>
       <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
         <form @submit.prevent="handleSubmit(submit)">
