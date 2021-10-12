@@ -1,24 +1,31 @@
 <template>
   <div class="common-container">
-    <p>ニックネーム変更する</p>
-    <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
-      <form @submit.prevent="handleSubmit(submit)">
-        <ValidationInput
-          input-name="nickName"
-          rules="required"
-          class="nameinput"
-          :set-value="form.nickName"
-          @input="change($event, 'nickName')"
-        ></ValidationInput>
-        <input
-          type="submit"
-          class="common-button"
-          title="変更する"
-          :disabled="invalid"
-          :class="invalid"
-        />
-      </form>
-    </ValidationObserver>
+    <div class="title">
+      <p class="text">Mypage</p>
+      <div class="line"></div>
+      <p class="comment">準備中！！綺麗になるのをお楽しみに〜</p>
+    </div>
+    <div class="main">
+      <p>ニックネーム変更する</p>
+      <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
+        <form @submit.prevent="handleSubmit(submit)">
+          <ValidationInput
+            input-name="nickName"
+            rules="required"
+            class="nameinput"
+            :set-value="form.nickName"
+            @input="change($event, 'nickName')"
+          ></ValidationInput>
+          <input
+            type="submit"
+            class="common-button"
+            title="変更する"
+            :disabled="invalid"
+            :class="invalid"
+          />
+        </form>
+      </ValidationObserver>
+    </div>
   </div>
 </template>
 

@@ -1,46 +1,54 @@
 <template>
-  <div v-if="post.user" class="common-container">
-    <v-card class="mx-auto" width="100%">
-      <v-card-title>
-        <span class="text-h6 font-weight-light">
-          タイトル: {{ post.title }}</span
-        >
-      </v-card-title>
-      <MarkdownViewCard :content="post.content" />
-      <v-card-text class="text-h5 font-weight-bold">
-        {{ updated_at }}
-      </v-card-text>
-      <v-card-actions>
-        <v-list-item class="grow">
-          <v-list-item-avatar color="grey darken-3">
-            <v-img class="elevation-6" alt="" :src="post.user.photoURL"></v-img>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title>{{
-              post.user.nickName ? post.user.nickName : post.user.displayName
-            }}</v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-content v-if="isCurrentUser(post.user_id, currentUser)">
-            <v-list-item-title
-              style="cursor: pointer"
-              @click="Router.push(`/posts/edit/${post.id}`)"
-              >編集</v-list-item-title
+  <div v-if="post.user" class="common-container -flex">
+    <div class="index-container -mt">
+      <div class="container -start">
+        <div class="detail-card">
+          <div class="title">
+            <p class="text">{{ post.title }}</p>
+          </div>
+          <div class="member">
+            <div class="image">
+              <img :src="post.user.photoURL" alt="" class="img" />
+            </div>
+            <p class="text">{{ post.user.nickName }}</p>
+            <p class="text -ml8">{{ updated_at }}</p>
+
+            <v-menu
+              :close-on-content-click="true"
+              :nudge-width="200"
+              offset-y
+              style="display: block"
             >
-          </v-list-item-content>
-          <v-list-item-content v-if="isCurrentUser(post.user_id, currentUser)">
-            <v-list-item-title
-              style="cursor: pointer"
-              @click="DeletePost(post.id, post.files)"
-              >削除</v-list-item-title
-            >
-          </v-list-item-content>
-        </v-list-item>
-      </v-card-actions>
-    </v-card>
-    <BaseComment :post-id="id" />
-    <p style="cursor: pointer; font-size: 12px" @click="Router.push('/')">
-      ホームに戻る
-    </p>
+              <template #activator="{ on, attrs }">
+                <div v-bind="attrs" class="button -ml8" v-on="on">
+                  <Icon :icon="faEllipsisH" types="button" />
+                </div>
+              </template>
+
+              <v-card class="card">
+                <div
+                  class="menu-item"
+                  @click="Router.push(`/posts/edit/${post.id}`)"
+                >
+                  <Icon :icon="faCode" types="menu" />
+                  <p class="text">Edit</p>
+                </div>
+                <div class="menu-item" @click="DeletePost(post.id, post.files)">
+                  <Icon :icon="faTrash" types="menu" />
+                  <p class="text">Delete</p>
+                </div>
+              </v-card>
+            </v-menu>
+          </div>
+          <div class="content">
+            <MarkdownViewCard :content="post.content" types="detail" />
+          </div>
+        </div>
+      </div>
+      <div class="container -start -right">
+        <BaseComment :post-id="id" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -56,17 +64,22 @@ import {
   onMounted,
 } from '@nuxtjs/composition-api'
 import _ from 'lodash'
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
 import MarkdownViewCard from '@/components/organisms/MarkdownViewCard.vue'
+import Icon from '@/components/molecules/Icon.vue'
+
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 import { isCurrentUser } from '@/compositions/useAuth'
 import { firestore } from '@/plugins/firebase.js'
 import BaseComment from '~/components/molecules/comment/BaseComment.vue'
 import { CurrentUser } from '@/types/props-types'
 import { usePost } from '~/compositions/usePost'
+
 export default defineComponent({
   components: {
     MarkdownViewCard,
     BaseComment,
+    Icon,
   },
   setup() {
     // compositionAPI
@@ -136,6 +149,7 @@ export default defineComponent({
       Router,
       // 投稿削除
       DeletePost,
+      faEllipsisH,
     }
   },
 })

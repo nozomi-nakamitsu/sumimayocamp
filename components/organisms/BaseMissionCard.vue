@@ -1,5 +1,5 @@
 <template>
-  <div class="card-container -blue -mx8">
+  <div class="card-container -mx8 -h150" :class="cardColor">
     <div class="container">
       <div class="card-head" @click.stop="openModal">
         <div class="left">
@@ -68,6 +68,10 @@ export default defineComponent({
   props: {
     propMission: {
       type: Object as PropType<Mission>,
+      required: true,
+    },
+    types: {
+      type: String,
       required: true,
     },
   },
@@ -143,6 +147,18 @@ export default defineComponent({
         (mission: Mission): boolean =>
           mission.sendUser.uid === currentUser.uid
     )
+    const cardColor = computed(() => {
+      switch (props.types) {
+        case 'Missions':
+          return '-blue'
+        case 'ProgressMissions':
+          return '-red'
+        case 'DoneMissions':
+          return '-green'
+        default:
+          return '-blue'
+      }
+    })
 
     return {
       DeleteMission,
@@ -150,6 +166,7 @@ export default defineComponent({
       isCurrentUser,
       currentUser,
       mission,
+      cardColor,
       // フォーマット
       formatDateToSlashWithTime,
       // compositionAPI

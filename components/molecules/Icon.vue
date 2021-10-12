@@ -8,6 +8,8 @@
       { '-menu': types === 'menu' },
       { '-modal': types === 'modal' },
       { '-calendar-item': types === 'calendar-item' },
+      { '-comment': types === 'comment' },
+
       labelColor,
     ]"
   />

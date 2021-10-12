@@ -33,11 +33,15 @@
 @import 'components/common/card/card-contatiner';
 @import 'components/common/card/card-footer-items';
 
+@import 'components/common/card/detail-card';
+
 @import 'components/common/card/card-head';
 @import 'components/common/card/menu-item';
 
 // comment
 @import 'components/common/comment/base-comment-container';
+@import 'components/common/comment/base-comment-item-container';
+@import 'components/common/comment/mentionable-container';
 
 @import 'components/common/icon-container';
 @import 'components/common/user-menu-container';
@@ -51,14 +55,16 @@
 @import 'components/common/calendar/event-card';
 @import 'components/common/calendar/event-background.scss';
 
-//pages
+// default
 @import 'components/pages/default/root-container';
 @import 'components/pages/default/sidebar-container';
 @import 'components/pages/default/sidebar-item';
 @import 'components/pages/default/common-container';
 @import 'components/pages/default/wrapper-container';
 @import 'components/pages/default/error-alert';
+@import 'components/pages/default/background-container';
 
+//pages
 @import 'components/pages/users/user-edit-container';
 @import 'components/pages/posts/form-container';
 @import 'components/pages/posts/index-container';

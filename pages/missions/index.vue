@@ -27,7 +27,11 @@
           @end="dragging = false"
         >
           <div v-for="mission in missions" :key="mission.id" class="items">
-            <BaseMissionCard :prop-mission="mission" @update="updateMission" />
+            <BaseMissionCard
+              :prop-mission="mission"
+              types="Misions"
+              @update="updateMission"
+            />
           </div>
         </draggable>
       </div>
@@ -51,7 +55,11 @@
             :key="mission.id"
             class="items"
           >
-            <BaseMissionCard :prop-mission="mission" @update="updateMission" />
+            <BaseMissionCard
+              :prop-mission="mission"
+              types="ProgressMissions"
+              @update="updateMission"
+            />
           </div>
         </draggable>
       </div>
@@ -71,7 +79,11 @@
           @end="dragging = false"
         >
           <div v-for="mission in DoneMissions" :key="mission.id" class="items">
-            <BaseMissionCard :prop-mission="mission" @update="updateMission" />
+            <BaseMissionCard
+              :prop-mission="mission"
+              types="DoneMissions"
+              @update="updateMission"
+            />
           </div>
         </draggable>
       </div>

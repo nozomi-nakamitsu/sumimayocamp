@@ -1,26 +1,26 @@
 <template>
-  <div class="container">
-    <div>
-      <Mentionable
-        :keys="['@']"
-        :items="items"
-        offset="6"
-        insert-space
-        @open="onOpen"
-      >
-        <textarea v-model="text" @input="onSelected(text)" />
-        <template #no-result>
-          <div class="dim">No result</div>
-        </template>
+  <div class="mentionable-container">
+    <Mentionable
+      :keys="['@']"
+      :items="items"
+      offset="6"
+      insert-space
+      @open="onOpen"
+    >
+      <textarea v-model="text" class="textarea" @input="onSelected(text)" />
+      <template #no-result>
+        <div class="user" style="display: none">該当するユーザーがいません</div>
+      </template>
 
-        <template #item-@="{ item }">
-          <div class="user">
-            {{ item.user.nickName }}
-            <!-- <span class="dim"> ({{ item.user.nickName }}) </span> -->
-          </div>
-        </template>
-      </Mentionable>
-    </div>
+      <template #item-@="{ item }">
+        <div class="image">
+          <img :src="item.user.photoURL" alt="" class="img" />
+        </div>
+        <div class="user">
+          {{ item.user.nickName }}
+        </div>
+      </template>
+    </Mentionable>
   </div>
 </template>
 
@@ -32,11 +32,15 @@ import {
   onBeforeUnmount,
   watch,
 } from '@nuxtjs/composition-api'
+import { Mentionable } from 'vue-mention'
 import _ from 'lodash'
 import { firestore } from '@/plugins/firebase'
 import { CurrentUser } from '@/types/props-types'
 
 export default defineComponent({
+  components: {
+    Mentionable,
+  },
   props: {
     setValue: {
       type: String,
@@ -92,7 +96,9 @@ export default defineComponent({
           const target = users.value.find((user) => user.user.nickName === name)
           selectedUser.value = [...selectedUser.value, target.user]
         }
+        return null
       })
+
       const data = { selectedUser: selectedUser.value, text }
       ctx.emit('on-selected', data)
     }
@@ -108,14 +114,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style>
-mention-item {
-  padding: 4px 10px;
-  border-radius: 4px;
-}
-
-.mention-selected {
-  background: rgb(192, 250, 153);
-}
-</style>

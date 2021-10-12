@@ -1,34 +1,24 @@
 <template>
   <div class="base-comment-container">
-    <h1>チャット</h1>
-    <section>
-      <main>
-        <div
-          v-for="(msg, index) in messages"
-          :key="'index-' + index"
-          class="message"
-          :class="[
-            { '-sent': sentOrReceived(msg.uid) === 'sent' },
-            { '-received': sentOrReceived(msg.uid) === 'received' },
-          ]"
-        >
-          <img :src="msg.photoURL" :alt="msg.nickName" />
-          <p>
-            {{ msg.text }}
-          </p>
-          <div @click="onDelete(msg)">
-            <Icon :icon="faEllipsisH" />
-          </div>
+    <div class="header">Comment</div>
+    <div class="main">
+      <div
+        v-for="(msg, index) in messages"
+        :key="'index-' + index"
+        class="message"
+      >
+        <BaseCommentItem :message="msg" :types="sentOrReceived(msg.uid)" />
+      </div>
+    </div>
+
+    <form class="form" @submit.prevent="sendMessage">
+      <TheMentionable :set-value="message" @on-selected="changeMessage" />
+      <button :disabled="!message" type="submit" class="btn">
+        <div class="common-button -comment">
+          <Icon :icon="faPaperPlane" types="coment" />
         </div>
-
-        <div ref="scrollable"></div>
-      </main>
-
-      <form class="form" @submit.prevent="sendMessage">
-        <TheMentionable :set-value="message" @on-selected="changeMessage" />
-        <button :disabled="!message" type="submit">📩</button>
-      </form>
-    </section>
+      </button>
+    </form>
   </div>
 </template>
 <script lang="ts">
@@ -40,11 +30,12 @@ import {
   onBeforeUnmount,
   computed,
 } from '@nuxtjs/composition-api'
-import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import _ from 'lodash'
 import { firestore } from '@/plugins/firebase.js'
 import Icon from '@/components/molecules/Icon.vue'
 import TheMentionable from '~/components/molecules/form/TheMentionable.vue'
+import BaseCommentItem from '~/components/molecules/comment/BaseCommentItem.vue'
 
 import { CurrentUser } from '~/types/props-types'
 
@@ -52,6 +43,7 @@ export default defineComponent({
   components: {
     Icon,
     TheMentionable,
+    BaseCommentItem,
   },
   props: {
     postId: {
@@ -104,6 +96,10 @@ export default defineComponent({
         .doc(id)
         .set(messageInfo)
       message.value = ''
+      const element = document.querySelector('.main')
+      if (element) {
+        element.scrollTop = element.scrollHeight
+      }
     }
     // ページ遷移後にsnapshotでの監視をstopする
     onBeforeUnmount(() => {
@@ -154,7 +150,7 @@ export default defineComponent({
       onDelete,
       changeMessage,
       // アイコン
-      faEllipsisH,
+      faPaperPlane,
       // メンション機能
       mentions,
     }

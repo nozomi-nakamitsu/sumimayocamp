@@ -11,6 +11,10 @@
     &.-start {
       justify-content: flex-start;
     }
+     &.-right {
+      width: 500px;
+      margin-left: 20px;
+    }
     &.-mission {
       width: 400px;
       background-color: $purple-boysenberry;
