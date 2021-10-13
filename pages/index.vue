@@ -32,13 +32,14 @@ import {
   defineComponent,
   onBeforeMount,
   onBeforeUnmount,
-  onMounted,
   ref,
   useStore,
 } from '@nuxtjs/composition-api'
 import _ from 'lodash'
 import { CurrentUser, Post } from '@/types/props-types'
 import Card from '@/components/organisms/Card.vue'
+import { UsersRef } from '~/utilities/useFirestore'
+
 import { firestore } from '@/plugins/firebase'
 import TheDeclaration from '~/components/organisms/TheDeclaration.vue'
 import BaseCalendar from '~/components/organisms/BaseCalendar.vue'
@@ -57,18 +58,18 @@ export default defineComponent({
     let unsubscribe = null as any
     const allUsers = ref<CurrentUser[]>([])
     // ユーザー一覧データを取得する
-    onBeforeMount(() => {
-      firestore
-        .collection('users')
+    const getAllUsers = () => {
+      UsersRef()
         .get()
-        .then(function (querySnapshot) {
+        .then((querySnapshot) => {
           querySnapshot.forEach(function (doc) {
             allUsers.value = [...allUsers.value, doc.data()] as CurrentUser[]
           })
         })
-    })
+    }
     // 投稿一覧データを取得する
-    onMounted(() => {
+    onBeforeMount(() => {
+      getAllUsers()
       unsubscribe = firestore
         .collection('posts')
         .orderBy('updated_at', 'desc')

@@ -1,4 +1,5 @@
 import firebase, { firestore, storage, messaging } from '~/plugins/firebase.js'
+import { OneUserRef } from '~/utilities/useFirestore'
 
 import 'firebase/storage'
 const storageRef = storage.ref()
@@ -80,7 +81,7 @@ export const actions = {
         userObject.fcmToken = ''
         // NOTE:一度ログインしたことあるユーザーであれば、元のニックネームデータを取得する。初ログインユーザーであれば、displayNameニックネームの初期値にする
         if (!result.additionalUserInfo.isNewUser) {
-          const docRef = firestore.collection('users').doc(user.uid)
+          const docRef = OneUserRef(user.uid)
           await docRef.get().then((doc) => {
             if (doc.exists) {
               userObject.nickName = doc.data().nickName
@@ -124,8 +125,7 @@ export const actions = {
   // ④ 公開可能なユーザー情報をFirestoreに登録
   setPublicUserData({ commit }, userObject) {
     return new Promise((resolve) => {
-      const publicUser = firestore.collection('users').doc(userObject.uid)
-      // ** usersに登録するObjのみを登録する
+      const publicUser = OneUserRef(userObject.uid)
       const publicObj = {}
       publicObj.uid = userObject.uid
       publicObj.providerId = userObject.providerId
@@ -182,10 +182,8 @@ export const actions = {
       userObject.fcmToken = await messaging.getToken()
     })
 
-    await firestore.collection('users').doc(userObject.uid).update(userObject)
-    firestore
-      .collection('users')
-      .doc(userObject.uid)
+    await OneUserRef(userObject.uid).update(userObject)
+    OneUserRef(userObject.uid)
       .get()
       .then((doc) => {
         if (doc.exists) {
@@ -236,9 +234,7 @@ export const actions = {
   editNickName({ commit, state, dispatch }, formData) {
     return new Promise((resolve) => {
       try {
-        firestore
-          .collection('users')
-          .doc(state.currentUser.uid)
+        OneUserRef(state.currentUser.uid)
           .update(formData)
           .then(() => {
             commit('setCurrentUser', formData)
