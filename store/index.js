@@ -115,7 +115,7 @@ export const actions = {
     return new Promise((resolve) => {
       firebase
         .auth()
-        .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+        .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
         .then((result) => {
           resolve(result)
         })
