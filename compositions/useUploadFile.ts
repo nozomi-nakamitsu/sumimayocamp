@@ -1,6 +1,7 @@
 import { ref, useStore, watch } from '@nuxtjs/composition-api'
 import { v4 as uuidv4 } from 'uuid'
 import { CurrentUser, FileArray, PostForm } from '@/types/props-types'
+import { timestamp } from '@/compositions/useFormatData'
 export const useUploadFile = (currentUser: CurrentUser) => {
   const store = useStore()
   const isLoading = ref<boolean>(false)
@@ -10,8 +11,8 @@ export const useUploadFile = (currentUser: CurrentUser) => {
     user_id: currentUser.uid,
     title: '',
     content: '',
-    created_at: new Date(),
-    updated_at: new Date(),
+    created_at: timestamp(new Date()),
+    updated_at: timestamp(new Date()),
     user: { ...currentUser },
     files: [],
   })

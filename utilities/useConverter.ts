@@ -43,6 +43,18 @@ export class Post {
     readonly files: Files[]
   ) {}
 }
+export class Message {
+  constructor(
+    readonly createdAt: Timestamp,
+    readonly id: string,
+    readonly mentions: CurrentUser[],
+    readonly nickName: string,
+    readonly photoURL: string,
+    readonly postId: string,
+    readonly text: string,
+    readonly uid: string
+  ) {}
+}
 
 // Converter
 export const userConverter = {
@@ -107,6 +119,37 @@ export const postConverter = {
       data.updated_at,
       data.user,
       data.files
+    )
+  },
+}
+
+export const messageConverter = {
+  toFirestore(message: Message): firebase.firestore.DocumentData {
+    return {
+      createdAt: message.createdAt,
+      id: message.id,
+      mentions: message.mentions,
+      nickName: message.nickName,
+      photoURL: message.photoURL,
+      postId: message.postId,
+      text: message.text,
+      uid: message.uid,
+    }
+  },
+  fromFirestore(
+    snapshot: firebase.firestore.QueryDocumentSnapshot,
+    options: firebase.firestore.SnapshotOptions
+  ): Message {
+    const data = snapshot.data(options)!
+    return new Message(
+      data.createdAt,
+      data.id,
+      data.mentions,
+      data.nickName,
+      data.photoURL,
+      data.postId,
+      data.text,
+      data.uid
     )
   },
 }
