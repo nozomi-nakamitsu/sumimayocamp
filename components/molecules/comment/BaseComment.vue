@@ -32,6 +32,7 @@ import {
 } from '@nuxtjs/composition-api'
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import _ from 'lodash'
+import { v4 as uuidv4 } from 'uuid'
 import { firestore } from '@/plugins/firebase.js'
 import Icon from '@/components/molecules/Icon.vue'
 import TheMentionable from '~/components/molecules/form/TheMentionable.vue'
@@ -77,8 +78,7 @@ export default defineComponent({
       mentions.value = _.filter(mentions.value, function (item) {
         return message.value.includes(item.nickName)
       })
-
-      const id = await firestore.collection('posts').doc().id
+      const id = uuidv4()
       const messageInfo = {
         uid: currentUser.uid,
         nickName: currentUser.nickName,

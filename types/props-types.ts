@@ -1,3 +1,5 @@
+import { Timestamp } from '@google-cloud/firestore'
+
 /**
  * NOTE:storeのログインユーザーの型
  */
@@ -32,8 +34,8 @@ export interface MissionPost {
   id: string
   title: string
   content: string
-  created_at: Date
-  updated_at: Date
+  created_at: any
+  updated_at: any
   sendUser: CurrentUser
   receiveUser: CurrentUser[] | null
   files: FileArray[]
@@ -48,8 +50,8 @@ export interface PostForm {
   user_id: string
   title: string
   content: string
-  created_at: Date
-  updated_at: Date
+  created_at: Timestamp
+  updated_at: Timestamp
   user: CurrentUser
   files: FileArray[]
 }
@@ -72,8 +74,8 @@ export interface Post {
   title: string
   content: string
 
-  created_at: any
-  updated_at: any
+  created_at: Timestamp
+  updated_at: Timestamp
   user: CurrentUser
   emojiItems: {
     item: EmojiType | undefined
