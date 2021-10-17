@@ -9,6 +9,8 @@
       { '-modal': types === 'modal' },
       { '-calendar-item': types === 'calendar-item' },
       { '-comment': types === 'comment' },
+      { '-sidebar': types === 'sidebar' },
+
 
       labelColor,
     ]"
