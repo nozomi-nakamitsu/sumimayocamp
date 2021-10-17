@@ -3,6 +3,7 @@ import {
   userConverter,
   postConverter,
   messageConverter,
+  DeclarationConverter,
 } from '@/utilities/useConverter'
 
 export const UsersRef = () => {
@@ -30,4 +31,14 @@ export const OneMessageRef = (postId: string, messageId: string) => {
     .collection('messages')
     .withConverter(messageConverter)
     .doc(messageId)
+}
+export const OneDeclarationRef = (uid: string) => {
+  return firestore
+    .collection('declaration')
+    .withConverter(DeclarationConverter)
+    .doc(uid)
+}
+
+export const DeclarationRef = () => {
+  return firestore.collection('declaration').withConverter(DeclarationConverter)
 }

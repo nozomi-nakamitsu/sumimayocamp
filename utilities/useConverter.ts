@@ -56,6 +56,36 @@ export class Message {
   ) {}
 }
 
+export class Status {
+  constructor(
+    readonly nickName: string,
+    readonly photoURL: string,
+    readonly status: boolean,
+    readonly uid: string
+  ) {}
+}
+export class Mission {
+  constructor(
+    readonly content: string,
+    readonly created_at: Timestamp,
+    readonly files: Files[],
+    readonly id: string,
+    readonly position: number,
+    readonly receiveUser: [],
+    readonly sendUser: User[],
+    readonly status: Status[],
+    readonly title: string,
+    readonly updated_at: Timestamp
+  ) {}
+}
+export class Declaration {
+  constructor(
+    readonly declaration: string,
+    readonly mission: Mission[],
+    readonly uid: string
+  ) {}
+}
+
 // Converter
 export const userConverter = {
   toFirestore(user: User): firebase.firestore.DocumentData {
@@ -153,3 +183,22 @@ export const messageConverter = {
     )
   },
 }
+
+export const DeclarationConverter = {
+  toFirestore(declaration: Declaration): firebase.firestore.DocumentData {
+    return {
+      declaration: declaration.declaration,
+      mission: declaration.mission,
+      uid: declaration.uid,
+    }
+  },
+  fromFirestore(
+    snapshot: firebase.firestore.QueryDocumentSnapshot,
+    options: firebase.firestore.SnapshotOptions
+  ): Declaration {
+    const data = snapshot.data(options)!
+    return new Declaration(data.declaration, data.mission, data.uid)
+  },
+}
+
+// 絵文字、絵文字ユーザー、ミッション、ポジション、宣言
