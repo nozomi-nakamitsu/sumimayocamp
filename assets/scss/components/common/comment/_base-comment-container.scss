@@ -4,20 +4,19 @@
   height: 100vh;
   position: relative;
   width: 500px;
-  height: 700px;
 
   > .header {
     background-color: $purple-boysenberry;
-    height: 80px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     border-bottom: 1px solid $gray-lightpowdered;
-    padding:8px;
+    padding: 20px;
     opacity: 0.5;
   }
   > .main {
     height: calc(100% - 160px);
     overflow-y: scroll;
+    padding: 8px;
   }
   > .form {
     position: absolute;

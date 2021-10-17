@@ -2,51 +2,56 @@
   <div v-if="post.user" class="common-container -flex">
     <div class="index-container -mt">
       <div class="container -start">
-        <div class="detail-card">
-          <div class="title">
-            <p class="text">{{ post.title }}</p>
-          </div>
-          <div class="member">
-            <div class="image">
-              <img :src="post.user.photoURL" alt="" class="img" />
+        <div class="title -mt20">
+          <p class="text">{{ post.title }}</p>
+        </div>
+        <div class="body">
+          <div class="detail-card">
+            <div class="member">
+              <div class="image">
+                <img :src="post.user.photoURL" alt="" class="img" />
+              </div>
+              <p class="text">{{ post.user.nickName }}</p>
+              <p class="text -ml8">{{ updated_at }}</p>
+
+              <v-menu
+                :close-on-content-click="true"
+                :nudge-width="200"
+                offset-y
+                style="display: block"
+              >
+                <template #activator="{ on, attrs }">
+                  <div
+                    v-if="isMyPost(post.user_id)"
+                    v-bind="attrs"
+                    class="button -ml8"
+                    v-on="on"
+                  >
+                    <Icon :icon="faEllipsisH" types="button" />
+                  </div>
+                </template>
+
+                <v-card class="card">
+                  <div
+                    class="menu-item"
+                    @click="Router.push(`/posts/edit/${post.id}`)"
+                  >
+                    <Icon :icon="faCode" types="menu" />
+                    <p class="text">Edit</p>
+                  </div>
+                  <div
+                    class="menu-item"
+                    @click="DeletePost(post.id, post.files)"
+                  >
+                    <Icon :icon="faTrash" types="menu" />
+                    <p class="text">Delete</p>
+                  </div>
+                </v-card>
+              </v-menu>
             </div>
-            <p class="text">{{ post.user.nickName }}</p>
-            <p class="text -ml8">{{ updated_at }}</p>
-
-            <v-menu
-              :close-on-content-click="true"
-              :nudge-width="200"
-              offset-y
-              style="display: block"
-            >
-              <template #activator="{ on, attrs }">
-                <div
-                  v-if="isMyPost(post.user_id)"
-                  v-bind="attrs"
-                  class="button -ml8"
-                  v-on="on"
-                >
-                  <Icon :icon="faEllipsisH" types="button" />
-                </div>
-              </template>
-
-              <v-card class="card">
-                <div
-                  class="menu-item"
-                  @click="Router.push(`/posts/edit/${post.id}`)"
-                >
-                  <Icon :icon="faCode" types="menu" />
-                  <p class="text">Edit</p>
-                </div>
-                <div class="menu-item" @click="DeletePost(post.id, post.files)">
-                  <Icon :icon="faTrash" types="menu" />
-                  <p class="text">Delete</p>
-                </div>
-              </v-card>
-            </v-menu>
-          </div>
-          <div class="content">
-            <MarkdownViewCard :content="post.content" types="detail" />
+            <div class="content">
+              <MarkdownViewCard :content="post.content" types="detail" />
+            </div>
           </div>
         </div>
       </div>
