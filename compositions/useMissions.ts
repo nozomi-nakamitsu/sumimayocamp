@@ -1,7 +1,6 @@
 import { ref, useStore, watch } from '@nuxtjs/composition-api'
 import { v4 as uuidv4 } from 'uuid'
 import _ from 'lodash'
-import draggable from 'vuedraggable'
 import {
   FileArray,
   MissionPost,
@@ -9,6 +8,7 @@ import {
   MissionStatus,
 } from '@/types/props-types'
 import { firestore } from '@/plugins/firebase.js'
+import { OneMissionRef } from '@/utilities/useFirestore'
 
 export const useMissions = (props: any) => {
   const store = useStore()
@@ -24,6 +24,7 @@ export const useMissions = (props: any) => {
     receiveUser: [],
     files: [],
     status: [],
+    position: null,
   })
 
   const files = ref<FileArray[]>(missionForm.value.files)
@@ -92,7 +93,7 @@ export const useMissions = (props: any) => {
       },
     ]
     try {
-      await firestore.collection('missions').doc(mission.id).update(data)
+      await OneMissionRef(mission.id).update(data)
     } catch (error) {
       store.dispatch('onRejected', error)
     }
@@ -113,7 +114,7 @@ export const useMissions = (props: any) => {
       },
     ]
     try {
-      await firestore.collection('missions').doc(mission.id).update(data)
+      await OneMissionRef(mission.id).update(data)
     } catch (error) {
       store.dispatch('onRejected', error)
     }
@@ -126,7 +127,7 @@ export const useMissions = (props: any) => {
     })
 
     try {
-      await firestore.collection('missions').doc(mission.id).update(data)
+      await OneMissionRef(mission.id).update(data)
     } catch (error) {
       store.dispatch('onRejected', error)
     }

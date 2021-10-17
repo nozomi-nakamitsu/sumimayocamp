@@ -83,6 +83,7 @@ import {
 } from '@nuxtjs/composition-api'
 import ValidationInput from '../molecules/form/ValidationInput.vue'
 import { markdownOption } from '@/compositions/useMarkdown'
+import { timestamp } from '@/compositions/useFormatData'
 
 export default defineComponent({
   components: {
@@ -94,11 +95,11 @@ export default defineComponent({
       required: true,
     },
     title: {
-      types: String,
+      type: String,
       default: '',
     },
     propLoading: {
-      types: Boolean,
+      type: Boolean,
       default: false,
     },
   },
@@ -114,8 +115,10 @@ export default defineComponent({
       user_id: currentUser.uid,
       content: props.propsform.content,
       created_at:
-        props.title === '新規作成' ? new Date() : props.propsform.created_at,
-      updated_at: new Date(),
+        props.title === '新規作成'
+          ? timestamp(new Date())
+          : props.propsform.created_at,
+      updated_at: timestamp(new Date()),
       user: props.propsform.user,
     }))
 

@@ -54,10 +54,10 @@ import {
 import _ from 'lodash'
 import { FileArray, Mission, MissionStatus } from '@/types/props-types'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
+import { OneMissionRef } from '@/utilities/useFirestore'
 import BaseSquareMenu from '@/components/atoms/BaseSquareMenu.vue'
 import ModalViewMission from '@/components/organisms/ModalViewMission.vue'
 import { useModal } from '@/compositions/useModal'
-import { firestore } from '@/plugins/firebase.js'
 import { isCurrentUser } from '@/compositions/useAuth'
 
 export default defineComponent({
@@ -99,9 +99,10 @@ export default defineComponent({
             store.dispatch('deleteFile', {
               id,
             })
+            return null
           })
         }
-        await firestore.collection('missions').doc(id).delete()
+        await OneMissionRef(id).delete()
       } catch (error) {
         store.dispatch('onRejected', error)
       }
@@ -135,7 +136,7 @@ export default defineComponent({
         )
         data.status[targetIndex].status = target.status
         try {
-          await firestore.collection('missions').doc(mission.id).update(data)
+          await OneMissionRef(mission.id).update(data)
         } catch (error) {
           store.dispatch('onRejected', error)
         }

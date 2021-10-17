@@ -32,10 +32,13 @@ import {
 } from '@nuxtjs/composition-api'
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import _ from 'lodash'
-import { firestore } from '@/plugins/firebase.js'
+import { v4 as uuidv4 } from 'uuid'
+
 import Icon from '@/components/molecules/Icon.vue'
 import TheMentionable from '~/components/molecules/form/TheMentionable.vue'
 import BaseCommentItem from '~/components/molecules/comment/BaseCommentItem.vue'
+import { MessageRef, OneMessageRef } from '~/utilities/useFirestore'
+import { timestamp } from '@/compositions/useFormatData'
 
 import { CurrentUser } from '~/types/props-types'
 
@@ -63,10 +66,7 @@ export default defineComponent({
 
     // ページ遷移後にsnapshotでの監視をstartする
     onMounted(() => {
-      unsubscribe = firestore
-        .collection('posts')
-        .doc(props.postId)
-        .collection('messages')
+      unsubscribe = MessageRef(props.postId)
         .orderBy('createdAt')
         .onSnapshot((snapshot) => {
           messages.value = snapshot.docs.map((doc) => doc.data())
@@ -77,24 +77,18 @@ export default defineComponent({
       mentions.value = _.filter(mentions.value, function (item) {
         return message.value.includes(item.nickName)
       })
-
-      const id = await firestore.collection('posts').doc().id
+      const id = uuidv4()
       const messageInfo = {
         uid: currentUser.uid,
         nickName: currentUser.nickName,
         photoURL: currentUser.photoURL,
         text: message.value,
         postId: props.postId,
-        createdAt: Date.now(),
+        createdAt: timestamp(new Date()),
         id,
         mentions: mentions.value,
       }
-      await firestore
-        .collection('posts')
-        .doc(props.postId)
-        .collection('messages')
-        .doc(id)
-        .set(messageInfo)
+      await OneMessageRef(props.postId, id).set(messageInfo)
       message.value = ''
       const element = document.querySelector('.main')
       if (element) {
@@ -117,12 +111,7 @@ export default defineComponent({
         return
       }
       try {
-        await firestore
-          .collection('posts')
-          .doc(props.postId)
-          .collection('messages')
-          .doc(msg.id)
-          .delete()
+        await OneMessageRef(props.postId, msg.id).delete()
       } catch (error) {
         store.dispatch('onRejected', error)
       }

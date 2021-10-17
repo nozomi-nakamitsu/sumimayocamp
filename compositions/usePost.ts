@@ -1,5 +1,5 @@
 import { useRouter, useStore, computed } from '@nuxtjs/composition-api'
-
+import { OnePostRef } from '~/utilities/useFirestore'
 import { FileArray } from '@/types/props-types'
 
 import { firestore } from '@/plugins/firebase.js'
@@ -61,7 +61,7 @@ export const usePost = () => {
           })
         })
       // NOTE:postsを削除
-      await firestore.collection('posts').doc(id).delete()
+      await OnePostRef(id).delete()
       Router.push('/')
     } catch (error) {
       store.dispatch('onRejected', error)

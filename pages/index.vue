@@ -15,7 +15,7 @@
         <div class="wrapper">
           <div class="title">今週のキャンプ</div>
           <div>
-            <TheDeclaration />
+            <TheDeclaration :declaration="declaration" />
           </div>
           <p class="title">カレンダー</p>
           <div class="calendar">
@@ -32,13 +32,15 @@ import {
   defineComponent,
   onBeforeMount,
   onBeforeUnmount,
-  onMounted,
   ref,
   useStore,
 } from '@nuxtjs/composition-api'
 import _ from 'lodash'
 import { CurrentUser, Post } from '@/types/props-types'
 import Card from '@/components/organisms/Card.vue'
+import { UsersRef, DeclarationRef } from '~/utilities/useFirestore'
+import { Declaration } from '~/utilities/useConverter'
+
 import { firestore } from '@/plugins/firebase'
 import TheDeclaration from '~/components/organisms/TheDeclaration.vue'
 import BaseCalendar from '~/components/organisms/BaseCalendar.vue'
@@ -54,21 +56,24 @@ export default defineComponent({
     const store = useStore()
     const currentUser = store.getters.getCurrentUser
     const posts = ref<Post[]>([])
+    const declaration = ref<Declaration | null>(null)
     let unsubscribe = null as any
+    let unsubscribeDeclaration = null as any
+
     const allUsers = ref<CurrentUser[]>([])
     // ユーザー一覧データを取得する
-    onBeforeMount(() => {
-      firestore
-        .collection('users')
+    const getAllUsers = () => {
+      UsersRef()
         .get()
-        .then(function (querySnapshot) {
+        .then((querySnapshot) => {
           querySnapshot.forEach(function (doc) {
             allUsers.value = [...allUsers.value, doc.data()] as CurrentUser[]
           })
         })
-    })
+    }
     // 投稿一覧データを取得する
-    onMounted(() => {
+    onBeforeMount(async () => {
+      await getAllUsers()
       unsubscribe = firestore
         .collection('posts')
         .orderBy('updated_at', 'desc')
@@ -80,7 +85,6 @@ export default defineComponent({
                 const postData = change.doc.data()
                 change.doc.ref
                   .collection('emojiItems')
-
                   .get()
                   .then((res) => {
                     // サブコレクションの絵文字データとサブサブコレクションの絵文字ユーザーデータを取得
@@ -189,15 +193,32 @@ export default defineComponent({
               }
             },
             (error: any) => {
-              console.error(error)
+              store.dispatch('onRejected', error)
             }
           )
         })
+      getDeclaration()
     })
     // ページ遷移後にsnapshotでの監視をstopする
     onBeforeUnmount(() => {
       unsubscribe()
+      unsubscribeDeclaration()
     })
+
+    const getDeclaration = () => {
+      unsubscribeDeclaration = DeclarationRef()
+        .where('uid', '==', store.getters.getCurrentUser.uid)
+        .onSnapshot((snapshot) => {
+          snapshot.docChanges().forEach(
+            (change) => {
+              declaration.value = change.doc.data()
+            },
+            (error: any) => {
+              store.dispatch('onRejected', error)
+            }
+          )
+        })
+    }
 
     // 絵文字押されたときに、user情報EmojiItemに追加する
     const addEmojiMember = (item: any, emojiUser: any, postData: Post) => {
@@ -214,6 +235,7 @@ export default defineComponent({
       // 全投稿データ
       posts,
       currentUser,
+      declaration,
     }
   },
 })

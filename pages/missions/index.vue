@@ -120,6 +120,7 @@ import BaseMissionCard from '@/components/organisms/BaseMissionCard.vue'
 import ModalCreateMission from '@/components/organisms/ModalCreateMission.vue'
 import { useModal } from '@/compositions/useModal'
 import { useMissions } from '@/compositions/useMissions'
+import { MissionRef } from '@/utilities/useFirestore'
 
 import { firestore } from '@/plugins/firebase'
 
@@ -268,6 +269,7 @@ export default defineComponent({
       receiveUser: [],
       files: [],
       status: [],
+      position: null,
     })
     const updateMission = (data: Mission) => {
       openModal()
@@ -285,6 +287,7 @@ export default defineComponent({
         receiveUser: [],
         files: [],
         status: [],
+        position: null,
       }
     }
     const { isOpened, openModal, closeModal } = useModal()
@@ -358,8 +361,7 @@ export default defineComponent({
 
     // NOTE:ポジションのみが変更された時(縦方向のみの移動時)に全てのデータのポジションをサーバーのデータを取得して更新している
     const getNewData = async (arg: Mission[], key: string) => {
-      await firestore
-        .collection('missions')
+      await MissionRef()
         .get()
         .then((snapshots) => {
           snapshots.docChanges().forEach((snapshot) => {

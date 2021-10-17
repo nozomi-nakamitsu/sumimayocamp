@@ -16,11 +16,11 @@
 
 <script lang="ts">
 import { defineComponent, useStore, useRouter } from '@nuxtjs/composition-api'
+import { v4 as uuidv4 } from 'uuid'
 import { PostForm, FileArray } from '@/types/props-types'
 import ThePostForm from '@/components/organisms/ThePostForm.vue'
-
-import { firestore } from '@/plugins/firebase'
 import { useUploadFile } from '@/compositions/useUploadFile'
+import { OnePostRef } from '~/utilities/useFirestore'
 
 export default defineComponent({
   components: {
@@ -61,9 +61,9 @@ export default defineComponent({
         form.value.files = files.value.filter((file: FileArray) =>
           form.value.content.includes(file.url)
         )
-        const id = firestore.collection('posts').doc().id
+        const id = uuidv4()
         form.value.id = id
-        firestore.collection('posts').doc(id).set(form.value)
+        OnePostRef(id).set(form.value)
         Router.push('/')
       } catch (error) {
         store.dispatch('onRejected', error)
