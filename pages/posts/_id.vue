@@ -20,7 +20,12 @@
               style="display: block"
             >
               <template #activator="{ on, attrs }">
-                <div v-bind="attrs" class="button -ml8" v-on="on">
+                <div
+                  v-if="isMyPost(post.user_id)"
+                  v-bind="attrs"
+                  class="button -ml8"
+                  v-on="on"
+                >
                   <Icon :icon="faEllipsisH" types="button" />
                 </div>
               </template>
@@ -108,7 +113,7 @@ export default defineComponent({
       return formatDateToSlashWithTime(post.value.updated_at)
     })
     // 削除メソッド
-    const { DeletePost } = usePost()
+    const { DeletePost, isMyPost } = usePost()
     return {
       // 認証系
       currentUser,
@@ -124,6 +129,7 @@ export default defineComponent({
       // 投稿削除
       DeletePost,
       faEllipsisH,
+      isMyPost,
     }
   },
 })
