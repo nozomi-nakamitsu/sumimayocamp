@@ -70,7 +70,7 @@
     height: 18px;
   }
   &.-modal {
-    font-size: 40px;
+    font-size: 30px;
     margin: 0;
     display: flex;
     justify-content: center;
@@ -89,5 +89,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  &.-sidebar {
+    font-size: 18px;
+    margin: 24px 0 0 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $purple;
+    &:hover {
+      color: $black-dugong;
+    }
   }
 }

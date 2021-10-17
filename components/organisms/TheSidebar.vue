@@ -5,13 +5,17 @@
         <div class="image">
           <img :src="currentUser.photoURL" alt="" class="img" />
         </div>
-        <p class="name">
-          {{
-            currentUser.nickName
-              ? currentUser.nickName
-              : currentUser.displayName
-          }}
-        </p>
+        <div class="head">
+          <p class="name">
+            {{
+              currentUser.nickName
+                ? currentUser.nickName
+                : currentUser.displayName
+            }}
+          </p>
+          <div @click="openModal"><Icon :icon="faCode" types="sidebar" /></div>
+        </div>
+
         <!-- TODO: 後で正しい値を表示できるように実装する -->
         <p class="date">Last Logined : 2021/08/31 23:00(仮)</p>
       </div>
@@ -56,7 +60,7 @@
         >
           <div class="container" :class="whereUrl('/users/edit')">
             <div class="circle -blue"></div>
-            <p class="title">Mypage</p>
+            <p class="title">Members List</p>
             <div class="button">
               <BaseSquareButton />
             </div>
@@ -67,6 +71,11 @@
         <button class="common-button -logout" @click="logout">Sigin Out</button>
       </div>
     </div>
+    <ModalUserEdit
+      :control-flag="isOpened"
+      title="プロフィール編集"
+      @click="closeModal"
+    />
   </div>
 </template>
 
@@ -78,10 +87,18 @@ import {
   computed,
   useRoute,
 } from '@nuxtjs/composition-api'
+import { faCode } from '@fortawesome/free-solid-svg-icons'
 import BaseSquareButton from '@/components/atoms/BaseSquareButton.vue'
+import Icon from '@/components/molecules/Icon.vue'
+import ModalUserEdit from '@/components/organisms/ModalUserEdit.vue'
+
+import { useModal } from '@/compositions/useModal'
+
 export default defineComponent({
   components: {
     BaseSquareButton,
+    Icon,
+    ModalUserEdit,
   },
   setup() {
     // compositionAPI
@@ -91,6 +108,7 @@ export default defineComponent({
 
     // ref
     const currentUser = store.getters.getCurrentUser
+    const { isOpened, openModal, closeModal } = useModal()
 
     // ログアウト
     const logout = async () => {
@@ -115,6 +133,12 @@ export default defineComponent({
       logout,
       currentUser,
       whereUrl,
+      // アイコン
+      faCode,
+      // モーダル
+      isOpened,
+      openModal,
+      closeModal,
     }
   },
 })

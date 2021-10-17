@@ -15,6 +15,11 @@
     justify-content: center;
     align-items: center;
   }
+    > .container > .top >.head {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   > .container > .top > .image {
     width: 100px;
     height: 100px;
@@ -25,7 +30,7 @@
     border-radius: 50%;
     object-fit: cover;
   }
-  > .container > .top > .name {
+  > .container > .top > .head>.name {
     margin-top: 24px;
     font-size: 18px;
     font-weight: bold;
