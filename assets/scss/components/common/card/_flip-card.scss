@@ -1,0 +1,212 @@
+.flip-card {
+  > .wrapper {
+    min-width: 250px;
+    width: 20%;
+  }
+
+  > .wrapper > .cols {
+    min-width: 250px;
+    width: 20%;
+  }
+
+  > .wrapper > .cols > .col {
+    cursor: pointer;
+    min-width: 250px;
+    width: 20%;
+    padding: 20px;
+  }
+  > .wrapper > .cols > .col > .container {
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+    min-width: 250px;
+    width: 20%;
+  }
+
+  > .wrapper > .cols > .col > .container > .front {
+    background-size: cover;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    background-position: center;
+    -webkit-transition: -webkit-transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: -webkit-transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    -o-transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1),
+      -webkit-transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    text-align: center;
+    min-height: 280px;
+    height: auto;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1.5rem;
+    min-width: 250px;
+    width: 20%;
+  }
+  > .wrapper > .cols > .col > .container > .back {
+    background-size: cover;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    background-position: center;
+    -webkit-transition: -webkit-transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: -webkit-transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    -o-transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1),
+      -webkit-transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    text-align: center;
+    min-height: 280px;
+    height: auto;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1.5rem;
+    min-width: 250px;
+    width: 20%;
+  }
+
+  > .wrapper > .cols > .col > .container > .back {
+    background: #cedce7;
+  }
+
+  > .wrapper > .cols > .col > .container:hover .front {
+    -webkit-transition: -webkit-transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: -webkit-transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    -o-transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1),
+      -webkit-transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+  }
+
+  > .wrapper > .cols > .col > .container:hover .back {
+    -webkit-transition: -webkit-transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: -webkit-transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    -o-transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1),
+      -webkit-transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+  }
+
+  > .wrapper > .cols > .col > .container > .back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 250px;
+    width: 20%;
+  }
+
+  > .wrapper > .cols > .col > .container > .front > .inner {
+    -webkit-transform: translateY(-50%) translateZ(60px) scale(0.94);
+    transform: translateY(-50%) translateZ(60px) scale(0.94);
+    top: 50%;
+    position: absolute;
+    left: 0;
+    min-width: 250px;
+    width: 20%;
+    padding: 20px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: 1px solid transparent;
+    -webkit-perspective: inherit;
+    perspective: inherit;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  > .wrapper > .cols > .col > .container > .back > .inner {
+    -webkit-transform: translateY(-50%) translateZ(60px) scale(0.94);
+    transform: translateY(-50%) translateZ(60px) scale(0.94);
+    top: 50%;
+    position: absolute;
+    left: 0;
+    min-width: 250px;
+    width: 20%;
+    padding: 20px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: 1px solid transparent;
+    -webkit-perspective: inherit;
+    perspective: inherit;
+    z-index: 2;
+  }
+
+  > .wrapper > .cols > .col > .container .back {
+    -webkit-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+  }
+
+  > .wrapper > .cols > .col > .container .front {
+    -webkit-transform: rotateY(0deg);
+    transform: rotateY(0deg);
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+
+    background-color: $purple-boysenberry;
+  }
+
+  > .wrapper > .cols > .col > .container:hover .back {
+    -webkit-transform: rotateY(0deg);
+    transform: rotateY(0deg);
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+  }
+
+  > .wrapper > .cols > .col > .container:hover .front {
+    -webkit-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+  }
+
+  > .wrapper > .cols > .col > .container > .front > .inner > .image {
+    width: 150px;
+    height: 150px;
+    padding: 8px;
+  }
+  > .wrapper > .cols > .col > .container > .front > .inner > .image > .img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  > .wrapper > .cols > .col > .container > .front > .inner > .image > .img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  > .wrapper > .cols > .col > .container > .front > .inner > .body {
+    font-size: 12px;
+    text-align: center;
+    color: $black-dugong;
+  }
+  > .wrapper > .cols > .col > .container > .front > .inner > .body > .name {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  > .wrapper
+    > .cols
+    > .col
+    > .container
+    > .back
+    > .inner
+    > .body
+    > .text
+    > .name {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  > .wrapper > .cols > .col > .container > .back > .inner > .body > .text {
+    font-size: 16px;
+    &.-mt20 {
+      margin-top: 20px;
+    }
+  }
+}
