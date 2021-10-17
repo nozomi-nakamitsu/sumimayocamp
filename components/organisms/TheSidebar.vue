@@ -55,10 +55,10 @@
         </div>
         <div
           class="sidebar-item"
-          :class="whereUrl('/users/edit')"
-          @click="Router.push('/users/edit')"
+          :class="whereUrl('/users')"
+          @click="Router.push('/users')"
         >
-          <div class="container" :class="whereUrl('/users/edit')">
+          <div class="container" :class="whereUrl('/users')">
             <div class="circle -blue"></div>
             <p class="title">Members List</p>
             <div class="button">

@@ -72,7 +72,7 @@ export default defineComponent({
           return '#e3e3ff'
         case '/missions':
           return '#ffd36b'
-        case '/users/edit':
+        case '/users':
           return '#ff9a8f'
 
         default:
@@ -88,7 +88,7 @@ export default defineComponent({
           return '#8bf0ce'
         case '/missions':
           return '#ffff'
-        case '/users/edit':
+        case '/users':
           return '#ffd36b'
         default:
           return '#99d3ff'
@@ -100,7 +100,7 @@ export default defineComponent({
           return '-create'
         case '/missions':
           return '-missions'
-        case '/users/edit':
+        case '/users':
           return '-users'
         default:
           return ''
