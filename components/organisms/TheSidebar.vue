@@ -17,7 +17,7 @@
         </div>
 
         <!-- TODO: 後で正しい値を表示できるように実装する -->
-        <p class="date">Last Logined : 2021/08/31 23:00(仮)</p>
+        <p class="date">Last Logined : {{ lastloginDate }}</p>
       </div>
       <div class="middle">
         <div
@@ -93,6 +93,8 @@ import Icon from '@/components/molecules/Icon.vue'
 import ModalUserEdit from '@/components/organisms/ModalUserEdit.vue'
 
 import { useModal } from '@/compositions/useModal'
+import { Auth } from '@/plugins/firebase'
+import { formatOnlyDateToSlash } from '@/compositions/useFormatData'
 
 export default defineComponent({
   components: {
@@ -125,6 +127,10 @@ export default defineComponent({
       }
     })
 
+    const lastloginDate = Auth.currentUser?.metadata.lastSignInTime
+      ? formatOnlyDateToSlash(Auth.currentUser?.metadata.lastSignInTime)
+      : null
+
     return {
       // compositionAPI
       store,
@@ -139,6 +145,7 @@ export default defineComponent({
       isOpened,
       openModal,
       closeModal,
+      lastloginDate,
     }
   },
 })
