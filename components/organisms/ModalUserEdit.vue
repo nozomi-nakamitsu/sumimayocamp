@@ -71,7 +71,7 @@ export default defineComponent({
         await store.dispatch('editNickName', form.value)
         ctx.emit('click')
       } catch (error) {
-        store.dispatch('onRejectted', error)
+        store.dispatch('onRejected', error)
       }
     }
 

@@ -65,9 +65,8 @@ export const actions = {
     firebase
       .auth()
       .signInWithPopup(provider)
-      .then(async function (result) {
+      .then(async (result) => {
         const user = result.user
-        console.log('user.email', user.email)
         commit('setIsLogined', true)
         // 認証後のユーザー情報を取得してオブジェクト化
         const userObject = {}
@@ -99,7 +98,7 @@ export const actions = {
         dispatch('setPublicUserData', userObject)
         dispatch('setLocalUserData', userObject)
       })
-      .catch(function (error) {
+      .catch((error) => {
         const errorCode = error.code
         console.error('error : ' + errorCode)
         console.error('errorMessage : ' + error)
@@ -216,7 +215,7 @@ export const actions = {
       const url = userObject.photoURL
       const xhr = new XMLHttpRequest()
       xhr.responseType = 'blob'
-      xhr.onload = function () {
+      xhr.onload = () => {
         const blob = xhr.response
         const mountainsRef = storageRef.child(
           `user/${userObject.uid}/image.jpg`
@@ -274,7 +273,7 @@ export const actions = {
             storage
               .ref(uploadTask.ref.fullPath)
               .getDownloadURL()
-              .then(function (url) {
+              .then((url) => {
                 resolve(url)
               })
           })

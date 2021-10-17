@@ -92,8 +92,8 @@ export default defineComponent({
         let allUsers = <any>[]
         await UsersRef()
           .get()
-          .then(function (querySnapshot) {
-            querySnapshot.forEach(function (doc) {
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
               allUsers = [...allUsers, doc.data()] as CurrentUser[]
             })
           })
