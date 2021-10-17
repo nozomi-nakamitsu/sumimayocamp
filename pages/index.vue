@@ -66,7 +66,7 @@ export default defineComponent({
       UsersRef()
         .get()
         .then((querySnapshot) => {
-          querySnapshot.forEach(function (doc) {
+          querySnapshot.forEach((doc) => {
             allUsers.value = [...allUsers.value, doc.data()] as CurrentUser[]
           })
         })

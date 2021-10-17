@@ -39,8 +39,8 @@ export default defineComponent({
       firestore
         .collection('users')
         .get()
-        .then(function (querySnapshot) {
-          querySnapshot.forEach(function (doc) {
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
             allUsers.value = [...allUsers.value, doc.data()] as CurrentUser[]
           })
         })
