@@ -10,6 +10,8 @@ export interface CurrentUser {
   displayName: string
   nickName: string
   fcmToken: string
+  isLogined: boolean
+  updated_at: Timestamp
 }
 // マークダウンエディター用にファイル情報保有用の配列の型
 export interface FileArray {

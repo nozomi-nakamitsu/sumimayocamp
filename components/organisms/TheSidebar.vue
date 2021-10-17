@@ -17,7 +17,7 @@
         </div>
 
         <!-- TODO: 後で正しい値を表示できるように実装する -->
-        <p class="date">Last Logined : 2021/08/31 23:00(仮)</p>
+        <p class="date">Last Logined : {{ lastloginDate }}</p>
       </div>
       <div class="middle">
         <div
@@ -55,10 +55,10 @@
         </div>
         <div
           class="sidebar-item"
-          :class="whereUrl('/users/edit')"
-          @click="Router.push('/users/edit')"
+          :class="whereUrl('/users')"
+          @click="Router.push('/users')"
         >
-          <div class="container" :class="whereUrl('/users/edit')">
+          <div class="container" :class="whereUrl('/users')">
             <div class="circle -blue"></div>
             <p class="title">Members List</p>
             <div class="button">
@@ -93,6 +93,8 @@ import Icon from '@/components/molecules/Icon.vue'
 import ModalUserEdit from '@/components/organisms/ModalUserEdit.vue'
 
 import { useModal } from '@/compositions/useModal'
+import { Auth } from '@/plugins/firebase'
+import { formatOnlyDateToSlash , timestamp } from '@/compositions/useFormatData'
 
 export default defineComponent({
   components: {
@@ -113,9 +115,12 @@ export default defineComponent({
     // ログアウト
     const logout = async () => {
       try {
-        await store.dispatch('logout')
+        const formData = currentUser
+        formData.isLogined = false
+        formData.updated_at = timestamp(new Date())
+        await store.dispatch('logout', formData)
       } catch (error) {
-        store.dispatch('onRejectted', error)
+        store.dispatch('onRejected', error)
       }
     }
     const whereUrl = computed(() => (routeName: string) => {
@@ -124,6 +129,10 @@ export default defineComponent({
         active: pathName === routeName,
       }
     })
+
+    const lastloginDate = Auth.currentUser?.metadata.lastSignInTime
+      ? formatOnlyDateToSlash(Auth.currentUser?.metadata.lastSignInTime)
+      : null
 
     return {
       // compositionAPI
@@ -139,6 +148,7 @@ export default defineComponent({
       isOpened,
       openModal,
       closeModal,
+      lastloginDate,
     }
   },
 })
