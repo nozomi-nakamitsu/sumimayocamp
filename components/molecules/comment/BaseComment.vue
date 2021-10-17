@@ -70,6 +70,10 @@ export default defineComponent({
         .orderBy('createdAt')
         .onSnapshot((snapshot) => {
           messages.value = snapshot.docs.map((doc) => doc.data())
+          const element = document.querySelector('.main')
+          if (element) {
+            element.scrollTop = element.scrollHeight
+          }
         })
     })
     // メッセージを送信する

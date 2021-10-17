@@ -10,7 +10,10 @@
       <p class="text" :class="[{ '-sent': types === 'sent' }]">
         {{ message.text }}
       </p>
-      <p class="date" style="text-align: end">
+      <p class="date" style="text-align: end" v-if="types === 'sent'">
+        {{ formatOnlyDateToSlashWithTime(new Date()) }}
+      </p>
+      <p class="date" v-else>
         {{ formatOnlyDateToSlashWithTime(new Date()) }}
       </p>
       <!-- <div

@@ -2,46 +2,56 @@
   <div v-if="post.user" class="common-container -flex">
     <div class="index-container -mt">
       <div class="container -start">
-        <div class="detail-card">
-          <div class="title">
-            <p class="text">{{ post.title }}</p>
-          </div>
-          <div class="member">
-            <div class="image">
-              <img :src="post.user.photoURL" alt="" class="img" />
+        <div class="title -mt20">
+          <p class="text">{{ post.title }}</p>
+        </div>
+        <div class="body">
+          <div class="detail-card">
+            <div class="member">
+              <div class="image">
+                <img :src="post.user.photoURL" alt="" class="img" />
+              </div>
+              <p class="text">{{ post.user.nickName }}</p>
+              <p class="text -ml8">{{ updated_at }}</p>
+
+              <v-menu
+                :close-on-content-click="true"
+                :nudge-width="200"
+                offset-y
+                style="display: block"
+              >
+                <template #activator="{ on, attrs }">
+                  <div
+                    v-if="isMyPost(post.user_id)"
+                    v-bind="attrs"
+                    class="button -ml8"
+                    v-on="on"
+                  >
+                    <Icon :icon="faEllipsisH" types="button" />
+                  </div>
+                </template>
+
+                <v-card class="card">
+                  <div
+                    class="menu-item"
+                    @click="Router.push(`/posts/edit/${post.id}`)"
+                  >
+                    <Icon :icon="faCode" types="menu" />
+                    <p class="text">Edit</p>
+                  </div>
+                  <div
+                    class="menu-item"
+                    @click="DeletePost(post.id, post.files)"
+                  >
+                    <Icon :icon="faTrash" types="menu" />
+                    <p class="text">Delete</p>
+                  </div>
+                </v-card>
+              </v-menu>
             </div>
-            <p class="text">{{ post.user.nickName }}</p>
-            <p class="text -ml8">{{ updated_at }}</p>
-
-            <v-menu
-              :close-on-content-click="true"
-              :nudge-width="200"
-              offset-y
-              style="display: block"
-            >
-              <template #activator="{ on, attrs }">
-                <div v-bind="attrs" class="button -ml8" v-on="on">
-                  <Icon :icon="faEllipsisH" types="button" />
-                </div>
-              </template>
-
-              <v-card class="card">
-                <div
-                  class="menu-item"
-                  @click="Router.push(`/posts/edit/${post.id}`)"
-                >
-                  <Icon :icon="faCode" types="menu" />
-                  <p class="text">Edit</p>
-                </div>
-                <div class="menu-item" @click="DeletePost(post.id, post.files)">
-                  <Icon :icon="faTrash" types="menu" />
-                  <p class="text">Delete</p>
-                </div>
-              </v-card>
-            </v-menu>
-          </div>
-          <div class="content">
-            <MarkdownViewCard :content="post.content" types="detail" />
+            <div class="content">
+              <MarkdownViewCard :content="post.content" types="detail" />
+            </div>
           </div>
         </div>
       </div>
@@ -61,19 +71,15 @@ import {
   useRouter,
   computed,
   onBeforeMount,
-  onMounted,
 } from '@nuxtjs/composition-api'
-import _ from 'lodash'
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
 import MarkdownViewCard from '@/components/organisms/MarkdownViewCard.vue'
 import Icon from '@/components/molecules/Icon.vue'
-
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 import { isCurrentUser } from '@/compositions/useAuth'
-import { firestore } from '@/plugins/firebase.js'
 import BaseComment from '~/components/molecules/comment/BaseComment.vue'
-import { CurrentUser } from '@/types/props-types'
 import { usePost } from '~/compositions/usePost'
+import { OnePostRef } from '@/utilities/useFirestore'
 
 export default defineComponent({
   components: {
@@ -92,34 +98,12 @@ export default defineComponent({
     const post = ref(store.getters.getPost)
     // 投稿者情報を取得
     const id = Route.value.params.id
-    const allUsers = ref<CurrentUser[]>([])
-
-    // ユーザー一覧データを取得する
     onBeforeMount(() => {
-      firestore
-        .collection('users')
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            allUsers.value = [...allUsers.value, doc.data()] as CurrentUser[]
-          })
-        })
-    })
-    onMounted(async () => {
       try {
-        await store
-          .dispatch('getPostData', {
-            id,
-          })
+        OnePostRef(id)
+          .get()
           .then((result) => {
-            const targetUser = _.find(
-              allUsers.value,
-              function (user: CurrentUser) {
-                return user.uid === result.user_id
-              }
-            )
-            result.user = { ...targetUser }
-            post.value = { ...result }
+            post.value = { ...result.data() }
           })
       } catch (error) {
         store.dispatch('onRejected', error)
@@ -134,7 +118,7 @@ export default defineComponent({
       return formatDateToSlashWithTime(post.value.updated_at)
     })
     // 削除メソッド
-    const { DeletePost } = usePost()
+    const { DeletePost, isMyPost } = usePost()
     return {
       // 認証系
       currentUser,
@@ -150,6 +134,7 @@ export default defineComponent({
       // 投稿削除
       DeletePost,
       faEllipsisH,
+      isMyPost,
     }
   },
 })
