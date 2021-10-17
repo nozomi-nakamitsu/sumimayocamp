@@ -11,7 +11,6 @@ export default function ({ route, store, redirect }: Context) {
           .doc(user.uid)
           .get()
           .then((doc) => {
-            console.log("middleware")
             store.commit('setCurrentUser', doc.data())
           })
         if (route.name === 'login___ja') {

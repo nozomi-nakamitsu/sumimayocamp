@@ -37,9 +37,10 @@ export interface MissionPost {
   created_at: any
   updated_at: any
   sendUser: CurrentUser
-  receiveUser: CurrentUser[] | null
+  receiveUser: []
   files: FileArray[]
   status: MissionStatus[]
+  position: number | null
 }
 /**
  * NOTE:
@@ -124,6 +125,7 @@ export interface MissionForm {
   receiveUser: CurrentUser[] | null
   files: FileArray[]
   status: MissionStatus[]
+  position: number | null
 }
 /**
  * NOTE:

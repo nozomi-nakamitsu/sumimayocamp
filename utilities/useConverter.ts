@@ -70,14 +70,19 @@ export class Mission {
     readonly created_at: Timestamp,
     readonly files: Files[],
     readonly id: string,
-    readonly position: number,
+    readonly position: number | null,
     readonly receiveUser: [],
-    readonly sendUser: User[],
+    readonly sendUser: CurrentUser,
     readonly status: Status[],
     readonly title: string,
     readonly updated_at: Timestamp
   ) {}
 }
+
+export class Position {
+  constructor(readonly position: number | null) {}
+}
+
 export class Declaration {
   constructor(
     readonly declaration: string,
@@ -201,4 +206,53 @@ export const DeclarationConverter = {
   },
 }
 
-// 絵文字、絵文字ユーザー、ミッション、ポジション、宣言
+export const MissionConverter = {
+  toFirestore(mission: Mission): firebase.firestore.DocumentData {
+    return {
+      content: mission.content,
+      created_at: mission.created_at,
+      files: mission.files,
+      id: mission.id,
+      position: mission.position,
+      receiveUser: mission.receiveUser,
+      sendUser: mission.sendUser,
+      status: mission.status,
+      title: mission.title,
+      updated_at: mission.updated_at,
+    }
+  },
+  fromFirestore(
+    snapshot: firebase.firestore.QueryDocumentSnapshot,
+    options: firebase.firestore.SnapshotOptions
+  ): Mission {
+    const data = snapshot.data(options)!
+    return new Mission(
+      data.content,
+      data.created_at,
+      data.files,
+      data.id,
+      data.position,
+      data.receiveUser,
+      data.sendUser,
+      data.status,
+      data.title,
+      data.updated_at
+    )
+  },
+}
+export const PositionConverter = {
+  toFirestore(position: Position): firebase.firestore.DocumentData {
+    return {
+      position: position.position,
+    }
+  },
+  fromFirestore(
+    snapshot: firebase.firestore.QueryDocumentSnapshot,
+    options: firebase.firestore.SnapshotOptions
+  ): Position {
+    const data = snapshot.data(options)!
+    return new Position(data.position)
+  },
+}
+
+// 絵文字、絵文字ユーザー、ミッション、ポジション、

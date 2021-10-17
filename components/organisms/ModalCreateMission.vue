@@ -17,6 +17,8 @@ import { FileArray, MissionPost, CurrentUser } from '@/types/props-types'
 import { firestore } from '@/plugins/firebase'
 import BaseModal from '@/components/atoms/BaseModal.vue'
 import { useMissions } from '~/compositions/useMissions'
+import { v4 as uuidv4 } from 'uuid'
+import { OneMissionRef, PositionRef, UsersRef } from '@/utilities/useFirestore'
 
 export default defineComponent({
   components: {
@@ -85,25 +87,19 @@ export default defineComponent({
         missionForm.value.files = files.value.filter((file: FileArray) =>
           missionForm.value.content.includes(file.url)
         )
-        const id = await firestore.collection('missions').doc().id
+        const id = uuidv4()
         missionForm.value.id = id
         let allUsers = <any>[]
-        await firestore
-          .collection('users')
+        await UsersRef()
           .get()
           .then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
               allUsers = [...allUsers, doc.data()] as CurrentUser[]
             })
           })
-        await firestore.collection('missions').doc(id).set(missionForm.value)
-        allUsers.map(async (user: CurrentUser) => {
-          firestore
-            .collection('missions')
-            .doc(id)
-            .collection('positions')
-            .doc(user.uid)
-            .set({ position: null })
+        await OneMissionRef(id).set(missionForm.value)
+        allUsers.map((user: CurrentUser) => {
+          PositionRef(id, user.uid).set({ position: null })
         })
         ctx.emit('click')
       } catch (error) {
@@ -137,10 +133,7 @@ export default defineComponent({
           missionForm.value.content.includes(file.url)
         )
 
-        await firestore
-          .collection('missions')
-          .doc(missionForm.value.id)
-          .update(missionForm.value)
+        await OneMissionRef(missionForm.value.id).update(missionForm.value)
         ctx.emit('click')
       } catch (error) {
         store.dispatch('onRejected', error)

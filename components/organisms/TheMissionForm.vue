@@ -106,6 +106,7 @@ export default defineComponent({
       sendUser: store.getters.getCurrentUser,
       receiveUser: props.propsform.receiveUser,
       status: props.propsform.status,
+      position: props.propsform.position,
     }))
 
     const fileUploadEvent = ref<any>(null)

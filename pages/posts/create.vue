@@ -20,7 +20,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { PostForm, FileArray } from '@/types/props-types'
 import ThePostForm from '@/components/organisms/ThePostForm.vue'
 import { useUploadFile } from '@/compositions/useUploadFile'
-import { PostRef } from '~/utilities/useFirestore'
+import { OnePostRef } from '~/utilities/useFirestore'
 
 export default defineComponent({
   components: {
@@ -63,7 +63,7 @@ export default defineComponent({
         )
         const id = uuidv4()
         form.value.id = id
-        PostRef(id).set(form.value)
+        OnePostRef(id).set(form.value)
         Router.push('/')
       } catch (error) {
         store.dispatch('onRejected', error)
