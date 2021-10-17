@@ -12,7 +12,7 @@ export const formatOnlyDateToSlashWithTime = (date: Date): string => {
 }
 // date => YYYY/MM/DD HH:mm
 export const formatOnlyDateToSlash = (date: string): string => {
-  return dayjs(date).format('YYYY/MM/DD')
+  return dayjs(date).format('YYYY/MM/DD HH:mm')
 }
 
 // DateをFirestore のTimestamp に変換して返す
