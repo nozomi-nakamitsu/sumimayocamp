@@ -5,6 +5,11 @@
   height: 200px;
   border-radius: 8px;
   padding: 10px;
+  cursor: pointer;
+  
+  &.-mx {
+    margin: 0 8px;
+  }
   &.-blue {
     background-color: $blue;
   }
@@ -42,6 +47,9 @@
     align-items: flex-end;
     &.-start {
       justify-content: flex-start;
+    }
+    &.-end {
+      justify-content: flex-end;
     }
   }
   > .container > .footer > .emoji {

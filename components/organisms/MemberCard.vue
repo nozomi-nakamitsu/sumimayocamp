@@ -1,5 +1,5 @@
 <template>
-  <div class="flip-card">
+  <div class="flip-card" @click="$emit('open-modal', user)">
     <div class="wrapper">
       <div class="cols">
         <div class="col" ontouchstart="this.classList.toggle('hover');">
@@ -53,7 +53,6 @@ import { defineComponent } from '@nuxtjs/composition-api'
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 
 export default defineComponent({
-  // components: { Icon },
   props: {
     user: {
       type: Object,
@@ -64,6 +63,7 @@ export default defineComponent({
       default: '',
     },
   },
+  emits: ['open-modal'],
   setup() {
     return {
       formatDateToSlashWithTime,
