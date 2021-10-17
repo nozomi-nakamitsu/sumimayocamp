@@ -52,7 +52,9 @@
   > .message > .date {
     margin-right: 5px;
     margin-top: 5px;
-
     font-size: 8px;
+    &.-sent {
+      text-align: end !important;
+    }
   }
 }
