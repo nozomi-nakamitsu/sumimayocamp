@@ -37,6 +37,7 @@
 
 @import 'components/common/card/card-head';
 @import 'components/common/card/menu-item';
+@import 'components/common/card/member-card-container';
 
 // comment
 @import 'components/common/comment/base-comment-container';
@@ -65,7 +66,7 @@
 @import 'components/pages/default/background-container';
 
 //pages
-@import 'components/pages/users/user-edit-container';
+@import 'components/pages/users/member-list-container';
 @import 'components/pages/posts/form-container';
 @import 'components/pages/posts/index-container';
 @import 'components/pages/posts/declaration-container';
