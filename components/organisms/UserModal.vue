@@ -8,7 +8,7 @@
       <div v-for="post in propPosts" :key="post.id" class="items">
         <Card :post="post" />
       </div>
-      <div v-if="!propPosts.left">投稿してないようです..</div>
+      <div v-if="!propPosts.length">投稿してないようです..</div>
     </div>
   </BaseModal>
 </template>

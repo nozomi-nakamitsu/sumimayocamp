@@ -94,8 +94,7 @@ import ModalUserEdit from '@/components/organisms/ModalUserEdit.vue'
 
 import { useModal } from '@/compositions/useModal'
 import { Auth } from '@/plugins/firebase'
-import { formatOnlyDateToSlash } from '@/compositions/useFormatData'
-import { timestamp } from '@/compositions/useFormatData'
+import { formatOnlyDateToSlash , timestamp } from '@/compositions/useFormatData'
 
 export default defineComponent({
   components: {
