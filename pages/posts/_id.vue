@@ -61,19 +61,15 @@ import {
   useRouter,
   computed,
   onBeforeMount,
-  onMounted,
 } from '@nuxtjs/composition-api'
-import _ from 'lodash'
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
 import MarkdownViewCard from '@/components/organisms/MarkdownViewCard.vue'
 import Icon from '@/components/molecules/Icon.vue'
-
 import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 import { isCurrentUser } from '@/compositions/useAuth'
-import { firestore } from '@/plugins/firebase.js'
 import BaseComment from '~/components/molecules/comment/BaseComment.vue'
-import { CurrentUser } from '@/types/props-types'
 import { usePost } from '~/compositions/usePost'
+import { OnePostRef } from '@/utilities/useFirestore'
 
 export default defineComponent({
   components: {
@@ -92,34 +88,12 @@ export default defineComponent({
     const post = ref(store.getters.getPost)
     // 投稿者情報を取得
     const id = Route.value.params.id
-    const allUsers = ref<CurrentUser[]>([])
-
-    // ユーザー一覧データを取得する
     onBeforeMount(() => {
-      firestore
-        .collection('users')
-        .get()
-        .then(function (querySnapshot) {
-          querySnapshot.forEach(function (doc) {
-            allUsers.value = [...allUsers.value, doc.data()] as CurrentUser[]
-          })
-        })
-    })
-    onMounted(async () => {
       try {
-        await store
-          .dispatch('getPostData', {
-            id,
-          })
+        OnePostRef(id)
+          .get()
           .then((result) => {
-            const targetUser = _.find(
-              allUsers.value,
-              function (user: CurrentUser) {
-                return user.uid === result.user_id
-              }
-            )
-            result.user = { ...targetUser }
-            post.value = { ...result }
+            post.value = { ...result.data() }
           })
       } catch (error) {
         store.dispatch('onRejected', error)
