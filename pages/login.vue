@@ -26,7 +26,7 @@ import firebase from '@/plugins/firebase'
 export default defineComponent({
   setup() {
     onMounted(async () => {
-      await firebase.auth().onAuthStateChanged(function (user) {
+      await firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           store.commit('setIsLogined', true)
           store.commit('setCurrentUser', user)
