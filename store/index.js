@@ -1,5 +1,6 @@
 import firebase, { firestore, storage, messaging } from '~/plugins/firebase.js'
 import { OneUserRef } from '~/utilities/useFirestore'
+import { timestamp } from '@/compositions/useFormatData'
 
 import 'firebase/storage'
 const storageRef = storage.ref()
@@ -40,6 +41,8 @@ export const mutations = {
     state.currentUser.displayName = data.displayName
     state.currentUser.nickName = data.nickName
     state.currentUser.fcmToken = data.fcmToken
+    state.currentUser.isLogined = data.isLogined
+    state.currentUser.updated_at = data.updated_at
   },
   setPost(state, data) {
     state.post.id = data.id
@@ -64,7 +67,7 @@ export const actions = {
       .signInWithPopup(provider)
       .then(async function (result) {
         const user = result.user
-
+        console.log('user.email', user.email)
         commit('setIsLogined', true)
         // 認証後のユーザー情報を取得してオブジェクト化
         const userObject = {}
@@ -79,6 +82,9 @@ export const actions = {
         userObject.isNewUser = result.additionalUserInfo.isNewUser
         userObject.providerId = result.additionalUserInfo.providerId
         userObject.fcmToken = ''
+        userObject.isLogined = true
+        userObject.updated_at = timestamp(new Date())
+
         // NOTE:一度ログインしたことあるユーザーであれば、元のニックネームデータを取得する。初ログインユーザーであれば、displayNameニックネームの初期値にする
         if (!result.additionalUserInfo.isNewUser) {
           const docRef = OneUserRef(user.uid)
@@ -130,11 +136,16 @@ export const actions = {
       publicObj.uid = userObject.uid
       publicObj.providerId = userObject.providerId
       publicObj.isNewUser = userObject.isNewUser
+      publicObj.email = userObject.email
       publicObj.photoURL = userObject.photoURL
       publicObj.displayName = userObject.displayName
       publicObj.token = userObject.token
       publicObj.nickName = userObject.nickName
       publicObj.fcmToken = userObject.fcmToken
+
+      publicObj.isLogined = userObject.isLogined
+
+      publicObj.updated_at = userObject.updated_at
 
       publicUser.set(publicObj, { merge: true }).then(() => {
         resolve(userObject)
@@ -157,6 +168,8 @@ export const actions = {
       privateObj.refreshToken = userObject.refreshToken
       privateObj.nickName = userObject.nickName
       privateObj.fcmToken = userObject.fcmToken
+      privateObj.isLogined = userObject.isLogined
+      privateObj.updated_at = userObject.updated_at
       privateUsers.set(privateObj, { merge: true }).then(() => {
         resolve(userObject)
       })
@@ -187,6 +200,8 @@ export const actions = {
       .get()
       .then((doc) => {
         if (doc.exists) {
+          console.log(doc.data())
+          debugger
           commit('setCurrentUser', doc.data())
           console.log(`ログインに成功しました`)
         }
@@ -220,7 +235,8 @@ export const actions = {
       xhr.send()
     })
   },
-  logout({ commit }) {
+  async logout({ commit }, formData) {
+    await OneUserRef(formData.uid).update(formData)
     firebase
       .auth()
       .signOut()

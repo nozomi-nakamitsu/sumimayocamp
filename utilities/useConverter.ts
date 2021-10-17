@@ -13,7 +13,9 @@ export class User {
     readonly providerId: string,
     readonly refreshToken: string,
     readonly token: string,
-    readonly uid: string
+    readonly uid: string,
+    readonly isLogined: boolean,
+    readonly updated_at: Timestamp
   ) {}
 }
 
@@ -24,7 +26,9 @@ export class CurrentUser {
     readonly nickName: string,
     readonly photoURL: string,
     readonly token: string,
-    readonly uid: string
+    readonly uid: string,
+    readonly isLogined: boolean,
+    readonly updated_at: Timestamp
   ) {}
 }
 export class Files {
@@ -105,6 +109,8 @@ export const userConverter = {
       refreshToken: user.refreshToken,
       token: user.token,
       uid: user.uid,
+      isLogined: user.isLogined,
+      updated_at: user.updated_at,
     }
   },
   fromFirestore(
@@ -122,7 +128,9 @@ export const userConverter = {
       data.providerId,
       data.refreshToken,
       data.token,
-      data.uid
+      data.uid,
+      data.isLogined,
+      data.updated_at
     )
   },
 }

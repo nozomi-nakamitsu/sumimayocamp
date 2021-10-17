@@ -11,9 +11,18 @@
                 </div>
                 <div class="body">
                   <p class="name">{{ user.nickName }}</p>
-                  <div>
-                    <div><Icon /></div>
-                    <p>ログイン中</p>
+                  <div class="login">
+                    <p v-if="user.isLogined">ログイン中</p>
+                    <div v-else>
+                      <p>離席中</p>
+                      <p>
+                        最終ログイン日{{
+                          user.updated_at
+                            ? formatDateToSlashWithTime(user.updated_at)
+                            : null
+                        }}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -41,10 +50,10 @@
 
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
-import Icon from '../molecules/Icon.vue'
+import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 
 export default defineComponent({
-  components: { Icon },
+  // components: { Icon },
   props: {
     user: {
       type: Object,
@@ -56,7 +65,9 @@ export default defineComponent({
     },
   },
   setup() {
-    return {}
+    return {
+      formatDateToSlashWithTime,
+    }
   },
 })
 </script>

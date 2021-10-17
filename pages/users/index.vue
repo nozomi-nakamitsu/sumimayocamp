@@ -34,6 +34,7 @@ export default defineComponent({
     const store = useStore()
     const declarations = ref<Declaration[]>([])
     let unsubscribeDeclaration = null as any
+
     // ユーザー一覧データを取得する
     onBeforeMount(() => {
       UsersRef()
