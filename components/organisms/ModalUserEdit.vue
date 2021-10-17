@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, useStore, ref } from '@nuxtjs/composition-api'
+import { defineComponent, useStore, computed } from '@nuxtjs/composition-api'
 import ValidationInput from '../molecules/form/ValidationInput.vue'
 
 import BaseModal from '@/components/atoms/BaseModal.vue'
@@ -59,18 +59,14 @@ export default defineComponent({
     const store = useStore()
     // ref系
     const currentUser = store.getters.getCurrentUser
-    const form = ref({
+    const form = computed(() => ({
       token: currentUser.token,
       uid: currentUser.uid,
       photoURL: currentUser.photoURL,
       displayName: currentUser.displayName,
       nickName: currentUser.nickName,
-    })
+    }))
     const submit = async () => {
-      form.value.token = currentUser.token
-      form.value.uid = currentUser.uid
-      form.value.photoURL = currentUser.photoURL
-      form.value.displayName = currentUser.displayName
       try {
         await store.dispatch('editNickName', form.value)
         ctx.emit('click')
