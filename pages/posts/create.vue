@@ -30,7 +30,7 @@ export default defineComponent({
     // compositionAPI
     const store = useStore()
 
-    const currentUser = store.getters.getCurrentUser
+    const currentUser = store.getters['auth/getCurrentUser']
     const Router = useRouter()
     const { fileChanged, deleteUnNecessaryFiles, isLoading, files, form } =
       useUploadFile(currentUser)
@@ -53,7 +53,7 @@ export default defineComponent({
         if (deleteFiles.length) {
           await deleteFiles.map((file: FileArray) => {
             const id = file.id
-            store.dispatch('deleteFile', {
+            store.dispatch('auth/deleteFile', {
               id,
             })
           })
@@ -66,7 +66,7 @@ export default defineComponent({
         OnePostRef(id).set(form.value)
         Router.push('/')
       } catch (error) {
-        store.dispatch('onRejected', error)
+        store.dispatch('auth/onRejected', error)
       }
     }
 

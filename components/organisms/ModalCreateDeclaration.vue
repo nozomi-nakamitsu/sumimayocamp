@@ -60,7 +60,7 @@ export default defineComponent({
 
   setup(props, ctx) {
     const store = useStore()
-    const currentUser = store.getters.getCurrentUser
+    const currentUser = store.getters['auth/getCurrentUser']
     const form = ref<any>({
       declaration: '',
       mission: '',

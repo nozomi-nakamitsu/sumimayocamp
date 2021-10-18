@@ -82,7 +82,7 @@ export default defineComponent({
     const Router = useRouter()
     const store = useStore()
     // ref系
-    const currentUser = store.getters.getCurrentUser
+    const currentUser = store.getters['auth/getCurrentUser']
     const mission = ref<Mission>(props.propMission)
     watch(
       () => props.propMission,
@@ -96,7 +96,7 @@ export default defineComponent({
         if (files.length !== 0) {
           await files.map((file) => {
             const id = file.id
-            store.dispatch('deleteFile', {
+            store.dispatch('auth/deleteFile', {
               id,
             })
             return null
@@ -104,7 +104,7 @@ export default defineComponent({
         }
         await OneMissionRef(id).delete()
       } catch (error) {
-        store.dispatch('onRejected', error)
+        store.dispatch('auth/onRejected', error)
       }
     }
 
@@ -138,7 +138,7 @@ export default defineComponent({
         try {
           await OneMissionRef(mission.id).update(data)
         } catch (error) {
-          store.dispatch('onRejected', error)
+          store.dispatch('auth/onRejected', error)
         }
       }
     }

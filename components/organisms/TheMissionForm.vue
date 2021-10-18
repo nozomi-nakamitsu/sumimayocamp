@@ -95,7 +95,7 @@ export default defineComponent({
     // compositionAPI
     const store = useStore()
     // ref系
-    const currentUser = store.getters.getCurrentUser
+    const currentUser = store.getters['auth/getCurrentUser']
     const form = computed(() => ({
       id: props.propsform.id,
       title: props.propsform.title,
@@ -103,7 +103,7 @@ export default defineComponent({
       created_at:
         props.title === '新規作成' ? new Date() : props.propsform.created_at,
       updated_at: new Date(),
-      sendUser: store.getters.getCurrentUser,
+      sendUser: store.getters['auth/getCurrentUser'],
       receiveUser: props.propsform.receiveUser,
       status: props.propsform.status,
       position: props.propsform.position,

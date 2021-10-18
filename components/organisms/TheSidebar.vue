@@ -94,7 +94,7 @@ import ModalUserEdit from '@/components/organisms/ModalUserEdit.vue'
 
 import { useModal } from '@/compositions/useModal'
 import { Auth } from '@/plugins/firebase'
-import { formatOnlyDateToSlash , timestamp } from '@/compositions/useFormatData'
+import { formatOnlyDateToSlash, timestamp } from '@/compositions/useFormatData'
 
 export default defineComponent({
   components: {
@@ -109,7 +109,7 @@ export default defineComponent({
     const Route = useRoute()
 
     // ref
-    const currentUser = store.getters.getCurrentUser
+    const currentUser = store.getters['auth/getCurrentUser']
     const { isOpened, openModal, closeModal } = useModal()
 
     // ログアウト
@@ -118,9 +118,9 @@ export default defineComponent({
         const formData = currentUser
         formData.isLogined = false
         formData.updated_at = timestamp(new Date())
-        await store.dispatch('logout', formData)
+        await store.dispatch('auth/logout', formData)
       } catch (error) {
-        store.dispatch('onRejected', error)
+        store.dispatch('auth/onRejected', error)
       }
     }
     const whereUrl = computed(() => (routeName: string) => {

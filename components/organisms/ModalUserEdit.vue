@@ -58,7 +58,7 @@ export default defineComponent({
     // vuex
     const store = useStore()
     // ref系
-    const currentUser = store.getters.getCurrentUser
+    const currentUser = store.getters['auth/getCurrentUser']
     const form = computed(() => ({
       token: currentUser.token,
       uid: currentUser.uid,
@@ -68,10 +68,10 @@ export default defineComponent({
     }))
     const submit = async () => {
       try {
-        await store.dispatch('editNickName', form.value)
+        await store.dispatch('auth/editNickName', form.value)
         ctx.emit('click')
       } catch (error) {
-        store.dispatch('onRejected', error)
+        store.dispatch('auth/onRejected', error)
       }
     }
 

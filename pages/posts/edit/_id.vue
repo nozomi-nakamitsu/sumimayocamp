@@ -38,19 +38,19 @@ export default defineComponent({
     const store = useStore()
     const Router = useRouter()
     const Route = useRoute()
-    const currentUser = store.getters.getCurrentUser
+    const currentUser = store.getters['auth/getCurrentUser']
     onBeforeMount(() => {
       const id = Route.value.params.id
       try {
         store
-          .dispatch('getPostData', {
+          .dispatch('auth/getPostData', {
             id,
           })
           .then((result) => {
             form.value = { ...result }
           })
       } catch (error) {
-        store.dispatch('onRejected', error)
+        store.dispatch('auth/onRejected', error)
       }
     })
 
@@ -77,7 +77,7 @@ export default defineComponent({
         if (deleteFiles.length) {
           await deleteFiles.map((file: FileArray) => {
             const id = file.id
-            store.dispatch('deleteFile', {
+            store.dispatch('auth/deleteFile', {
               id,
             })
           })
@@ -88,7 +88,7 @@ export default defineComponent({
           .update(form.value)
         Router.push('/')
       } catch (error) {
-        store.dispatch('onRejected', error)
+        store.dispatch('auth/onRejected', error)
       }
     }
 

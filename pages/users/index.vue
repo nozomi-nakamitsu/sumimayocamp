@@ -70,7 +70,7 @@ export default defineComponent({
             declarations.value = [...declarations.value, change.doc.data()]
           },
           (error: any) => {
-            store.dispatch('onRejected', error)
+            store.dispatch('auth/onRejected', error)
           }
         )
       })

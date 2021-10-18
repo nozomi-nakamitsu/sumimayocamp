@@ -86,7 +86,7 @@ export default defineComponent({
     // compositionAPI
     const store = useStore()
     // ref系
-    const currentUser = store.getters.getCurrentUser
+    const currentUser = store.getters['auth/getCurrentUser']
     const isHoverd = ref<string>('')
     const emojiItems = computed(() => {
       const target = JSON.parse(JSON.stringify(props.post.emojiItems))
