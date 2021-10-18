@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex'
-// import { loginUser } from '../types'
+import { AuthType } from '../types'
 
-const mutations: MutationTree<any> = {
+const mutations: MutationTree<AuthType> = {
   setIsLogined: (state, isLogined) => {
     state.isLogined = isLogined
   },

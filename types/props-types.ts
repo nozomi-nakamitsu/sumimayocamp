@@ -2,12 +2,12 @@ import { Timestamp } from '@google-cloud/firestore'
 /**
  * NOTE:storeのログインユーザーの型
  */
-export interface User {
+export interface TypeUser {
   displayName: string
   email: string
   fcmToken: string | null
   isNewUser: boolean
-  nickName: string
+  nickName: string | undefined
   photoURL: string
   providerId: string
   refreshToken: string

@@ -1,6 +1,6 @@
-// import { loginUser } from '../types'
+import { AuthType } from '../types'
 
-const state = (): any => ({
+const state = (): AuthType => ({
   isLogined: false,
   isLoading: false,
   currentUser: {
@@ -10,6 +10,8 @@ const state = (): any => ({
     displayName: '',
     nickName: '',
     fcmToken: '',
+    isLogined: false,
+    updated_at: null,
   },
   post: {
     id: '',
@@ -17,8 +19,8 @@ const state = (): any => ({
     title: '',
     content: '',
     files: [],
-    created_at: '',
-    updated_at: '',
+    created_at: null,
+    updated_at: null,
   },
   error: '',
 })

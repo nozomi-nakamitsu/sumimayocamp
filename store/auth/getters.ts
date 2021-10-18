@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex'
-import { RootState } from '../types'
+import { RootState, AuthType } from '../types'
 
-const getters: GetterTree<any, RootState> = {
+const getters: GetterTree<AuthType, RootState> = {
   getIsLogined: (state) => {
     return state.isLogined
   },

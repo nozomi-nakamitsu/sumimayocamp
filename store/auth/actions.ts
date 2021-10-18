@@ -1,24 +1,24 @@
 import { ActionTree } from 'vuex'
-import { RootState } from '../types'
-import { User } from '@/types/props-types'
+import { RootState, AuthType } from '../types'
+import { TypeUser } from '@/types/props-types'
 
 import firebase, { firestore, storage, messaging } from '~/plugins/firebase.js'
 import { OneUserRef } from '~/utilities/useFirestore'
+
 import { timestamp } from '@/compositions/useFormatData'
 
 const storageRef = storage.ref()
-const actions: ActionTree<any, RootState> = {
+const actions: ActionTree<AuthType, RootState> = {
   auth: ({ commit, dispatch }) => {
     const provider = new firebase.auth.GoogleAuthProvider()
     firebase
       .auth()
       .signInWithPopup(provider)
       .then(async (result: any) => {
-        const user = result.user as any
-
+        const user = result.user
         commit('setIsLogined', true)
         // 認証後のユーザー情報を取得してオブジェクト化
-        const userObject = {} as User
+        const userObject = {} as TypeUser
         userObject.token = result.credential.accessToken
         userObject.refreshToken = user.refreshToken
         userObject.uid = user.uid
@@ -36,9 +36,9 @@ const actions: ActionTree<any, RootState> = {
         // NOTE:一度ログインしたことあるユーザーであれば、元のニックネームデータを取得する。初ログインユーザーであれば、displayNameニックネームの初期値にする
         if (!result.additionalUserInfo.isNewUser) {
           const docRef = OneUserRef(user.uid)
-          await docRef.get().then((doc: any) => {
+          await docRef.get().then((doc) => {
             if (doc.exists) {
-              userObject.nickName = doc.data().nickName
+              userObject.nickName = doc.data()?.nickName
             }
           })
         }
@@ -70,7 +70,7 @@ const actions: ActionTree<any, RootState> = {
     return new Promise((resolve) => {
       firebase
         .auth()
-        .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+        .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
         .then((result) => {
           resolve(result)
         })
@@ -85,19 +85,7 @@ const actions: ActionTree<any, RootState> = {
       })
     })
   },
-  // ⑤非公開のユーザー情報をFirestoreに登録
-  setPrivateUserData: (userObject: any) => {
-    return new Promise((resolve) => {
-      const privateUsers = firestore
-        .collection('privateUsers')
-        .doc(userObject.uid)
-      // privateUsersに登録するObjのみを登録する
-      privateUsers.set(userObject, { merge: true }).then(() => {
-        resolve(userObject)
-      })
-    })
-  },
-  // ⑥ ローカルストレージに保持するユーザー情報を設定
+  // ⑤ローカルストレージに保持するユーザー情報を設定
   setLocalUserData: async ({ commit }, userObject) => {
     await messaging
       .requestPermission()
@@ -131,7 +119,7 @@ const actions: ActionTree<any, RootState> = {
       })
   },
   // ③ 取得したアイコンのURLをFirestorageに保存して、そのURLをFirestoreに登録する準備
-  createPhotoURL: ({ commit }, userObject: User) => {
+  createPhotoURL: ({ commit }, userObject: TypeUser) => {
     return new Promise((resolve) => {
       const url = userObject.photoURL
       const xhr = new XMLHttpRequest()
