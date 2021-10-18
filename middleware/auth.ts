@@ -5,13 +5,13 @@ export default function ({ route, store, redirect }: Context) {
     firebase.auth().onAuthStateChanged((user: any) => {
       if (user) {
         // ログイン中の場合の処理
-        store.commit('setIsLogined', true)
+        store.commit('auth/setIsLogined', true)
         firestore
           .collection('users')
           .doc(user.uid)
           .get()
           .then((doc) => {
-            store.commit('setCurrentUser', doc.data())
+            store.commit('auth/setCurrentUser', doc.data())
           })
         if (route.name === 'login___ja') {
           redirect('/')

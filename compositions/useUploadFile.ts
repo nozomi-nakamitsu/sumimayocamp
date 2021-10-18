@@ -27,7 +27,7 @@ export const useUploadFile = (currentUser: CurrentUser) => {
     isLoading.value = true
     const id = uuidv4()
     try {
-      const url = await store.dispatch('uploadFile', {
+      const url = await store.dispatch('auth/uploadFile', {
         file,
         id,
       })
@@ -39,7 +39,7 @@ export const useUploadFile = (currentUser: CurrentUser) => {
       document.querySelector('.v-note-show')?.classList.remove('-hidden')
       files.value = [...files.value, { id, url }]
     } catch (error) {
-      store.dispatch('onRejected', error)
+      store.dispatch('auth/onRejected', error)
     } finally {
       isLoading.value = false
     }
@@ -50,7 +50,7 @@ export const useUploadFile = (currentUser: CurrentUser) => {
   const deleteUnNecessaryFiles = () => {
     files.value.map((file) => {
       const id = file.id
-      store.dispatch('deleteFile', {
+      store.dispatch('auth/deleteFile', {
         id,
       })
     })

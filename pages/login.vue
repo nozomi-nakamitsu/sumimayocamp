@@ -28,8 +28,8 @@ export default defineComponent({
     onMounted(async () => {
       await firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-          store.commit('setIsLogined', true)
-          store.commit('setCurrentUser', user)
+          store.commit('auth/setIsLogined', true)
+          store.commit('auth/setCurrentUser', user)
         } else {
           console.log('ログインしてないよ')
         }
@@ -39,10 +39,10 @@ export default defineComponent({
     const store = useStore()
     const login = async () => {
       try {
-        await store.dispatch('setPersistence')
-        await store.dispatch('auth')
+        await store.dispatch('auth/setPersistence')
+        await store.dispatch('auth/auth')
       } catch (error) {
-        store.dispatch('onRejected', error)
+        store.dispatch('auth/onRejected', error)
       }
     }
     return {

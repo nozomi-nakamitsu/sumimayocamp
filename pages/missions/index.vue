@@ -145,7 +145,7 @@ export default defineComponent({
     const missions = ref<Mission[]>([])
     let unsubscribe = null as any
     const allUsers = ref<CurrentUser[]>([])
-    const currentUser = store.getters.getCurrentUser
+    const currentUser = store.getters['auth/getCurrentUser']
     // ログインユーザーが挑戦しているミッションかを判断する
     const ProgressMissions = ref<Mission[]>([])
     const DoneMissions = ref<Mission[]>([])

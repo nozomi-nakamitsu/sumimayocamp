@@ -61,7 +61,7 @@ export default defineComponent({
     const messages = ref<any[]>([])
 
     // ref系
-    const currentUser = store.getters.getCurrentUser
+    const currentUser = store.getters['auth/getCurrentUser']
     let unsubscribe = null as any
 
     // ページ遷移後にsnapshotでの監視をstartする
@@ -117,7 +117,7 @@ export default defineComponent({
       try {
         await OneMessageRef(props.postId, msg.id).delete()
       } catch (error) {
-        store.dispatch('onRejected', error)
+        store.dispatch('auth/onRejected', error)
       }
     }
 

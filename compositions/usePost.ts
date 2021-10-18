@@ -7,7 +7,7 @@ import { firestore } from '@/plugins/firebase.js'
 export const usePost = () => {
   const store = useStore()
   const Router = useRouter()
-  const currentUser = store.getters.getCurrentUser
+  const currentUser = store.getters['auth/getCurrentUser']
 
   const DeletePost = async (id: string, files: FileArray[]) => {
     try {
@@ -15,7 +15,7 @@ export const usePost = () => {
       if (files.length !== 0) {
         await files.map((file) => {
           const id = file.id
-          store.dispatch('deleteFile', {
+          store.dispatch('auth/deleteFile', {
             id,
           })
         })
@@ -64,7 +64,7 @@ export const usePost = () => {
       await OnePostRef(id).delete()
       Router.push('/')
     } catch (error) {
-      store.dispatch('onRejected', error)
+      store.dispatch('auth/onRejected', error)
     }
   }
   // ログインユーザーが作成した投稿かを判断する

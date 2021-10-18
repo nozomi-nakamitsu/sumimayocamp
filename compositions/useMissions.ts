@@ -13,7 +13,7 @@ import { OneMissionRef } from '@/utilities/useFirestore'
 export const useMissions = (props: any) => {
   const store = useStore()
   const isLoading = ref<boolean>(false)
-  const currentUser = store.getters.getCurrentUser
+  const currentUser = store.getters['auth/getCurrentUser']
   const missionForm = ref<MissionPost>({
     id: '',
     title: '',
@@ -45,7 +45,7 @@ export const useMissions = (props: any) => {
     isLoading.value = true
     const id = uuidv4()
     try {
-      const url = await store.dispatch('uploadFile', {
+      const url = await store.dispatch('auth/uploadFile', {
         file,
         id,
       })
@@ -58,7 +58,7 @@ export const useMissions = (props: any) => {
       document.querySelector('.v-note-show')?.classList.remove('-hidden')
       files.value = [...files.value, { id, url }]
     } catch (error) {
-      store.dispatch('onRejected', error)
+      store.dispatch('auth/onRejected', error)
     } finally {
       isLoading.value = false
     }
@@ -69,7 +69,7 @@ export const useMissions = (props: any) => {
   const deleteUnNecessaryFiles = () => {
     files.value.map((file) => {
       const id = file.id
-      return store.dispatch('deleteFile', {
+      return store.dispatch('auth/deleteFile', {
         id,
       })
     })
@@ -95,7 +95,7 @@ export const useMissions = (props: any) => {
     try {
       await OneMissionRef(mission.id).update(data)
     } catch (error) {
-      store.dispatch('onRejected', error)
+      store.dispatch('auth/onRejected', error)
     }
   }
   // ログインユーザーを挑戦者として完了ののステータスで登録する
@@ -116,7 +116,7 @@ export const useMissions = (props: any) => {
     try {
       await OneMissionRef(mission.id).update(data)
     } catch (error) {
-      store.dispatch('onRejected', error)
+      store.dispatch('auth/onRejected', error)
     }
   }
   // ログインユーザーを挑戦者として登録を解除する
@@ -129,7 +129,7 @@ export const useMissions = (props: any) => {
     try {
       await OneMissionRef(mission.id).update(data)
     } catch (error) {
-      store.dispatch('onRejected', error)
+      store.dispatch('auth/onRejected', error)
     }
   }
 
@@ -146,7 +146,7 @@ export const useMissions = (props: any) => {
           .doc(currentUser.uid)
           .set({ position: index + 1 })
       } catch (error) {
-        store.dispatch('onRejected', error)
+        store.dispatch('auth/onRejected', error)
       }
     })
   }

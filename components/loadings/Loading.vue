@@ -62,7 +62,7 @@ export default defineComponent({
       }
     }
     const finishLoading = () => {
-      store.commit('setIsLoading', false)
+      store.commit('auth/setIsLoading', false)
     }
   },
 })

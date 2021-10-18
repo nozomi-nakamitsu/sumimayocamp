@@ -108,7 +108,7 @@ export default defineComponent({
     // compositionAPI
     const store = useStore()
     // ref系
-    const currentUser = store.getters.getCurrentUser
+    const currentUser = store.getters['auth/getCurrentUser']
     const form = computed(() => ({
       id: props.propsform.id,
       title: props.propsform.title,

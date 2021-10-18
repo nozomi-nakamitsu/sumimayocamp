@@ -30,12 +30,12 @@ export default defineComponent({
     const store = useStore()
     const Router = useRouter()
     // ref
-    const errorMeesage = computed(() => store.getters.getError)
+    const errorMeesage = computed(() => store.getters['auth/getError'])
 
     const alert = ref(true)
 
     const onClose = () => {
-      store.dispatch('resetError')
+      store.dispatch('auth/resetError')
     }
 
     return {

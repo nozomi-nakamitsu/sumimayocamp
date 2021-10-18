@@ -135,7 +135,7 @@ export default defineComponent({
     const Router = useRouter()
     const store = useStore()
     // ref系
-    const currentUser = store.getters.getCurrentUser
+    const currentUser = store.getters['auth/getCurrentUser']
 
     // 絵文字関連の処理
     const {
