@@ -18,4 +18,13 @@ textarea {
   appearance: none;
   resize: none;
   outline: none;
+  &:focus {
+    border: 2px solid $blue;
+    outline: 0;
+  }
+}
+
+input[type='text']:focus {
+  border: 2px solid $blue;
+  outline: 0;
 }
