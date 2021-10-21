@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar-container">
-    <div class="container">
+    <div class="container sidebar-wrapper">
       <div class="top">
         <div class="image">
           <img :src="currentUser.photoURL" alt="" class="img" />

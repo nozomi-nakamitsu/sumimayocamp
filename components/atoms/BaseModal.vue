@@ -22,7 +22,7 @@
  * - controlFlag 表示/非表示を制御する boolteleport と transition の兼ね合いでcomponent 自体にv-ifすると不具合が生じるため propsで渡している
  * - title header 部分に表示するタイトル文言
  */
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, watch } from '@nuxtjs/composition-api'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import Icon from '@/components/molecules/Icon.vue'
 export default defineComponent({
@@ -40,7 +40,17 @@ export default defineComponent({
     },
   },
   emits: ['click'],
-  setup() {
+  setup(props) {
+    watch(
+      () => props.controlFlag,
+      () => {
+        if (props.controlFlag) {
+          document.querySelector('.sidebar-wrapper')?.classList.add('-z0')
+        } else {
+          document.querySelector('.sidebar-wrapper')?.classList.remove('-z0')
+        }
+      }
+    )
     return {
       faTimes,
     }
