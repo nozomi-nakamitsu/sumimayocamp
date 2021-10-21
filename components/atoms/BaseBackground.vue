@@ -71,9 +71,9 @@ export default defineComponent({
         case '/posts/create':
           return '#e3e3ff'
         case '/missions':
-          return '#ffd36b'
+          return '#96fbc4'
         case '/users':
-          return '#ff9a8f'
+          return '#ffc3a0'
 
         default:
           return '#e3e3ff'
@@ -87,9 +87,9 @@ export default defineComponent({
         case '/posts/create':
           return '#8bf0ce'
         case '/missions':
-          return '#ffff'
+          return '#f9f586'
         case '/users':
-          return '#ffd36b'
+          return '#ffafbd'
         default:
           return '#99d3ff'
       }
