@@ -44,9 +44,8 @@
               <v-card
                 v-if="selectedEvent.user"
                 color="grey lighten-4"
-                min-width="350px"
                 flat
-                class="calendar-card"
+                class="calendar-card "
               >
                 <div
                   class="toolbar"
