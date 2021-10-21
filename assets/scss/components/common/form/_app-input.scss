@@ -5,6 +5,10 @@
   height: 40px;
   border-radius: 8px;
   background-color: $white;
+  &:focus {
+    border: 2px solid $blue;
+    outline: 0;
+  }
   &.-error {
     color: $red;
     background-color: $red-coy;
