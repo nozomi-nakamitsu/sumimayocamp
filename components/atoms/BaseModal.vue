@@ -1,15 +1,17 @@
 <template>
   <div v-if="controlFlag" class="modal-background">
     <div class="base-modal">
-      <div v-if="controlFlag" class="inner">
-        <div class="header">
-          <p class="text">{{ title }}</p>
-          <div class="icon" @click="$emit('click')">
-            <Icon :icon="faTimes" types="modal" />
+      <div class="wrapper">
+        <div v-if="controlFlag" class="inner">
+          <div class="header" :class="{ '-fixed': types === 'fixed' }">
+            <p class="text">{{ title }}</p>
+            <div class="icon" @click="$emit('click')">
+              <Icon :icon="faTimes" types="modal" />
+            </div>
           </div>
-        </div>
-        <div class="main">
-          <slot />
+          <div class="main" :class="{ '-fixed': types === 'fixed' }">
+            <slot />
+          </div>
         </div>
       </div>
     </div>
@@ -35,6 +37,10 @@ export default defineComponent({
       required: true,
     },
     title: {
+      type: String as () => string | null,
+      default: null,
+    },
+    types: {
       type: String as () => string | null,
       default: null,
     },

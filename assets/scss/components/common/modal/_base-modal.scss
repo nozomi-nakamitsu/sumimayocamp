@@ -2,9 +2,15 @@
   background-color: #fff;
   width: 70%;
   max-height: 700px;
-  overflow-y: scroll;
   border-radius: 30px;
-  > .inner > .header {
+  overflow-y: scroll;
+  .wrapper {
+    height: 100%;
+    max-height: 700px;
+    border-radius: 30px;
+    overflow-y: scroll;
+  }
+  .wrapper > .inner > .header {
     padding: 60px 60px 30px 60px;
     position: fixed;
     z-index: 3;
@@ -17,15 +23,21 @@
 
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
+
+    &.-fixed {
+      height: auto;
+      z-index: 9999;
+      padding: 30px 30px 30px 60px;
+    }
   }
-  > .inner > .header > .text {
+  .wrapper > .inner > .header > .text {
     font-size: 24px;
     font-weight: bold;
   }
-  > .inner > .header > .icon {
+  .wrapper > .inner > .header > .icon {
     margin-left: auto;
   }
-  > .inner > .main {
+  .wrapper > .inner > .main {
     z-index: 1;
     height: 100%;
     padding-top: 100px; //   ヘッダー固定のため

@@ -1,5 +1,5 @@
 <template>
-  <BaseModal :control-flag="controlFlag" @click="$emit('click')">
+  <BaseModal :control-flag="controlFlag" types="fixed" @click="$emit('click')">
     <div class="form-container -modal">
       <div class="flex">
         <div class="image">
