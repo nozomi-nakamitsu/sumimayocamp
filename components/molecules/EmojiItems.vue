@@ -35,15 +35,14 @@
           <p class="count">{{ item.users.length }}</p>
         </div>
       </div>
-      <div class="wrapper">
+      <button class="wrapper">
         <div
           class="box"
-          @mouseover="$emit('on-focus', true)"
           @click="$emit('on-clicked', true)"
         >
           <Icon :icon="faSmile" />
         </div>
-      </div>
+      </button>
     </div>
   </div>
 </template>

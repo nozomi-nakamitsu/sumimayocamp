@@ -8,11 +8,17 @@
       </p>
     </div>
     <div class="index-container -mt">
-      <div class="container -start -mission">
-        <p class="title -ml">Missions Lists</p>
-        <button class="common-button -mission" @click="openModal">
-          New Missions
-        </button>
+      <div class="container -start -mission -blue">
+        <div class="head">
+          <p class="title -ml">Missions Lists</p>
+          <button class="common-button -mission" @click="openModal">
+            <div>
+              <Icon :icon="faPlusCircle" types="button" />
+            </div>
+            <p claas="text" style="margin-left: 8px">New Missions</p>
+          </button>
+        </div>
+
         <draggable
           :list="missions"
           group="list"
@@ -35,7 +41,7 @@
           </div>
         </draggable>
       </div>
-      <div class="container -start -mission -ml40">
+      <div class="container -start -mission -ml40 -red">
         <p class="title -ml">Progress</p>
         <draggable
           :list="ProgressMissions"
@@ -63,7 +69,7 @@
           </div>
         </draggable>
       </div>
-      <div class="container -start -mission -ml40">
+      <div class="container -start -mission -ml40 -green">
         <p class="title -ml">Completed</p>
         <draggable
           :list="DoneMissions"
@@ -108,7 +114,7 @@ import {
   useStore,
 } from '@nuxtjs/composition-api'
 import Draggable from 'vuedraggable'
-
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import _ from 'lodash'
 import {
   Mission,
@@ -121,7 +127,7 @@ import ModalCreateMission from '@/components/organisms/ModalCreateMission.vue'
 import { useModal } from '@/compositions/useModal'
 import { useMissions } from '@/compositions/useMissions'
 import { MissionRef } from '@/utilities/useFirestore'
-
+import Icon from '@/components/molecules/Icon.vue'
 import { firestore } from '@/plugins/firebase'
 
 export default defineComponent({
@@ -129,6 +135,7 @@ export default defineComponent({
     BaseMissionCard,
     ModalCreateMission,
     Draggable,
+    Icon,
   },
   props: {},
   setup(props) {
@@ -417,6 +424,8 @@ export default defineComponent({
       onChangeMissions,
       onChangeProgressMissions,
       onChangeDoneMissions,
+      // アイコン
+      faPlusCircle,
     }
   },
 })

@@ -15,6 +15,9 @@
     border-radius: 50px;
     cursor: pointer;
     font-weight: bold;
+    &:hover {
+      color: $blue;
+    }
     &.-active {
       background-color: $blue-Niagara;
       border: 1px solid $blue-Weather;

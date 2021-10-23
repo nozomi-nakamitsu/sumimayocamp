@@ -12,7 +12,7 @@
                 <v-icon small> mdi-chevron-right </v-icon>
               </v-btn>
               <v-toolbar-title v-if="$refs.calendar">
-                {{ $refs.calendar.title }}
+                {{ formatTitle($refs.calendar.title) }}
               </v-toolbar-title>
 
               <BaseUserSelectBox
@@ -44,9 +44,8 @@
               <v-card
                 v-if="selectedEvent.user"
                 color="grey lighten-4"
-                min-width="350px"
                 flat
-                class="calendar-card"
+                class="calendar-card "
               >
                 <div
                   class="toolbar"
@@ -144,11 +143,18 @@ export default {
     moreClick: false,
     targetDate: '',
     faTimes,
+    targetTitle: [],
   }),
   computed: {
     path() {
       return function (postId) {
         return `posts/${postId}`
+      }
+    },
+    formatTitle() {
+      return function (title) {
+        title.split('月').reverse()
+        return `${title.split('月').reverse().join('年')}月`
       }
     },
   },
@@ -166,6 +172,7 @@ export default {
   },
   mounted() {
     this.$refs.calendar.checkChange()
+    console.log(this.$refs.calendar)
   },
   methods: {
     viewDay({ date }) {

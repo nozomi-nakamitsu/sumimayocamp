@@ -9,6 +9,7 @@
 }
 
 .v-application {
+  font-family: $font-family !important;
   position: static !important;
 }
 .v-list-item__title {
@@ -33,4 +34,10 @@
 }
 .v-menu__content {
   border-radius: 8px;
+}
+.v-toolbar__title {
+  font-size: 16px !important;
+}
+.v-note-wrapper {
+  min-width: auto !important;
 }

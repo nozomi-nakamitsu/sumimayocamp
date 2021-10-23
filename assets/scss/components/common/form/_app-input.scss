@@ -4,10 +4,15 @@
   padding: 8px;
   height: 40px;
   border-radius: 8px;
+  background-color: $white;
+  &:focus {
+    border: 2px solid $blue;
+    outline: 0;
+  }
   &.-error {
-    color: $red-orko;
+    color: $red;
     background-color: $red-coy;
-    border: 1px solid $red-orko;
+    border: 2px solid $red !important;
   }
   &.-textarea {
     height: 100%;

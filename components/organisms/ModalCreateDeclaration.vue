@@ -8,7 +8,7 @@
             label="今週やることを宣言しよう"
             input-name="declaration"
             rules="required"
-            class="nameinput"
+            class="nameinput -declaration"
             :set-value="form.declaration"
             @input="change"
           ></ValidationTextArea>
