@@ -5,6 +5,7 @@
       :items="items"
       offset="6"
       insert-space
+      :limit="9999"
       @open="onOpen"
     >
       <textarea v-model="text" class="textarea" @input="onSelected(text)" />
@@ -83,6 +84,7 @@ export default defineComponent({
     })
     const onOpen = () => {
       items.value = users.value
+      console.log(items.value)
     }
     const selectedUser = ref<CurrentUser[]>([])
     const onSelected = (text: string) => {
