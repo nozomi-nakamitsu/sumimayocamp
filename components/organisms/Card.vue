@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="card-container">
+    <div class="card-container -animation">
       <div class="container">
         <div class="card-head" @click.stop="Router.push(`/posts/${post.id}`)">
           <div class="left">

@@ -6,7 +6,15 @@
   border-radius: 8px;
   padding: 10px;
   cursor: pointer;
-  
+  border: 1px solid transparent;
+  &.-animation {
+    transition: all 0.3s;
+  }
+  &.-animation:hover {
+    box-shadow: 0 5px 7px $gray-lightpowdered;
+    border: 2px solid transparent;
+  }
+
   &.-mx {
     margin: 0 8px;
   }
