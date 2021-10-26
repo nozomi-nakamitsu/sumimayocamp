@@ -11,10 +11,10 @@
         {{ message.text }}
       </p>
       <p v-if="types === 'sent'" class="date" style="text-align: end">
-        {{ formatOnlyDateToSlashWithTime(new Date()) }}
+        {{ formatDateToSlashWithTime(message.createdAt) }}
       </p>
       <p v-else class="date">
-        {{ formatOnlyDateToSlashWithTime(new Date()) }}
+        {{ formatDateToSlashWithTime(message.createdAt) }}
       </p>
       <!-- <div
         @click="onDelete(message)"
@@ -31,7 +31,7 @@
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
-import { formatOnlyDateToSlashWithTime } from '@/compositions/useFormatData'
+import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 
 // import Icon from '@/components/molecules/Icon.vue'
 
@@ -52,7 +52,7 @@ export default defineComponent({
   setup() {
     return {
       faTrash,
-      formatOnlyDateToSlashWithTime,
+      formatDateToSlashWithTime,
     }
   },
 })
