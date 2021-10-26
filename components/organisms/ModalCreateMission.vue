@@ -79,7 +79,7 @@ export default defineComponent({
         if (deleteFiles.length) {
           await deleteFiles.map((file: FileArray) => {
             const id = file.id
-            return store.dispatch('deleteFile', {
+            return store.dispatch('auth/deleteFile', {
               id,
             })
           })
@@ -103,7 +103,7 @@ export default defineComponent({
         })
         ctx.emit('click')
       } catch (error) {
-        store.dispatch('onRejected', error)
+        store.dispatch('auth/onRejected', error)
       }
     }
     /**
@@ -124,7 +124,7 @@ export default defineComponent({
         if (deleteFiles.length) {
           await deleteFiles.map((file: FileArray) => {
             const id = file.id
-            return store.dispatch('deleteFile', {
+            return store.dispatch('auth/deleteFile', {
               id,
             })
           })
@@ -136,7 +136,7 @@ export default defineComponent({
         await OneMissionRef(missionForm.value.id).update(missionForm.value)
         ctx.emit('click')
       } catch (error) {
-        store.dispatch('onRejected', error)
+        store.dispatch('auth/onRejected', error)
       }
     }
     return {

@@ -104,7 +104,7 @@ export const useEmoji = (props: any, currentUser: any) => {
     } catch (error) {
       // エラー時は選択した絵文字を画面から削除する
       selectedItem.value = selectedItem.value.filter((v) => v.id !== item.id)
-      store.dispatch('onRejected', error)
+      store.dispatch('auth/onRejected', error)
     } finally {
       switchVisible()
     }

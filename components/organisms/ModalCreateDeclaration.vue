@@ -8,7 +8,7 @@
             label="今週やることを宣言しよう"
             input-name="declaration"
             rules="required"
-            class="nameinput"
+            class="nameinput -declaration"
             :set-value="form.declaration"
             @input="change"
           ></ValidationTextArea>
@@ -60,7 +60,7 @@ export default defineComponent({
 
   setup(props, ctx) {
     const store = useStore()
-    const currentUser = store.getters.getCurrentUser
+    const currentUser = store.getters['auth/getCurrentUser']
     const form = ref<any>({
       declaration: '',
       mission: '',

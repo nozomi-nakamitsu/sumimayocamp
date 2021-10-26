@@ -1,75 +1,24 @@
+import { ActionTree } from 'vuex'
+import { RootState, AuthType } from '../types'
+import { TypeUser } from '@/types/props-types'
+
 import firebase, { firestore, storage, messaging } from '~/plugins/firebase.js'
 import { OneUserRef } from '~/utilities/useFirestore'
+
 import { timestamp } from '@/compositions/useFormatData'
 
-import 'firebase/storage'
 const storageRef = storage.ref()
-export const state = () => ({
-  isLogined: false,
-  isLoading: false,
-  currentUser: {
-    token: '',
-    uid: '',
-    photoURL: '',
-    displayName: '',
-    nickName: '',
-    fcmToken: '',
-  },
-  post: {
-    id: '',
-    user_id: '',
-    title: '',
-    content: '',
-    files: [],
-    created_at: '',
-    updated_at: '',
-  },
-  error: '',
-})
-
-export const mutations = {
-  setIsLogined(state, isLogined) {
-    state.isLogined = isLogined
-  },
-  setIsLoading(state, isLoading) {
-    state.isLoading = isLoading
-  },
-  setCurrentUser(state, data) {
-    state.currentUser.uid = data.uid
-    state.currentUser.token = data.token
-    state.currentUser.photoURL = data.photoURL
-    state.currentUser.displayName = data.displayName
-    state.currentUser.nickName = data.nickName
-    state.currentUser.fcmToken = data.fcmToken
-    state.currentUser.isLogined = data.isLogined
-    state.currentUser.updated_at = data.updated_at
-  },
-  setPost(state, data) {
-    state.post.id = data.id
-    state.post.user_id = data.user_id
-    state.post.title = data.title
-    state.post.content = data.content
-    state.post.files = data.files
-    state.post.created_at = data.created_at
-    state.post.updated_at = data.updated_at
-  },
-  setError(state, error) {
-    state.error = error
-  },
-}
-
-export const actions = {
-  // ② Google認証
-  auth({ commit, dispatch }) {
+const actions: ActionTree<AuthType, RootState> = {
+  auth: ({ commit, dispatch }) => {
     const provider = new firebase.auth.GoogleAuthProvider()
     firebase
       .auth()
       .signInWithPopup(provider)
-      .then(async (result) => {
+      .then(async (result: any) => {
         const user = result.user
         commit('setIsLogined', true)
         // 認証後のユーザー情報を取得してオブジェクト化
-        const userObject = {}
+        const userObject = {} as TypeUser
         userObject.token = result.credential.accessToken
         userObject.refreshToken = user.refreshToken
         userObject.uid = user.uid
@@ -89,7 +38,7 @@ export const actions = {
           const docRef = OneUserRef(user.uid)
           await docRef.get().then((doc) => {
             if (doc.exists) {
-              userObject.nickName = doc.data().nickName
+              userObject.nickName = doc.data()?.nickName
             }
           })
         }
@@ -105,7 +54,7 @@ export const actions = {
       })
   },
   // エラーの時
-  onRejected({ commit }, error) {
+  onRejected: ({ commit }, error) => {
     console.error('errorMessage : ' + error)
     commit(
       'setError',
@@ -113,11 +62,11 @@ export const actions = {
     )
   },
   // エラーを初期化する
-  resetError({ commit }) {
+  resetError: ({ commit }) => {
     commit('setError', '')
   },
   // ① 認証状態を明示的にセットする
-  setPersistence() {
+  setPersistence: () => {
     return new Promise((resolve) => {
       firebase
         .auth()
@@ -128,54 +77,16 @@ export const actions = {
     })
   },
   // ④ 公開可能なユーザー情報をFirestoreに登録
-  setPublicUserData({ commit }, userObject) {
+  setPublicUserData: ({ commit }, userObject) => {
     return new Promise((resolve) => {
       const publicUser = OneUserRef(userObject.uid)
-      const publicObj = {}
-      publicObj.uid = userObject.uid
-      publicObj.providerId = userObject.providerId
-      publicObj.isNewUser = userObject.isNewUser
-      publicObj.email = userObject.email
-      publicObj.photoURL = userObject.photoURL
-      publicObj.displayName = userObject.displayName
-      publicObj.token = userObject.token
-      publicObj.nickName = userObject.nickName
-      publicObj.fcmToken = userObject.fcmToken
-
-      publicObj.isLogined = userObject.isLogined
-
-      publicObj.updated_at = userObject.updated_at
-
-      publicUser.set(publicObj, { merge: true }).then(() => {
+      publicUser.set(userObject, { merge: true }).then(() => {
         resolve(userObject)
       })
     })
   },
-  // ⑤非公開のユーザー情報をFirestoreに登録
-  setPrivateUserData(userObject) {
-    return new Promise((resolve) => {
-      const privateUsers = firestore
-        .collection('privateUsers')
-        .doc(userObject.uid)
-      // privateUsersに登録するObjのみを登録する
-      const privateObj = {}
-      privateObj.uid = userObject.uid
-      privateObj.providerId = userObject.providerId
-      privateObj.isNewUser = userObject.isNewUser
-      privateObj.email = userObject.email
-      privateObj.token = userObject.token
-      privateObj.refreshToken = userObject.refreshToken
-      privateObj.nickName = userObject.nickName
-      privateObj.fcmToken = userObject.fcmToken
-      privateObj.isLogined = userObject.isLogined
-      privateObj.updated_at = userObject.updated_at
-      privateUsers.set(privateObj, { merge: true }).then(() => {
-        resolve(userObject)
-      })
-    })
-  },
-  // ⑥ ローカルストレージに保持するユーザー情報を設定
-  async setLocalUserData({ commit }, userObject) {
+  // ⑤ローカルストレージに保持するユーザー情報を設定
+  setLocalUserData: async ({ commit }, userObject) => {
     await messaging
       .requestPermission()
       .then(async () => {
@@ -199,8 +110,6 @@ export const actions = {
       .get()
       .then((doc) => {
         if (doc.exists) {
-          console.log(doc.data())
-          debugger
           commit('setCurrentUser', doc.data())
           console.log(`ログインに成功しました`)
         }
@@ -210,11 +119,12 @@ export const actions = {
       })
   },
   // ③ 取得したアイコンのURLをFirestorageに保存して、そのURLをFirestoreに登録する準備
-  createPhotoURL({ commit }, userObject) {
+  createPhotoURL: ({ commit }, userObject: TypeUser) => {
     return new Promise((resolve) => {
       const url = userObject.photoURL
       const xhr = new XMLHttpRequest()
       xhr.responseType = 'blob'
+
       xhr.onload = () => {
         const blob = xhr.response
         const mountainsRef = storageRef.child(
@@ -234,7 +144,7 @@ export const actions = {
       xhr.send()
     })
   },
-  async logout({ commit }, formData) {
+  logout: async ({ commit }, formData) => {
     await OneUserRef(formData.uid).update(formData)
     firebase
       .auth()
@@ -246,7 +156,7 @@ export const actions = {
       })
   },
   // ログインユーザーのニックネームを変更する
-  editNickName({ commit, state, dispatch }, formData) {
+  editNickName: ({ commit, state, dispatch }, formData) => {
     return new Promise((resolve) => {
       try {
         OneUserRef(state.currentUser.uid)
@@ -260,12 +170,11 @@ export const actions = {
       }
     })
   },
-  uploadFile({ commit, dispatch }, payload) {
+  uploadFile: ({ commit, dispatch }, payload) => {
     return new Promise((resolve) => {
       try {
         const file = payload.file
         const ref = `public/${payload.id}`
-
         storage
           .ref(ref)
           .put(file.file)
@@ -282,19 +191,19 @@ export const actions = {
       }
     })
   },
-  deleteFile({ commit, dispatch }, payload) {
+  deleteFile: ({ commit, dispatch }, payload) => {
     return new Promise((resolve) => {
       try {
         const ref = `public/${payload.id}`
         storage.ref(ref).delete()
-        resolve()
+        resolve(null)
       } catch (error) {
         dispatch('onRejected', error)
       }
     })
   },
   // NOTE:指定したIDの投稿情報を取得
-  getPostData({ commit, dispatch }, payload) {
+  getPostData: ({ commit, dispatch }, payload) => {
     return new Promise((resolve) => {
       try {
         firestore
@@ -315,20 +224,4 @@ export const actions = {
   },
 }
 
-export const getters = {
-  getIsLogined(state) {
-    return state.isLogined
-  },
-  getIsLoading(state) {
-    return state.isLoading
-  },
-  getCurrentUser(state) {
-    return state.currentUser
-  },
-  getPost(state) {
-    return state.post
-  },
-  getError(state) {
-    return state.error
-  },
-}
+export default actions

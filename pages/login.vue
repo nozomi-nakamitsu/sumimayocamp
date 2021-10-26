@@ -6,15 +6,17 @@
       </div>
     </div>
     <div class="right">
-      <p class="title -mb0">Welcome to #sumimayocamp</p>
-      <p class="title -mt0">Get Started!!</p>
-      <p class="text">
-        すみまよキャンプへようこそ！ GoogleアカウントでLoginしてねっ
-      </p>
-      <div class="button">
-        <button class="common-button -login" @click="login">
-          Sign In with Google
-        </button>
+      <div class="flex">
+        <p class="title -mb0">Welcome to #sumimayocamp</p>
+        <p class="title -mt0">Get Started!!</p>
+        <p class="text">
+          すみまよキャンプへようこそ！ GoogleアカウントでLoginしてねっ
+        </p>
+        <div class="button">
+          <button class="common-button -login" @click="login">
+            Sign In with Google
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -28,8 +30,8 @@ export default defineComponent({
     onMounted(async () => {
       await firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-          store.commit('setIsLogined', true)
-          store.commit('setCurrentUser', user)
+          store.commit('auth/setIsLogined', true)
+          store.commit('auth/setCurrentUser', user)
         } else {
           console.log('ログインしてないよ')
         }
@@ -39,10 +41,10 @@ export default defineComponent({
     const store = useStore()
     const login = async () => {
       try {
-        await store.dispatch('setPersistence')
-        await store.dispatch('auth')
+        await store.dispatch('auth/setPersistence')
+        await store.dispatch('auth/auth')
       } catch (error) {
-        store.dispatch('onRejected', error)
+        store.dispatch('auth/onRejected', error)
       }
     }
     return {

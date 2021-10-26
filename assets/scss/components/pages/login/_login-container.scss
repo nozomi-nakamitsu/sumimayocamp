@@ -8,15 +8,16 @@
 
   > .left {
     background-color: $purple;
-    width: 70%;
+    width: 40%;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   > .left > .image {
-    width: 466px;
-    height: 420px;
+    max-width: 466px;
+    max-height: 420px;
+    padding: 8px;
   }
   > .left > .image > .img {
     width: 100%;
@@ -25,18 +26,25 @@
   }
   > .right {
     padding: 80px;
-    width: 100%;
+    // width: 100%;
   }
-  > .right > .title {
+  > .right > .flex {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+  }
+
+  > .right > .flex > .title {
     color: $black-dugong;
-    font-size: 32px;
+    font-size: 48px;
     font-weight: bold;
 
     &.-mb0 {
       margin-bottom: 0;
     }
   }
-  > .right > .text {
+  > .right > .flex > .text {
     color: $black-dugong;
     font-size: 16px;
     margin-top: 40px;
@@ -45,7 +53,7 @@
       margin-bottom: 0;
     }
   }
-  > .right > .button {
+  > .right > .flex > .button {
     display: flex;
     // justify-content: center;
     align-items: center;

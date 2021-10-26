@@ -1,11 +1,14 @@
 <template>
   <div class="root-container">
-    <Loading v-if="store.getters.getIsLoading && showSidebar" />
+    <Loading v-if="store.getters['auth/getIsLoading'] && showSidebar" />
 
     <Sidebar v-if="showSidebar" />
     <transition name="page">
       <div class="wrapper-container">
-        <BaseBackground v-if="!store.getters.getIsLoading" :path="path" />
+        <BaseBackground
+          v-if="!store.getters['auth/getIsLoading']"
+          :path="path"
+        />
         <Nuxt />
       </div>
     </transition>

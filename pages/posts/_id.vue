@@ -94,8 +94,8 @@ export default defineComponent({
     const Router = useRouter()
 
     // ref系
-    const currentUser = store.getters.getCurrentUser
-    const post = ref(store.getters.getPost)
+    const currentUser = store.getters['auth/getCurrentUser']
+    const post = ref(store.getters['auth/getPost'])
     // 投稿者情報を取得
     const id = Route.value.params.id
     onBeforeMount(() => {
@@ -106,7 +106,7 @@ export default defineComponent({
             post.value = { ...result.data() }
           })
       } catch (error) {
-        store.dispatch('onRejected', error)
+        store.dispatch('auth/onRejected', error)
       }
     })
     // 日付をフォーマットに変換する

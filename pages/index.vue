@@ -54,7 +54,7 @@ export default defineComponent({
   setup() {
     // compositionAPI
     const store = useStore()
-    const currentUser = store.getters.getCurrentUser
+    const currentUser = store.getters['auth/getCurrentUser']
     const posts = ref<Post[]>([])
     const declaration = ref<Declaration | null>(null)
     let unsubscribe = null as any
@@ -191,7 +191,7 @@ export default defineComponent({
               }
             },
             (error: any) => {
-              store.dispatch('onRejected', error)
+              store.dispatch('auth/onRejected', error)
             }
           )
         })
@@ -205,14 +205,14 @@ export default defineComponent({
 
     const getDeclaration = () => {
       unsubscribeDeclaration = DeclarationRef()
-        .where('uid', '==', store.getters.getCurrentUser.uid)
+        .where('uid', '==', store.getters['auth/getCurrentUser'].uid)
         .onSnapshot((snapshot) => {
           snapshot.docChanges().forEach(
             (change) => {
               declaration.value = change.doc.data()
             },
             (error: any) => {
-              store.dispatch('onRejected', error)
+              store.dispatch('auth/onRejected', error)
             }
           )
         })

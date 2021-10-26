@@ -18,4 +18,10 @@ textarea {
   appearance: none;
   resize: none;
   outline: none;
+  &:focus {
+    border: 2px solid $blue;
+    outline: 0;
+  }
 }
+
+

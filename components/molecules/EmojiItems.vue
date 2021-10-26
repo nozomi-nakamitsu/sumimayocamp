@@ -35,15 +35,14 @@
           <p class="count">{{ item.users.length }}</p>
         </div>
       </div>
-      <div class="wrapper">
+      <button class="wrapper">
         <div
           class="box"
-          @mouseover="$emit('on-focus', true)"
           @click="$emit('on-clicked', true)"
         >
           <Icon :icon="faSmile" />
         </div>
-      </div>
+      </button>
     </div>
   </div>
 </template>
@@ -86,7 +85,7 @@ export default defineComponent({
     // compositionAPI
     const store = useStore()
     // ref系
-    const currentUser = store.getters.getCurrentUser
+    const currentUser = store.getters['auth/getCurrentUser']
     const isHoverd = ref<string>('')
     const emojiItems = computed(() => {
       const target = JSON.parse(JSON.stringify(props.post.emojiItems))

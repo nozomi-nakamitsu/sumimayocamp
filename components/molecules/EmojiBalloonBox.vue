@@ -1,6 +1,8 @@
 <template>
   <div class="emoji-balloon-box">
-    <p v-for="user in users" :key="user.uid" class="person">{{ isCurrentUser(user) }}さん</p>
+    <p v-for="user in users" :key="user.uid" class="person">
+      {{ isCurrentUser(user) }}さん
+    </p>
     <p>がリアクションしました</p>
   </div>
 </template>
@@ -25,7 +27,7 @@ export default defineComponent({
     // compositionAPI
     const store = useStore()
     // ref系
-    const currentUser = store.getters.getCurrentUser
+    const currentUser = store.getters['auth/getCurrentUser']
     const isCurrentUser = computed(() => (user: EmojiUser) => {
       if (currentUser.uid === user.uid) {
         return 'あなた'

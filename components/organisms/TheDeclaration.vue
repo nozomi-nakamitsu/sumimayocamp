@@ -40,7 +40,7 @@ export default defineComponent({
     const { isOpened, openModal, closeModal } = useModal()
     // compositionAPI
     const store = useStore()
-    const currentUser = store.getters.getCurrentUser
+    const currentUser = store.getters['auth/getCurrentUser']
     /**
      * NOTE:fireStoreに投稿する
      *
@@ -50,7 +50,7 @@ export default defineComponent({
         closeModal()
         await OneDeclarationRef(currentUser.uid).set(data.formData)
       } catch (error) {
-        store.dispatch('onRejected', error)
+        store.dispatch('auth/onRejected', error)
       }
     }
 
