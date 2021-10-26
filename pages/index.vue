@@ -187,9 +187,7 @@ export default defineComponent({
                     posts.value = [...posts.value, postData as Post]
                   })
               } else if (change.type === 'removed') {
-                posts.value = posts.value.filter(
-                  (v: Post) => v.id !== change.doc.data().id
-                )
+                removePost(change.doc.data() as Post)
               }
             },
             (error: any) => {
@@ -230,6 +228,11 @@ export default defineComponent({
         ...item,
         users: [...emojiUser],
       })
+    }
+
+    // 投稿が削除された時、表示配列から削除アイテムを取り除く
+    const removePost = (data: Post) => {
+      posts.value = posts.value.filter((v: Post) => v.id !== data.id)
     }
     return {
       // 全投稿データ
