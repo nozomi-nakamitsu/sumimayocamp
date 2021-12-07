@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="card-container">
+    <div :id="post.title" class="card-container -animation">
       <div class="container">
         <div class="card-head" @click.stop="Router.push(`/posts/${post.id}`)">
           <div class="left">
@@ -43,62 +43,6 @@
       <Picker @select="selectEmoji" />
     </div>
   </div>
-
-  <!-- <div class="card-container">
-    <v-card class="mx-auto" width="500">
-      <v-card-title>
-        <span class="text-h6 font-weight-light">
-          タイトル: {{ post.title }}</span
-        >
-      </v-card-title>
-      <v-card-text class="text-h5 font-weight-bold">
-        {{ formatDateToSlashWithTime(post.updated_at) }}
-      </v-card-text>
-      <v-card-actions>
-        <v-list-item class="grow">
-          <v-list-item-avatar color="grey darken-3">
-            <v-img class="elevation-6" alt="" :src="post.user.photoURL"></v-img>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title>{{
-              post.user.nickName ? post.user.nickName : post.user.displayName
-            }}</v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-content v-if="isCurrentUser(post.user_id, currentUser)">
-            <v-list-item-title
-              style="cursor: pointer"
-              @click="Router.push(`/posts/edit/${post.id}`)"
-              >編集</v-list-item-title
-            >
-          </v-list-item-content>
-          <v-list-item-content v-if="isCurrentUser(post.user_id, currentUser)">
-            <v-list-item-title
-              style="cursor: pointer"
-              @click="DeletePost(post.id, post.files)"
-              >削除</v-list-item-title
-            >
-          </v-list-item-content>
-          <v-list-item-content>
-            <v-list-item-title
-              style="cursor: pointer"
-              @click="Router.push(`/posts/${post.id}`)"
-              >詳細</v-list-item-title
-            >
-          </v-list-item-content>
-        </v-list-item>
-      </v-card-actions>
-      <Emojifrom
-        :selected-item="selectedItem"
-        :post="post"
-        @on-focus="onFocus"
-        @on-clicked="switchVisible"
-        @delete-select-emoji-item="DeleteSelectEmojiItem"
-      />
-    </v-card>
-    <div v-if="isFormVisible" class="form" @mouseleave="onRemoveFocus">
-      <Picker @select="selectEmoji" />
-    </div>
-  </div> -->
 </template>
 <script lang="ts">
 import {
@@ -106,7 +50,10 @@ import {
   PropType,
   useRouter,
   useStore,
+  onMounted,
 } from '@nuxtjs/composition-api'
+import { Power4, gsap } from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
 import { Picker } from 'emoji-mart-vue'
 import Emojifrom from '../molecules/EmojiItems.vue'
 import BaseSquareMenu from '@/components/atoms/BaseSquareMenu.vue'
@@ -116,6 +63,7 @@ import { formatDateToSlashWithTime } from '@/compositions/useFormatData'
 import { useEmoji } from '@/compositions/useEmoji'
 import { usePost } from '~/compositions/usePost'
 import { isCurrentUser } from '@/compositions/useAuth'
+gsap.registerPlugin(ScrollTrigger)
 
 export default defineComponent({
   components: {
@@ -147,6 +95,35 @@ export default defineComponent({
       switchVisible,
       DeleteSelectEmojiItem,
     } = useEmoji(props, currentUser)
+
+    onMounted(() => {
+      console.log(props.post.id)
+      gsapFunc()
+    })
+    const gsapFunc = () => {
+      gsap.from(`#${props.post.title}`, {
+        // 動かしたい要素は".a"
+        x: -20,
+        y: 80, // 右方向に500動く
+        rotation: -15,
+        opacity: 0,
+      })
+      gsap.to(`#${props.post.title}`, {
+        // 動かしたい要素は".a"
+        x: 0,
+        y: 0, // 右方向に500動く
+        opacity: 1,
+        // 右方向に500動く
+        duration: 0.8, // アニメーションは1秒間
+        rotation: 0,
+        scrollTrigger: {
+          trigger: `#${props.post.title}`, // 要素".a"がビューポートに入ったときにアニメーション開始
+          start: 'top bottom', // アニメーション開始位置
+          // markers: true, // マーカー表示
+          toggleActions: 'play pause resume reset', // スクロールを戻したらもう一度開始させる
+        },
+      })
+    }
     // 投稿削除
     const { DeletePost, isMyPost } = usePost()
     return {
